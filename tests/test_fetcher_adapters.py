@@ -63,6 +63,7 @@ LIDL_CAMPAIGN = ('<html><div data-grid-data="{&quot;title&quot;:&quot;Bananer&qu
                  '{&quot;currentLidlPlusPrice&quot;:{&quot;price&quot;:{&quot;price&quot;:14.9,'
                  '&quot;endDate&quot;:&quot;2026-10-04T21:59:59Z&quot;,'
                  '&quot;startDate&quot;:&quot;2026-09-15T07:46:08.286Z&quot;,'
+                 '&quot;discount&quot;:{&quot;deletedPrice&quot;:18.8},'
                  '&quot;basePrice&quot;:{&quot;text&quot;:&quot;/kg&quot;}}}}}}"></div>'
                  '<div data-grid-data="' + LIDL_NO_PRICE_TILE.replace('"', "&quot;")
                  + '"></div></html>')
@@ -102,11 +103,14 @@ def test_ica_parse_happy_path():
     entries = ica.parse_ica_offers(ICA_HTML, week_start="2026-09-21")
     assert len(entries) == 2
     first = entries[0]
-    assert first["external_id"] == "ica-5004009053"
+    assert first["external_id"] == "5004009053"  # bare id — mapper owns the prefix
     assert first["name"] == "Findus Fryst torskryggfilé"
     assert first["price"] == 119.0
     assert first["unit"] == "st"
     assert first["valid_to"] == "2026-09-27"
+    # ICA's page carries no regular piece price (comparisonPrice is the SALE
+    # price per kg) -> no regular_price key, never an invented one.
+    assert "regular_price" not in first
 
 
 def test_ica_sanitizer_undefined_and_new_map():
@@ -115,7 +119,7 @@ def test_ica_sanitizer_undefined_and_new_map():
     entries = ica.parse_ica_offers(ICA_HTML)
     # the second item carries undefined + new Map(...) literals; the sanitizer
     # must let the whole blob parse and the item keep its numeric mechanics
-    kaputt = [e for e in entries if e["external_id"] == "ica-5004009999"]
+    kaputt = [e for e in entries if e["external_id"] == "5004009999"]
     assert len(kaputt) == 1
     assert kaputt[0]["price"] == 25.0
     assert kaputt[0]["unit"] == "kg"
@@ -166,9 +170,10 @@ def test_lidl_campaign_parse_happy_path_and_missing_price_dropped():
     entries = lidl.parse_lidl_campaign(LIDL_CAMPAIGN, week_start="2026-09-21")
     assert len(entries) == 1  # the no-price tile is dropped
     e = entries[0]
-    assert e["external_id"] == "lidl-66000056"
+    assert e["external_id"] == "66000056"
     assert e["name"] == "Bananer"
     assert e["price"] == 14.9
+    assert e["regular_price"] == 18.8  # deletedPrice -> reference price (MC 1355.7)
     assert e["unit"] == "kg"
     assert e["valid_from"] == "2026-09-15"
     assert e["valid_to"] == "2026-10-04"
@@ -183,7 +188,7 @@ def test_lidl_pull_follows_campaign_pages():
     feed = pull_grocer(LIDL_CFG, "2026-W39", session=session)
     assert feed["grocer_id"] == "lidl"
     assert len(feed["entries"]) == 1
-    assert feed["entries"][0]["external_id"] == "lidl-66000056"
+    assert feed["entries"][0]["external_id"] == "66000056"
 
 
 def test_lidl_pull_fail_tolerant_non200_and_exception():

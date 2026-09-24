@@ -53,7 +53,8 @@ def normalize(chain: str, raw: dict, week_key: str) -> list[dict]:
     """Map one raw feed dictionary into in-week NormalizedOffers for ``chain``.
 
     raw:  {"grocer_id": str, "entries": [ RawOffer ... ]}
-        RawOffer = {external_id, name, price, unit, valid_from, valid_to}
+        RawOffer = {external_id, name, price, unit, valid_from, valid_to
+                    [, regular_price]}
     Returns 0..n normalized dicts:
         {grocer_id, external_id, week_key, name, price, unit, valid_from, valid_to}
     where ``price`` is integer cents (chain round applied) and only offers whose
@@ -79,12 +80,19 @@ def normalize(chain: str, raw: dict, week_key: str) -> list[dict]:
             continue  # unparsable dates -> drop (REV6 §7: parse dates defensively)
         if vt < week_start or vf > week_end:
             continue  # outside the running week -> the single filter owner
+        # MC 1355.7 (T5 attack 3): carry the adapter's optional reference price
+        # through as regular_price_cents; savings only when it is a real
+        # discount (regular > sale). No regular price -> both stay None.
+        regular = _to_cents(entry.get("regular_price"), rule["round_cents"])
         out.append({
             "grocer_id": grocer_id,
             "external_id": rule["id_prefix"] + ext_id,
             "week_key": week_key,
             "name": name,
             "price": cents,
+            "regular_price_cents": regular,
+            "savings_cents": (regular - cents) if regular is not None
+                             and regular > cents else None,
             "unit": entry.get("unit"),
             "valid_from": vf.isoformat(),
             "valid_to": vt.isoformat(),

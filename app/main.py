@@ -17,7 +17,8 @@ from __future__ import annotations
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
+from sqlalchemy import func
 
 import app.db as db
 from app.config import get_planner_config
@@ -58,7 +59,23 @@ app.include_router(stores.router)
 
 
 @app.get("/health")
-def health() -> dict:
+def health(session=Depends(db.get_db)) -> dict:
+    # MC 1355.7 (T5 attack 2): a total adapter breakage degrades to an empty
+    # feed and must be VISIBLE here, not green-silent — report how many offer
+    # rows exist for the current ISO week, per grocer.
+    from src.offers_db.store import Offer
+    from src.planner.weeks import current_week_key
+
+    week = current_week_key()
+    counts = dict(
+        session.query(Offer.grocer_id, func.count(Offer.offer_id))
+        .filter(Offer.week_key == week)
+        .group_by(Offer.grocer_id)
+        .all()
+    )
     return {"status": "ok", "app": "matapp",
             "auth": "argon2id+session", "profile": "auth-protected",
-            "menu": "auth+profile-protected"}
+            "menu": "auth+profile-protected",
+            "offers_week": week,
+            "offers_current_week": sum(counts.values()),
+            "offers_by_grocer": counts}

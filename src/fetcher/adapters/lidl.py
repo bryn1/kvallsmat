@@ -33,7 +33,11 @@ def find_campaign_urls(index_html: str) -> list[str]:
 
 
 def _tile_price(tile: dict) -> tuple | None:
-    """(price, unit, valid_from, valid_to) from a product tile, or None."""
+    """(price, unit, valid_from, valid_to, regular_price) from a tile, or None.
+
+    ``regular_price`` is the tile's ``price.discount.deletedPrice`` (T2 §4) —
+    the pre-campaign reference price — or None when the tile carries none.
+    """
     regions = tile.get("regionsPrices")
     if not isinstance(regions, dict) or not regions:
         return None
@@ -44,13 +48,17 @@ def _tile_price(tile: dict) -> tuple | None:
             amount = float(price.get("price"))
         except (TypeError, ValueError):
             continue  # missing/unparsable price -> drop the tile
+        try:
+            regular = float((price.get("discount") or {}).get("deletedPrice"))
+        except (TypeError, ValueError):
+            regular = None
         base = price.get("basePrice") or {}
         # basePrice.text is "/kg" or a full comparison string like "39,80 kr/kg"
         m = re.search(r"/\s*([A-Za-z]+)\s*$", str(base.get("text") or ""))
         unit = m.group(1) if m else "st"
         start = str(price.get("startDate") or "")[:10]
         end = str(price.get("endDate") or "")[:10]
-        return amount, unit, start, end
+        return amount, unit, start, end, regular
     return None
 
 
@@ -69,15 +77,18 @@ def parse_lidl_campaign(campaign_html: str, week_start: str = "") -> list[dict]:
         product_id = tile.get("productId")
         if parsed is None or not title or not product_id:
             continue
-        price, unit, start, end = parsed
+        price, unit, start, end, regular = parsed
+        # MC 1355.7 (T5 attack 5): bare product id — chain_mapper owns the prefix.
         entries.append({
-            "external_id": f"lidl-{product_id}",
+            "external_id": str(product_id),
             "name": str(title),
             "price": price,
             "unit": unit,
             "valid_from": start or week_start,
             "valid_to": end,
         })
+        if regular is not None:
+            entries[-1]["regular_price"] = regular
     return entries
 
 

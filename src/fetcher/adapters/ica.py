@@ -101,8 +101,17 @@ def parse_ica_offers(html: str, week_start: str = "") -> list[dict]:
         if not ext_id or not name or price_unit is None or not valid_to:
             continue  # malformed entry -> drop, not fatal
         price, unit = price_unit
+        # MC 1355.7 (T5 attack 5): NO adapter-side id prefix — chain_mapper owns
+        # the CHAIN_MAP id_prefix, so the final external_id carries exactly one.
+        #
+        # MC 1355.7 (T5 attack 3): no regular price is emitted here. The page's
+        # only reference field, ``comparisonPrice`` ("283:33/kg"), is the SALE
+        # price re-expressed per weight/volume (verified live 2026-09: 119 kr/st
+        # at 420 g -> 283.33 kr/kg exactly), NOT the regular price — using it
+        # would invent a discount on every item. Per the fixround rule, an item
+        # whose page carries no regular price stays regular_price=None.
         entries.append({
-            "external_id": f"ica-{ext_id}",
+            "external_id": str(ext_id),
             "name": name,
             "price": price,
             "unit": unit,

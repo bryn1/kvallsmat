@@ -11,6 +11,7 @@ grocer's feed problems (the fetcher already degrades to an empty feed).
 from __future__ import annotations
 
 from datetime import datetime
+import logging
 
 # MC 1355.5: the repo root is on sys.path in BOTH contexts (run_motor.py runs from
 # the root; the web app / tests put the root on path), so the ``src.`` package
@@ -22,6 +23,8 @@ from src.normalizer.chain_mapper import normalize
 from src.offers_db.store import upsert_week
 from database import make_engine, init_db
 from sqlalchemy.orm import sessionmaker
+
+logger = logging.getLogger(__name__)
 
 
 def choose_week(cfg, now: datetime | None = None) -> str:
@@ -61,6 +64,13 @@ def main(cfg: PlannerConfig | None = None, session=None, db_url="sqlite:///kvall
         for g in cfg.grocers:
             raw = per_grocer[g.grocer_id]
             if not raw["entries"]:
+                # MC 1355.7 (T5 attack 2): a grocer yielding ZERO entries is a
+                # silent total failure (adapter breakage degrades to an empty
+                # feed, never an exception) — it must be LOUD, not green-silent.
+                logger.warning(
+                    "grocer %s yielded 0 offers for %s — feed may be broken; "
+                    "menus degrade to recipe-only for its items",
+                    g.grocer_id, week_key)
                 continue
             normalized = normalize(g.chain or g.grocer_id, raw, week_key)
             if normalized:
