@@ -23,6 +23,14 @@ _REQUIRED = ("external_id", "name", "price", "valid_from", "valid_to")
 
 
 def pull_grocer(grocer_cfg, week_key: str, session=None) -> dict:
+    # Real per-grocer adapters first (MC 1355.4); None = no adapter for this
+    # chain -> fall through to the legacy {base}/veckans-extrapris pull.
+    from .adapters import fetch as adapter_fetch
+
+    adapted = adapter_fetch(grocer_cfg, week_key, session)
+    if adapted is not None:
+        return adapted
+
     base = grocer_cfg.endpoint.rstrip("/")
     url = f"{base}/veckans-extrapris"
     headers = dict(grocer_cfg.headers or {})

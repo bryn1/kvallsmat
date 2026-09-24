@@ -5,7 +5,7 @@ Single responsibility carried over from the deployed copy: the store catalog is
 READ from the motor's PlannerConfig grocers at request time via
 get_planner_config() (O1 pin — the motor's config, not an app constant, is the
 source of truth). PLANNER is the live instance wired at boot to the real store
-catalog (ica/willys/coop), so the shipped product serves a real /api/stores with
+catalog (ica/willys/coop/lidl — lidl added MC 1355.4), so the shipped product serves a real /api/stores with
 NO external harness; tests may rebind it. KVALLSMATS_GROCERS (JSON list)
 overrides the default for deployment/seeding.
 
@@ -33,7 +33,7 @@ def get_planner_config():
 
 # The REAL store catalog this product ships with at boot (DoD5, carried verbatim
 # from the deployed copy). These are the same chains the motor's CHAIN_MAP
-# defines (ica/willys/coop). Endpoints follow the motor's GrocerConfig shape;
+# defines (ica/willys/coop/lidl). Endpoints follow the motor's GrocerConfig shape;
 # 'chain' is the chain key (defaults to grocer_id). O1 is still honored: the
 # stores router READS PLANNER.grocers at request time — the motor's
 # PlannerConfig remains the single source; this is the production wiring of that
@@ -41,8 +41,11 @@ def get_planner_config():
 # {grocer_id, endpoint, token|chain}) overrides the default for deployment.
 _DEFAULT_GROCERS = [
     PlannerConfig.grocer("willys", "https://feeds.willys.se/week", chain="willys"),
-    PlannerConfig.grocer("ica", "https://feeds.ica.se/week", chain="ica"),
+    # Real endpoints (MC 1355.4, audit T2): ICA's offers page embeds the weekly
+    # offers server-side; Lidl's offers index links the campaign pages.
+    PlannerConfig.grocer("ica", "https://www.ica.se/erbjudanden/", chain="ica"),
     PlannerConfig.grocer("coop", "https://feeds.coop.se/week", chain="coop"),
+    PlannerConfig.grocer("lidl", "https://www.lidl.se/c/erbjudanden", chain="lidl"),
 ]
 
 

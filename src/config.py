@@ -40,6 +40,7 @@ CHAIN_MAP = {
     "ica":    {"id_prefix": "ica-", "round_cents": None},
     "willys": {"id_prefix": "", "round_cents": 10},
     "coop":   {"id_prefix": "coop-", "round_cents": None},
+    "lidl":   {"id_prefix": "lidl-", "round_cents": None},
 }
 
 CHAIN_DEFAULT = {"id_prefix": "", "round_cents": None}

@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from app import auth_service, security
 
-EXPECTED_STORES = {"ica", "willys", "coop"}
+EXPECTED_STORES = {"ica", "willys", "coop", "lidl"}
 
 
 def _mkuser_and_login(client, username: str, password: str) -> None:
@@ -40,7 +40,7 @@ def _mkuser_and_login(client, username: str, password: str) -> None:
 # ---------------------------------------------------------------- stores router
 
 def test_get_stores_returns_planner_catalog(client):
-    """GET /api/stores serves the 3 grocers read from PlannerConfig at request time."""
+    """GET /api/stores serves the PlannerConfig grocers read at request time."""
     r = client.get("/api/stores")
     assert r.status_code == 200
     body = r.json()
