@@ -15,7 +15,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 import app.db as db
-from app.routers import auth, menu, profile
+from app.routers import auth, menu, profile, stores
 
 
 @asynccontextmanager
@@ -29,6 +29,7 @@ app = FastAPI(title="matapp framtidsvision", lifespan=lifespan)
 app.include_router(auth.router)
 app.include_router(profile.router)
 app.include_router(menu.router)
+app.include_router(stores.router)
 
 
 @app.get("/health")

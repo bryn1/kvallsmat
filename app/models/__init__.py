@@ -11,3 +11,4 @@ that is the shared ``database.Base`` (``print(users.Base, profile.Base)``).
 from . import users      # noqa: F401  (registers users table on Base)
 from . import profile    # noqa: F401  (registers profile table on Base)
 from . import offers_db  # noqa: F401  (registers offers table on Base)
+from . import store_selection  # noqa: F401  (registers store_selection table, MC 1355.3)

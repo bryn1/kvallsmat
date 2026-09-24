@@ -19,6 +19,8 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 
 from app import auth_service, profile_service, security
+from app.config import get_planner_config
+from app.models.store_selection import valid_store_ids
 from app.models.users import User
 
 router = APIRouter(prefix="/api/profile", tags=["profile"])
@@ -60,6 +62,16 @@ def put_profile(body: ProfileBody, request: Request,
             status_code=422,
             detail=f"selected_stores may hold at most {_MAX_STORES} stores",
         )
+    # P1-2 fix (MC 1355.3): validate store ids against the SAME PlannerConfig
+    # catalog the stores router serves (O1 — one catalog, no second list).
+    if len(set(body.selected_stores)) != len(body.selected_stores):
+        raise HTTPException(status_code=422,
+                            detail="selected_stores must not contain duplicates")
+    valid = valid_store_ids(get_planner_config())
+    bad = [sid for sid in body.selected_stores if sid not in valid]
+    if bad:
+        raise HTTPException(status_code=422,
+                            detail=f"unknown store_id(s): {bad}")
     data = profile_service.ProfileData(
         persons=body.persons,
         meal_days=body.meal_days,
