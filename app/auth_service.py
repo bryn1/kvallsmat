@@ -170,3 +170,47 @@ def logout(token: str | None) -> None:
     """Invalidate a session token (idempotent)."""
     if token:
         sessions.delete(token)
+
+
+# ---------------------------------------------------------------------------
+# Open registration (MC 1355.7, owner-ratified 2026-09-24: open registration)
+# ---------------------------------------------------------------------------
+
+MIN_PASSWORD_LENGTH = 8
+MAX_USERNAME_LENGTH = 64
+
+
+class UsernameTaken(Exception):
+    """Raised by register() when the username already exists (-> HTTP 409)."""
+
+
+class WeakPassword(Exception):
+    """Raised by register() on a too-short password / bad username (-> 422)."""
+
+
+def register(username: str, password: str) -> str:
+    """Create a new account and return an opaque session token (auto-login).
+
+    Same mechanism as login — the users table, app.security hashing and the
+    module SessionStore; no second user mechanism. Raises UsernameTaken when
+    the username exists (router -> 409) and WeakPassword on a too-short
+    password or an empty/over-long username (router -> 422).
+    """
+    name = (username or "").strip()
+    if not name or len(name) > MAX_USERNAME_LENGTH:
+        raise WeakPassword("username must be 1-64 characters")
+    if not isinstance(password, str) or len(password) < MIN_PASSWORD_LENGTH:
+        raise WeakPassword(
+            f"password must be at least {MIN_PASSWORD_LENGTH} characters")
+    if dbm._Session is None:
+        dbm.boot()
+    session = dbm._Session()
+    try:
+        if session.query(User).filter_by(username=name).first() is not None:
+            raise UsernameTaken(name)
+        session.add(User(username=name,
+                         password_hash=security.hash_password(password)))
+        session.commit()
+    finally:
+        session.close()
+    return sessions.create(name)

@@ -1,13 +1,17 @@
-"""app.routers.auth — /api/auth/login|logout|me (Phase 3 T2 auth, gate C2).
+"""app.routers.auth — /api/auth/login|logout|me|register (Phase 3 T2 auth, gate C2).
 
-The three endpoints the gate C2 names, wired to app.auth_service (session logic) and
+The gate C2 endpoints, wired to app.auth_service (session logic) and
 app.security (Argon2id + cookie policy):
 
-  POST /api/auth/login   — body {username,password}; on success set the opaque
-                           HttpOnly+Secure+SameSite session cookie; 401 on bad creds.
-  POST /api/auth/logout  — invalidate the session and clear the cookie (idempotent).
-  GET  /api/auth/me      — return the current user from the session cookie; 401 if
-                           unauthenticated.
+  POST /api/auth/login    — body {username,password}; on success set the opaque
+                            HttpOnly+Secure+SameSite session cookie; 401 on bad creds.
+  POST /api/auth/logout   — invalidate the session and clear the cookie (idempotent).
+  GET  /api/auth/me       — return the current user from the session cookie; 401 if
+                            unauthenticated.
+  POST /api/auth/register — open registration (MC 1355.7, owner-ratified): create
+                            the account (argon2id via app.security) and auto-login
+                            with the SAME session cookie; 409 duplicate username,
+                            422 weak/short password.
 
 Single concern: HTTP wire-up. No password hashing here (that is app/security's job).
 """
@@ -64,6 +68,20 @@ def logout(request: Request, response: Response) -> dict:
     auth_service.logout(_read_token(request))
     _clear_session_cookie(response)
     return {"ok": True}
+
+
+@router.post("/register")
+def register(body: LoginBody, response: Response) -> dict:
+    """Open registration (MC 1355.7, owner-ratified): create the account and
+    auto-login — the session cookie is set exactly like login's."""
+    try:
+        token = auth_service.register(body.username, body.password)
+    except auth_service.UsernameTaken:
+        raise HTTPException(status_code=409, detail="username already taken")
+    except auth_service.WeakPassword as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+    _set_session_cookie(response, token)
+    return {"ok": True, "username": body.username.strip()}
 
 
 @router.get("/me")
