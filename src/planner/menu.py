@@ -26,12 +26,12 @@ import json
 import logging
 import random
 from dataclasses import dataclass, field
-from datetime import date, timedelta
+from datetime import timedelta
 
 logger = logging.getLogger("kvallsmat.planner")
 
 # Display week keys are ISO 8601 week dates, e.g. "2026-W34".
-_WEEK_RE = None  # populated lazily by _week_to_monday
+from .weeks import week_to_monday as _week_to_monday  # MC 1355.5: ONE shared helper
 
 
 @dataclass(frozen=True)
@@ -114,23 +114,6 @@ def _allowed(recipe, family: FamilyPrefs) -> bool:
     if (recipe.servings or 1) < family.persons:
         return False
     return True
-
-
-def _week_to_monday(week_key: str) -> date:
-    """Deterministic: resolve an ISO-8601 week key like '2026-W34' to that week's
-    Monday. Throws ValueError for malformed keys."""
-
-    if "-" not in week_key:
-        raise ValueError(f"week_key must look like '2026-W34', got {week_key!r}")
-    year_str, _, week_str = week_key.partition("-")
-    try:
-        year, wk = int(year_str), int(week_str.lstrip("Ww"))
-    except ValueError:
-        raise ValueError(f"bad week_key {week_key!r}") from None
-    # ISO 8601: week 1 is the week containing the first Thursday of the year.
-    jan4 = date(year, 1, 4)
-    monday_jan4 = jan4 - timedelta(days=jan4.isoweekday() - 1)
-    return monday_jan4 + timedelta(weeks=wk - 1)
 
 
 def _week_dates(week_key: str, meal_days: int) -> list[str]:

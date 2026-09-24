@@ -18,13 +18,18 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 Base = declarative_base()
 
 
+def default_url() -> str:
+    """The default sqlite URL (MATAPP_DB_URL override or project-local .data file)."""
+    here = os.path.dirname(os.path.abspath(__file__))
+    return os.environ.get("MATAPP_DB_URL", f"sqlite:///{here}/.data/matapp.db")
+
+
 def make_engine(url: str | None = None, **kwargs):
     """Create a sqlite engine. In-memory used by tests; file path used in production."""
     connect_args = {"check_same_thread": False}
     if url is None:
         # Default to a project-local data file, mirrors the root-route app.
-        here = os.path.dirname(os.path.abspath(__file__))
-        url = os.environ.get("MATAPP_DB_URL", f"sqlite:///{here}/.data/matapp.db")
+        url = default_url()
     if url.startswith("sqlite:///") and not url.startswith("sqlite:///:memory:"):
         # Fresh-clone safety: sqlite cannot open a file whose parent dir is missing.
         db_path = url[len("sqlite:///"):]

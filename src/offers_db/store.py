@@ -7,6 +7,12 @@ The Offers table carries a UNIQUE (grocer_id, external_id, week_key) constraint 
 and a (week_key, grocer_id) index for C-OW lookups. No filter logic lives here —
 the running-week predicate is owned entirely by C4 (normalizer). Family/consume
 semantics are out of scope for this module (N5).
+
+MC 1355.5: this is the SINGLE canonical definition of the ``offers`` table. The
+web layer's former duplicate (app/models/offers_db.py) is now a re-export shim —
+two mappings of one tablename on the shared Base raise InvalidRequestError the
+moment the menu router imports this module. The reference-price columns
+(closure-gap 1) live here too, so the web schema is unchanged.
 """
 from sqlalchemy import Column, Integer, String, UniqueConstraint, Index
 from sqlalchemy.orm import Session
@@ -23,6 +29,8 @@ class Offer(Base):
     week_key = Column(String, nullable=False)
     name = Column(String)
     price_cents = Column(Integer)
+    regular_price_cents = Column(Integer)  # reference price — closure-gap 1
+    savings_cents = Column(Integer)        # regular - current — closure-gap 1
     unit = Column(String)
     valid_from = Column(String)  # ISO 'YYYY-MM-DD' (week-scoped, kept as string per REV6)
     valid_to = Column(String)

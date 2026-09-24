@@ -37,6 +37,19 @@ def _default_engine():
     return make_engine()
 
 
+def db_url() -> str:
+    """The DB URL the web layer is bound to (MC 1355.5 boot-ingest seam).
+
+    Returns the bound engine's URL when one is set (tests rebind to a temp file),
+    else the same default ``database.make_engine`` resolves — ONE url source, so
+    the boot-time ingest writes to the very DB the app reads.
+    """
+    if _engine is not None:
+        return str(_engine.url)
+    from database import default_url
+    return default_url()
+
+
 def boot():
     """Idempotent startup: create the whole schema on the shared Base.
 

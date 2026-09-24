@@ -13,7 +13,10 @@ from __future__ import annotations
 
 from datetime import date, timedelta
 
-from config import CHAIN_MAP, CHAIN_DEFAULT
+try:  # app/test context: repo root on path (MC 1355.5 boot ingest imports src.*)
+    from src.config import CHAIN_MAP, CHAIN_DEFAULT
+except ImportError:  # motor context: src/ itself on path (run_motor.py)
+    from config import CHAIN_MAP, CHAIN_DEFAULT
 
 
 def iso_week_bounds(week_key: str) -> tuple[date, date]:

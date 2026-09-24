@@ -27,7 +27,7 @@ from __future__ import annotations
 import json
 import random
 from dataclasses import dataclass, field
-from datetime import date, timedelta
+from datetime import timedelta
 
 # ---------------------------------------------------------------------------
 # Family preferences (same N5 shape as the POC FamilyPrefs + the ratio threshold)
@@ -154,17 +154,9 @@ def _offer_hit_count(recipe, offers) -> int:
 # ---------------------------------------------------------------------------
 
 
-def _week_to_monday(week_key: str) -> date:
-    if "-" not in week_key:
-        raise ValueError(f"week_key must look like '2026-W34', got {week_key!r}")
-    year_str, _, week_str = week_key.partition("-")
-    try:
-        year, wk = int(year_str), int(week_str.lstrip("Ww"))
-    except ValueError:
-        raise ValueError(f"bad week_key {week_key!r}") from None
-    jan4 = date(year, 1, 4)
-    monday_jan4 = jan4 - timedelta(days=jan4.isoweekday() - 1)
-    return monday_jan4 + timedelta(weeks=wk - 1)
+# MC 1355.5 (audit P2-4): ONE shared week-math helper — the local copy that drifted
+# into BUG-1/BUG-2 is retired; see src/planner/weeks.py.
+from src.planner.weeks import week_to_monday as _week_to_monday
 
 
 def _week_dates(week_key: str, meal_days: int) -> list[str]:

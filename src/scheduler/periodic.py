@@ -12,11 +12,14 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from config import PlannerConfig
-from fetcher.grocer import pull_grocer
-from fetcher.aggregate import aggregate
-from normalizer.chain_mapper import normalize
-from offers_db.store import upsert_week
+# MC 1355.5: the repo root is on sys.path in BOTH contexts (run_motor.py runs from
+# the root; the web app / tests put the root on path), so the ``src.`` package
+# spelling resolves everywhere. ``database`` is a repo-root module either way.
+from src.config import PlannerConfig
+from src.fetcher.grocer import pull_grocer
+from src.fetcher.aggregate import aggregate
+from src.normalizer.chain_mapper import normalize
+from src.offers_db.store import upsert_week
 from database import make_engine, init_db
 from sqlalchemy.orm import sessionmaker
 
