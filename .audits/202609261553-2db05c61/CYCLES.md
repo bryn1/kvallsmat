@@ -3,3 +3,4 @@
 | cycle | trigger | action | outcome |
 |---|---|---|---|
 | 1 | task gate: build T10b-design.md REV2 + T10d N1-N4 musts | code-profile child built end-to-end, 2 mid-build self-corrections (geocode resp.json -> get_json idiom; store-clause no-op when no resolved stores), live sanity run once, fresh suite 95 passed EXIT=0, commit 793f991 | T10e-build.md VERDICT: PASS; DA gate on this build is the orchestrator's next phase (this dir is its out dir) |
+| resume 2/3 | mechanical loop: D8 BLOCKED | tried subagent AND subagent_fork to spawn the DA child — both rejected "subagent depth 2 exceeds maxDepth 1" (leaf child cannot spawn verifiers); list_agents confirms no children; decisive check re-run fresh: /usr/bin/python3 -m pytest -q -p no:cacheprovider tests/ -> 95 passed EXIT=0, hotell venv -> 95 passed EXIT=0 | D8 stays BLOCKED on the parent spawning the DA phase; pytest unmet condition from resume 1 stays fixed |
