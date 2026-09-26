@@ -40,3 +40,12 @@ STATUS: ACTIVE — audit + real-offers build landed 2026-09-24 (MC 1355).
 - Menus for non-current weeks degrade to recipe-only (ingest writes the current week).
 - Deployed copy /srv/workspace/hosting/apps/matapp is now BEHIND the source repo; deploy
   pending owner go.
+- 2026-09-26 (MC 1355.8/1355.9, T7 research): OCR of veckoblad = last resort only; Willys+Coop
+  offers wireable via Tjek squid API (dealer c371GA / 6c28SD, hotspots = structured JSON, no
+  auth). Offers are STORE-GATED for ICA/Willys/Coop (ICA merchant-priced by design; Willys
+  "från respektive butik"; Coop helpcenter confirms store variation); Lidl national (single
+  region in regionsPrices). Per-store cart needs store-level data for 3 of 4 chains.
+- 2026-09-26 (MC 1355.10, T8, commit c16d088): Tjek adapter wired for willys+coop behind the
+  existing RawFeed contract. Live pull all four: willys 111, ica 11, coop 97, lidl 132 real
+  offers. Orchestrator e2e: health offers_current_week=279; register→profile(willys,ica,lidl)
+  →menu 2026-W39 with 15/15 days carrying real used_offer_ids, max andel_extrapris 0.333.
