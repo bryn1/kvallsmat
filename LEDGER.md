@@ -53,3 +53,8 @@ STATUS: ACTIVE — audit + real-offers build landed 2026-09-24 (MC 1355).
   https://sibbamala.com/matapp/. Orchestrator live-verified: health 200 (app matapp,
   auth argon2id+session, offers_current_week 279, all four grocers populated), /api/stores
   returns willys/ica/coop/lidl. Rollback sha: 265b7cb (hosting repo).
+
+## 2026-09-26 — T10 store-level selection (MC 1355.12–1355.18) — LIVE
+- T10a locators VERIFIED (ICA/Willys/Coop/Lidl), T10b design REV2 pinned SHIP (2 DA gates), T10e build 793f991 + T10f fixes 2f44683/14dc068, DA c4 SHIP. 103 tests green.
+- Live deploy: hosting c2cfdc8 + a9261c2 (coop cache state-dir fix, live Errno 30). Live VERIFIED: health 200 (279 offers), postal preview 401 anon, PUT profile 41451 → all 4 chains ok, menu 200 (255 offer_sources, 15/15 days with offers).
+- Known: store-scoped offer rows populate at next boot ingest (design §6 step 5); ICA store-scoped ingest = named follow-up; Coop cold-start warm inside first profile save (stated POC limitation).
