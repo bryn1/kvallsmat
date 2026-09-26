@@ -49,3 +49,7 @@ STATUS: ACTIVE — audit + real-offers build landed 2026-09-24 (MC 1355).
   existing RawFeed contract. Live pull all four: willys 111, ica 11, coop 97, lidl 132 real
   offers. Orchestrator e2e: health offers_current_week=279; register→profile(willys,ica,lidl)
   →menu 2026-W39 with 15/15 days carrying real used_offer_ids, max andel_extrapris 0.333.
+- 2026-09-26 (MC 1355.11, T9, hosting commit e4b3d03): framtidsversion DEPLOYED to live
+  https://sibbamala.com/matapp/. Orchestrator live-verified: health 200 (app matapp,
+  auth argon2id+session, offers_current_week 279, all four grocers populated), /api/stores
+  returns willys/ica/coop/lidl. Rollback sha: 265b7cb (hosting repo).
