@@ -40,11 +40,24 @@ _MAX_AGE_H = 24
 
 
 def default_cache_path() -> str:
-    """File-backed cache location: the app's own .data dir (env-overridable)."""
-    return os.environ.get(
-        "MATAPP_COOP_CACHE",
-        os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(
-            os.path.abspath(__file__)))), ".data", "coop_store_cache.json"))
+    """File-backed cache location, next to the DB (env-overridable).
+
+    Reuses the ONE state-dir knob the app already has (MATAPP_DB_URL, set by
+    server.py to $STATE_DIRECTORY/.data on vm106) instead of a second env var:
+    the deployed repo tree is READ-ONLY, so a cache under the app dir fails
+    with Errno 30 (live finding, MC 1355.18). Falls back to the app-local
+    .data dir for bare local runs.
+    """
+    override = os.environ.get("MATAPP_COOP_CACHE")
+    if override:
+        return override
+    db_url = os.environ.get("MATAPP_DB_URL", "")
+    if db_url.startswith("sqlite:///"):
+        db_file = db_url[len("sqlite:///"):]
+        return os.path.join(os.path.dirname(os.path.abspath(db_file)),
+                            "coop_store_cache.json")
+    return os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__)))), ".data", "coop_store_cache.json")
 
 
 def locate(lat: float, lon: float, session=None,
