@@ -149,3 +149,6 @@ are clarifications a coder can implement conservatively without a re-design roun
 
 # JUDGED: 44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a
 # VERDICT: SHIP
+
+Orchestrator re-run 2026-09-26: /srv/workspace/hotell/.venv/bin/python -m pytest tests/ -q -> "103 passed, 3 warnings in 11.80s"
+VERIFY_EXIT=0
