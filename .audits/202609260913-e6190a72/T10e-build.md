@@ -117,3 +117,6 @@ EXIT=0
 
 # JUDGED: 44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a
 # VERDICT: PASS
+
+Orchestrator re-run 2026-09-26: find . -name __pycache__ -exec rm -rf; /srv/workspace/hotell/.venv/bin/python -m pytest tests/ -q -> "95 passed, 3 warnings in 7.70s"
+VERIFY_EXIT=0
