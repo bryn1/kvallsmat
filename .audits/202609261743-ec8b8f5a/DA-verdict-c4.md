@@ -56,13 +56,13 @@ PYTEST_EXIT=0
 
 ## Conditions attached to this SHIP
 
-- **The wiring is UNCOMMITTED.** `src/scheduler/periodic.py`, `app/main.py`,
-  `app/routers/menu.py`, the UI files, `.gitignore` are modified-tracked and
-  `tests/test_ingest_wiring.py` is UNTRACKED. This gate does not commit another
-  session's work: the author session MUST land it as ONE commit with the mandated
-  attribution form (`git -c user.name="code (MC 1355.17)" -c user.email=code@agent-town.local commit ...`),
-  including the new test file — until then the green suite lives only in this
-  working tree, not in any commit.
+- **RESOLVED during this cycle:** the author session committed the wiring as
+  **`14dc068`** ("matapp: T10f fixround — wire Willys store-scoped ingest
+  (MC 1355.17)", authored `code (MC 1355.17)`, including `tests/test_ingest_wiring.py`)
+  while this verdict was being finalized. The working tree is CLEAN
+  (`git status` empty) and the decisive check was re-run on the COMMITTED tree:
+  `103 passed, 3 warnings in 12.89s`, PYTEST_EXIT=0. The condition below is kept as
+  the record of the state the attack was performed over.
 - Cycle-1's residual note is now closed: the store clause is no longer dead code —
   the boot ingest stamps `offers.store_id` for resolved Willys stores with a Tjek
   catalog (design T10b §3/§6 step 5 now fires end-to-end).
