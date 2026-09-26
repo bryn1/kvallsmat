@@ -1,0 +1,44 @@
+/* ============================================================================
+   Kvällsmat — Responsive (static/css/responsive.css)
+   ============================================================================
+   Mobile-first viewport adjustments. Base.css/components.css are mobile-first
+   (single-column grids, full-width inputs); these rules refine layout as the
+   viewport widens.
+   ============================================================================ */
+
+/* ---- Small phones (default is already mobile-first) ---- */
+body {
+  /* ensure tap targets are comfortable on touch devices */
+  font-size: var(--text-base);
+}
+
+/* ---- ≥ 640px ---- */
+@media (min-width: 640px) {
+  .site-header {
+    padding: var(--space-8) var(--space-4);
+  }
+
+  .page-view {
+    padding: var(--space-8);
+  }
+
+  .constraints-form__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .menu-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+/* ---- ≥ 900px ---- */
+@media (min-width: 900px) {
+  .constraints-form__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .store-card__checkbox {
+    width: 22px;
+    height: 22px;
+  }
+}

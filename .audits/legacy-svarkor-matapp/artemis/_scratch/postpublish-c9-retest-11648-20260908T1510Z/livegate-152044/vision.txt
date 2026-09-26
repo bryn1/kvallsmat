@@ -1,0 +1,15 @@
+The user wants a literal description of the image. I need to transcribe all text verbatim, note the layout, colors, and positions. I should not evaluate correctness or guess intent. Let me carefully read everything.
+
+Top header: red/brown background. Logo emoji (a bowl of food, looks like ramen or soup) followed by "Kvällsmat" in white bold. Below that, white text: "Veckomeny med rabatterbjudanden från dina butiker".
+
+Below header, a light cream/off-white background. Centered tabs: "Butiker" (active, white background, red text, red underline) and "Veckomeny" (gray text).
+
+Then a white card with rounded corners. Inside: heading "Välj dina butiker" in dark bold. Subtext in gray: "Markera upp till tre butiker — vi hämtar erbjudanden därifrån till veckomenyn."
+
+Then a light gray box with a spinner (orange/red circle) and text "Laddar butiker...".
+
+Then a red-bordered box with light pink background. Text in red: "Kunde inte hämta butiker. Försök igen om en stund." followed by a button with red border and red text "Försök igen".
+
+Then three store cards in a row. First: green border, light green background, checked checkbox (green with white check), bold "willys" and gray "Willys". Second: green border, light green background, checked checkbox, bold "ica" and gray "
+
+[describe_image] model=lanef-27b from=reasoning (truncated — raise --max-tokens) prompt_tokens=880 completion_tokens=900 33.8s (degenerate tail trimmed)

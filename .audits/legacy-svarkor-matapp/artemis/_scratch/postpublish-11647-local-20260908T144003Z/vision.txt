@@ -1,0 +1,26 @@
+The image shows a web page, not blank. It has a vertical scrollbar on the far right edge.
+
+**Top header band** (solid terracotta/orange background, spanning full width):
+- On the left, a small circular icon (a round food image, resembling a pizza/cookie) followed by bold white text: "matapp"
+- On the line below, in white text: "3 förslag — veckomeny med majoritet extrapris"
+
+**Main content area** (cream/off-white background):
+- A horizontal row of three items near the top-left:
+  - A pill-shaped button with orange background and white text: "Konto"
+  - To its right, dark/black text: "Profil"
+  - To its right, dark/black text: "3 förslag"
+- Below that, a bold dark heading: "Logga in / konto"
+- Below the heading, gray text: "Logga in för att nå din profil och dina förslag."
+- A bold dark label: "Användarnamn"
+- Directly below it, an empty white rounded-rectangle input field.
+- A bold dark label: "Lösenord"
+- Directly below it, an empty white rounded-rectangle input field.
+- Below that, an orange rounded button with white text: "Logga in"
+
+**Footer** (separated from the content by a thin horizontal line, on the same cream background):
+- Gray text: "matapp — framtidsvision · auth + profil + 3 förslag"
+- On the line below, gray text: "Prototyp 2026"
+
+All text is in Swedish. No error messages are visible. Both input fields are empty.
+
+[describe_image] model=lanef-27b from=content prompt_tokens=880 completion_tokens=699 26.6s

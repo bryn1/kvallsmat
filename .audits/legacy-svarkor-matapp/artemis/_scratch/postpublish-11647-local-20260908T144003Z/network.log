@@ -1,0 +1,11 @@
+[997906F6A1F3DA1E4AB6B297B16574D4] GET http://127.0.0.1:8398/ (Document) 200
+[1645549.2] GET http://127.0.0.1:8398/static/css/app.css?v=20260908 (Stylesheet) 200
+[1645549.3] GET http://127.0.0.1:8398/static/js/utils/api.js?v=20260908 (Script) 200
+[1645549.4] GET http://127.0.0.1:8398/static/js/ui/auth.js?v=20260908 (Script) 200
+[1645549.5] GET http://127.0.0.1:8398/static/js/ui/profile.js?v=20260908 (Script) 200
+[1645549.6] GET http://127.0.0.1:8398/static/js/ui/suggestions.js?v=20260908 (Script) 200
+[1645549.7] GET http://127.0.0.1:8398/static/js/app.js?v=20260908 (Script) 200
+[1645549.14] GET http://127.0.0.1:8398/api/auth/me (Fetch) 401
+[1645549.15] GET http://127.0.0.1:8398/api/profile (Fetch) 401
+[1645549.16] GET http://127.0.0.1:8398/api/menu (Fetch) 401
+[1645549.17] GET http://127.0.0.1:8398/favicon.ico (Other) 404

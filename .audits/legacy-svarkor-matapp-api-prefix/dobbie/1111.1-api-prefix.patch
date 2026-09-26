@@ -1,0 +1,32 @@
+# MC 1111.1 — matapp api-prefix fix (minimal diff vs deployed baseline)
+# File: /srv/workspace/hosting/apps/matapp/static/js/utils/api.js
+# Change: make API_BASE prefix-aware so api/stores resolves under /matapp/.
+#
+# Baseline: API_BASE = '' -> browser fetches /api/stores at the origin root,
+#   where the renderer's nginx has no location -> 404 (verified live).
+# Fixed: API_BASE derived from window.location.pathname -> '/matapp' under
+#   /matapp/; frontend fetches /matapp/api/stores -> nginx strips /matapp ->
+#   backend serves /api/stores -> 200 (verified live with real catalog).
+#
+# Apply with:  patch -p1 < this-file   (paths relative to apps/matapp)  OR
+#   just copy the shipped api.js over static/js/utils/api.js.
+--- a/apps/matapp/static/js/utils/api.js
++++ b/apps/matapp/static/js/utils/api.js
+@@ -9,7 +9,16 @@
+ // this is purely transport helpers.
+ // ============================================================================
+ 
+-const API_BASE = '';
++// Prefix-aware API base (MC 1111.1): the renderer's nginx serves the app under
++// /matapp/ and STRIPS that prefix before proxying to the backend, so the
++// browser must request /matapp/api/... while the backend still sees /api/....
++// Derive the base from the page path so it also works mounted at root ("") and
++// is robust to the app moving to another prefix -- no hardcoded "/matapp".
++function resolveApiBase(pathname) {
++  const seg = (pathname || '').split('/')[1];
++  return seg ? '/' + seg : '';
++}
++const API_BASE = resolveApiBase(window.location.pathname);
+ 
+ /**
+  * Perform a GET request against the API.

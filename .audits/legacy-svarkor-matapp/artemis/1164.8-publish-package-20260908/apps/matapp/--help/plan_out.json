@@ -1,0 +1,50 @@
+{
+  "meta": {
+    "week_key": "2026-W34",
+    "offers_ingested": 4,
+    "recipes_in_db": 18,
+    "days_planned": 5,
+    "family": {
+      "meal_days": 5,
+      "persons": 4,
+      "vegetarian": false,
+      "budget_tier": "budget"
+    },
+    "generated_at_utc": "2026-09-09T17:48:29Z",
+    "plan_digest": "0b308db1390cd466"
+  },
+  "plan": {
+    "week_key": "2026-W34",
+    "days": [
+      {
+        "date": "2026-08-17",
+        "dish_id": "Korv stroganoff",
+        "used_offer_ids": [
+          2
+        ]
+      },
+      {
+        "date": "2026-08-18",
+        "dish_id": "Unsbakad falukorv med potatismos",
+        "used_offer_ids": []
+      },
+      {
+        "date": "2026-08-19",
+        "dish_id": "Köttbullar med gräddsås och potatis",
+        "used_offer_ids": [
+          1
+        ]
+      },
+      {
+        "date": "2026-08-20",
+        "dish_id": "Köttfärssås och spagetti",
+        "used_offer_ids": []
+      },
+      {
+        "date": "2026-08-21",
+        "dish_id": "Pytt i panna med ägg",
+        "used_offer_ids": []
+      }
+    ]
+  }
+}

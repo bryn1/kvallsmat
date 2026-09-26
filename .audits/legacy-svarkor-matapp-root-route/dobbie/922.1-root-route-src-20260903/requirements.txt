@@ -1,0 +1,11 @@
+# Exact pins for the vm106 matapp service (MC 573.2). The renderer requires
+# exact `pkg==version` pins (hyphens) and no extras syntax (uvicorn[standard]
+# is refused) -- plain uvicorn is sufficient: this is a plain HTTP FastAPI app
+# (no websockets; apps.yaml omits websocket for matapp). Runtime deps only;
+# the test-only deps (pytest, httpx) are NOT shipped. Versions are those
+# verified natively by the MC 573.1 assembly (teddy's deploy venv, 2026-08-24):
+#   fastapi 0.141.1, uvicorn 0.52.4, SQLAlchemy 2.0.52, pydantic 2.13.4.
+fastapi==0.141.1
+uvicorn==0.52.4
+sqlalchemy==2.0.52
+pydantic==2.13.4

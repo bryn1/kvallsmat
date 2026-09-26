@@ -1,0 +1,24 @@
+--- DISPATCH BRIEF ---
+WHAT: PHASE-0 plan: phase-plan DERIVED from the architecture map for matapp framtidsversion.
+SCOPE: Plan only. No code. Deliverable: docs/PHASE0.md bundle (research + map + plan) committed.
+SKILLS: workspace-convention; phase-0; job-sizing; plan-module-breakdown; web-app-hosting.
+READ: /srv/workspace/svarkor-matapp/PHASE0-research.md + /srv/workspace/svarkor-matapp/PHASE0-map.md. Planen DERIVERAS från kartan — byggordning = beroendepilar, fasantal skalar med projektet, INTE ärvt från önskemålets formulering.
+VISION (MC 1110): auth + profil (3 butiker, budget, måltider/vecka, personer) + motor → 3 veckomenyförslag, majoritet extrapris-ingredienser.
+KRAV PÅ PLANEN:
+  - Byggordning följer kartans beroendepilar.
+  - Varje fas namnger: seat, gate (vem verifierar, mot vad), [onfail:]-target och [cycles:]-budget.
+  - DoD med claim-vokabulär: PASS/FAIL/UNVERIFIED (UNVERIFIED != PASS). Ingen fas hävdar produktionsklarhet bortom evidens.
+  - Hostable web-app → OBLIGATORISKT DoD-item: "ships valid hosting.yaml at repo root AND entrypoint binds PORT env (0.0.0.0:$PORT)" med bar `python3 infra/vm106/repo-visibility-hosting/validate-hosting.py <repo> ; exit 0` (som appen ska HOSTAS). PLUS andra POST-PUBLISH DoD-item: "post-publish acceptance PASSES on live URL: reachable + renders (pixels AND vision) + every click/function/page, zero console errors, zero asset 404s" med bar `/usr/local/bin/postpublish-accept.sh --url https://sibbamala.com/matapp/ ... ; exit 0` — routad till henrik (enda vm105-seat med browser+vision).
+  - Test-plan-skelett med harness self-test (måste kunna fela).
+  - Evidence paths = workspace paths, aldrig /tmp.
+  - NOTERA/LEDGE: nuvarande render-fix (api-prefix, kort 1111.1) pågår parallellt — planen bör anta att befintlig POC-frontend får prefix-fix, och nya moduler byggs prefix-medvetna.
+OUTPUT: skriv BUNDLE till /srv/workspace/svarkor-matapp/docs/PHASE0.md (alla tre deliverables; research+map redan i separata filer — länka + sammanfatta, eller samla). Commit i projekt-workspace.
+DoD: /srv/workspace/svarkor-matapp/docs/PHASE0.md existerar med derivad fasplan (namngivna seat+gate+onfail+cycles per fas) + test-plan-skelett.
+RESULT: se schema.
+--- RESULT ---
+STATUS: DONE | BLOCKED
+FILES: <paths>
+DID: <<=4 rader>
+VERIFY: <check + utfall>
+BLOCKERS: <none eller konkret>
+--- END ---

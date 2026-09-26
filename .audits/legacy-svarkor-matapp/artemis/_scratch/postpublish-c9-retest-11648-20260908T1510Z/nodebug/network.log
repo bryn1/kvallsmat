@@ -1,0 +1,11 @@
+[80BFA039D6F7F410AF620C56D8DF99B6] GET http://127.0.0.1:8498/ (Document) 200
+[1865585.2] GET http://127.0.0.1:8498/static/css/app.css?v=20260908 (Stylesheet) 200
+[1865585.3] GET http://127.0.0.1:8498/static/js/utils/api.js?v=20260908 (Script) 200
+[1865585.4] GET http://127.0.0.1:8498/static/js/ui/auth.js?v=20260908 (Script) 200
+[1865585.5] GET http://127.0.0.1:8498/static/js/ui/profile.js?v=20260908 (Script) 200
+[1865585.6] GET http://127.0.0.1:8498/static/js/ui/suggestions.js?v=20260908 (Script) 200
+[1865585.7] GET http://127.0.0.1:8498/static/js/app.js?v=20260908 (Script) 200
+[1865585.14] GET http://127.0.0.1:8498/api/auth/me (Fetch) 401
+[1865585.15] GET http://127.0.0.1:8498/api/profile (Fetch) 401
+[1865585.16] GET http://127.0.0.1:8498/api/menu (Fetch) 401
+[1865585.17] GET http://127.0.0.1:8498/favicon.ico (Other) 200

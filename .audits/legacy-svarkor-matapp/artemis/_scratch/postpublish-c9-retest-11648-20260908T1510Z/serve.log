@@ -1,0 +1,8 @@
+[run_local] seeded acceptance user 'gate'
+[run_local] serving assembled matapp framtidsversion on 127.0.0.1:8398
+INFO:     Started server process [1843125]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 8398): address already in use
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.

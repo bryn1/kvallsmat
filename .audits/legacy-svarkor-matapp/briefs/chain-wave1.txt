@@ -1,0 +1,10 @@
+bernie|T1: Phase 2 [type:code] db-foundation — users+profile+regular_price_cents|/srv/workspace/svarkor-matapp/briefs/p2-db-foundation.txt|||none
+dobbie|G1: Phase 2 [type:test] gate C1 db-foundation|/srv/workspace/svarkor-matapp/briefs/gate-p2.txt|1|2|1
+bernie|T2: Phase 3 [type:code] auth — argon2id+session|/srv/workspace/svarkor-matapp/briefs/p3-auth.txt|||2
+bernie|T3: Phase 4 [type:code] offer-ingest-referenspris+httpx|/srv/workspace/svarkor-matapp/briefs/p4-offer-ingest.txt|||2
+dobbie|G2: Phase 3 [type:test] gate C2 auth|/srv/workspace/svarkor-matapp/briefs/gate-p3.txt|3|3|3
+dobbie|G3: Phase 4 [type:test] gate C3 ingest|/srv/workspace/svarkor-matapp/briefs/gate-p4.txt|4|3|4
+bernie|T4: Phase 5 [type:code] profile — auth-skyddad|/srv/workspace/svarkor-matapp/briefs/p5-profile.txt|||5
+dobbie|G4: Phase 5 [type:test] gate C4 profile|/srv/workspace/svarkor-matapp/briefs/gate-p5.txt|7|2|7
+bernie|T5: Phase 6 [type:code] optimizer-ratio-3|/srv/workspace/svarkor-matapp/briefs/p6-optimizer.txt|||6
+dobbie|G5: Phase 6 [type:test] gate C5 optimizer|/srv/workspace/svarkor-matapp/briefs/gate-p6.txt|9|4|9

@@ -1,0 +1,18 @@
+POST-PUBLISH ACCEPTANCE  v1.0.0
+url:   http://127.0.0.1:8399/
+when:  20260908T141307Z
+seat:  artemis@vm105
+  PASS  product path http://127.0.0.1:8399/ -> 200, 1083B
+  PASS  browser navigated: ✓ Calib Konto
+  PASS  pixels: 1280x577 stddev=0.060709 (>=0.02) colors=1151 (>=8) -- not blank
+  PASS  required copy present: Konto
+  PASS  required copy present: Profil
+  ..    vision SKIPPED by --no-vision -- render judged on pixels only; state this in your report
+  PASS  assets: 2 subresource requests, all 2xx/3xx
+  PASS  console: 0 page errors, 0 console errors
+  ..    surface: 2 links, 2 buttons, 2 inputs, 0 forms, 4 addressable refs -> /srv/workspace/svarkor-matapp/artemis/_scratch/postpublish-calib2-20260908/snapshot.txt
+  PASS  interactive surface enumerated (4 refs) -- exercise each below or in your own steps
+  PASS  flow: click 'a[data-page="profile"]' -> '#page-profile' VISIBLE
+  PASS  flow: click 'a[data-page="auth"]' -> '#page-auth' VISIBLE
+  PASS  no new page errors after interaction
+/usr/local/bin/postpublish-accept.sh: RESULT=PASS

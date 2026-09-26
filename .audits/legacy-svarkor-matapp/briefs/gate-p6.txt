@@ -1,0 +1,12 @@
+--- DISPATCH BRIEF ---
+WHAT: Mekanisk build+test-gate för Phase 6 (T5) optimizer gate C5. DU GRADERAR, du bygger INTE.
+READ: Phase 6 (T5) optimizer gate C5 spec i /srv/workspace/svarkor-matapp/docs/PHASE0.md.
+SKILLS: workspace-convention; deterministic-verdict.
+DoD: /srv/workspace/svarkor-matapp/<seat>/p6-evidence.md existerar med # VERDICT-raden (PASS/FAIL) OCH bevisar: >= 3 distinkta förslag, varje andel_extrapris >= 0.5 (exit 0); trasig (tröskel 0.0) RÖD.
+--- RESULT ---
+STATUS: DONE | BLOCKED
+FILES:
+DID:
+VERIFY:
+BLOCKERS:
+--- END ---

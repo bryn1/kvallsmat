@@ -1,0 +1,7 @@
+# Phase 2 (T1) db-foundation — deploy-runtime dependencies (pin, not dev-only).
+# sqlalchemy is the ORM this foundation and every later phase (auth/profile/ingest)
+# runs on — it must ship in the deploy venv, like fastapi/uvicorn (DA FIX-1 pattern).
+fastapi==0.141.1
+uvicorn==0.52.4
+sqlalchemy==2.0.52
+pydantic==2.13.4

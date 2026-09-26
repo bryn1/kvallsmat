@@ -1,0 +1,4 @@
+nicke|audit: vision click-through — varje klick, varje länk (matapp)|/srv/workspace/svarkor-matapp/audit-brief-vision.md||2
+sigrid|audit: säkerhet — POC open-login by design, granska 4d220cd auth|/srv/workspace/svarkor-matapp/audit-brief-security.md||2
+dobbie|audit: korrekthet — kör sviten, error paths (matapp)|/srv/workspace/svarkor-matapp/audit-brief-correctness.md||2
+dobbie|audit: korrekthet — kör sviten, error paths (matapp)|/srv/workspace/svarkor-matapp/audit-brief-correctness.md|1|2

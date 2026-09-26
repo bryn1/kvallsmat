@@ -1,0 +1,23 @@
+POST-PUBLISH ACCEPTANCE  v1.0.0
+url:   http://127.0.0.1:8498/
+when:  20260908T151718Z
+seat:  artemis@vm105
+  PASS  product path http://127.0.0.1:8498/ -> 200, 6082B
+  PASS  route /health -> 200
+  FAIL  route /api/menu -> 401
+  FAIL  route /api/profile -> 401
+  PASS  browser navigated: ✓ matapp — veckomeny med erbjudanden
+  PASS  pixels: 1280x577 stddev=0.18116 (>=0.02) colors=3434 (>=8) -- not blank
+  PASS  required copy present: Konto
+  PASS  required copy present: Profil
+  PASS  required copy present: 3 förslag
+  ..    vision SKIPPED by --no-vision -- render judged on pixels only; state this in your report
+  FAIL  ASSET FAILURES: 1 non-2xx/3xx subresource(s) of 11 (see /srv/workspace/svarkor-matapp/artemis/_scratch/postpublish-c9-retest-11648-20260908T1510Z/nodebug/network-bad.log)
+  FAIL  CONSOLE/PAGE ERRORS: page=0 console=2 (see /srv/workspace/svarkor-matapp/artemis/_scratch/postpublish-c9-retest-11648-20260908T1510Z/nodebug/pageerrors.log, /srv/workspace/svarkor-matapp/artemis/_scratch/postpublish-c9-retest-11648-20260908T1510Z/nodebug/console.log)
+  ..    surface: 3 links, 4 buttons, 5 inputs, 2 forms, 5 addressable refs -> /srv/workspace/svarkor-matapp/artemis/_scratch/postpublish-c9-retest-11648-20260908T1510Z/nodebug/snapshot.txt
+  PASS  interactive surface enumerated (5 refs) -- exercise each below or in your own steps
+  PASS  flow: click 'a[data-page="profile"]' -> '#page-profile' VISIBLE
+  PASS  flow: click 'a[data-page="suggestions"]' -> '#page-suggestions' VISIBLE
+  PASS  flow: click 'a[data-page="auth"]' -> '#page-auth' VISIBLE
+  PASS  no new page errors after interaction
+/usr/local/bin/postpublish-accept.sh: RESULT=FAIL

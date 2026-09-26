@@ -1,0 +1,4 @@
+[error] Failed to load profile (404 ok): {stack: "Error: HTTP 401
+    at apiGet (http://127.0.0.1:83….1:8398/static/js/ui/profile.js?v=20260908:69:17)", message: "HTTP 401"}
+[error] Failed to load suggestions: {stack: "Error: HTTP 401
+    at apiGet (http://127.0.0.1:83…398/static/js/ui/suggestions.js?v=20260908:74:20)", message: "HTTP 401"}

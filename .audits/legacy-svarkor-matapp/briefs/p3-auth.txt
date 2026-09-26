@@ -1,0 +1,13 @@
+--- DISPATCH BRIEF ---
+WHAT: Phase 3 (T2) auth — matapp framtidsversion. Stänger closure-gap 2 (argon2-cffi).
+READ: /srv/workspace/svarkor-matapp/docs/PHASE0.md §P Phase 3 (full spec: gate C2, DoD, cycles, onfail). Closure-gap 2 i PHASE0-map.md. POC-skelett app/main.py+routers+server.py.
+SKILLS: workspace-convention; test-driven-development.
+OBS (DA FIX-1 skugga): ingen ny closure här, men requirements hanteras som PH4 nedan — håll koll så inga runtime-deps blir dev-only.
+DoD: grep -i argon2 requirements.txt >= 1 pin OCH auth-harness-test verifierar lösenords-hash + session-roundtrip (exit 0); avsiktligt fel lösenord går RÖTT (harness self-test). Harness testar ARGON2-verifiering, inte egen encoder.
+--- RESULT ---
+STATUS: DONE | BLOCKED
+FILES:
+DID:
+VERIFY:
+BLOCKERS:
+--- END ---

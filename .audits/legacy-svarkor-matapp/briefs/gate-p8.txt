@@ -1,0 +1,12 @@
+--- DISPATCH BRIEF ---
+WHAT: Mekanisk build+test-gate för Phase 8 (T7) frontend gate C7. DU GRADERAR, du bygger INTE. Måste ha browser+vision för post-publish (Phase 10).
+READ: Phase 8 (T7) frontend gate C7 spec i /srv/workspace/svarkor-matapp/docs/PHASE0.md.
+SKILLS: workspace-convention; deterministic-verdict; web-app-hosting.
+DoD: /srv/workspace/svarkor-matapp/<seat>/p8-evidence.md existerar med # VERDICT-raden (PASS/FAIL) OCH bevisar: headless render (non-blank) av varje vy (auth/profil/3-förslag) exit 0; API-anrop går mot /matapp/-prefixet INTE /; en vy utan prefix gick RÖD.
+--- RESULT ---
+STATUS: DONE | BLOCKED
+FILES:
+DID:
+VERIFY:
+BLOCKERS:
+--- END ---

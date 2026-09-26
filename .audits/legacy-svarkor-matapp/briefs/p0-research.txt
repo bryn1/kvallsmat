@@ -1,0 +1,22 @@
+--- DISPATCH BRIEF ---
+WHAT: PHASE-0 research for matapp frantidsversion (auth + parametrerad menygenerator + extrapris-majoritet).
+SCOPE: Bounded research. NO code. Deliverables: findings file + kb remember.
+SKILLS: workspace-convention; reuse-research-gate; citation-discipline; grounded-citations.
+READ: /srv/workspace/svarkor-matapp-root-route/dobbie/922.1-root-route-src-20260903/ (nuvarande matapp POC-källkod — butiksväljare + veckomeny) och inf/roster ev. Börja med reuse-research-gate: kolla vad flottan redan byggt (MC-sökning, kb recall).
+VISION (Alex 2026-09-06, från MC 1110): användare loggar in, väljer 3 butiker, sätter budget, antal måltider/vecka, antal personer → system genererar TRE veckomenyförslag baserade på de 3 butikernas reklamblad. HÅRT KRAV: majoriteten av ingredienserna kommer från extrapriser.
+FORSKNINGSFRÅGOR (varje claim citerad URL eller markerad UNVERIFIED):
+  1. Meny-optimering / matplanering under villkor (budget + antal portioner): kända algoritmer, prior art.
+  2. "Majoritet ingredienser från extrapris" — hur säkerställer man detta motoriskt: constraint (andel), greedy, optimering? Kända mönster.
+  3. Auth för en liten lokal web-app (matapp storlek): standardpraxis — session vs JWT, lösenords-hashing (argon2/bcrypt), vad är proportionerligt för en prototyp som denna.
+  4. Reklamblad/extrapris-data: källorna POC redan använder (willys/ica/coop feeds) — hur extrapriser representeras, säkerställande att "majoritet extrapris" kan mätas.
+  5. Publicerade benchmarks/parametrar för meny-optimering om de finns; annars UNVERIFIED.
+OUTPUT: skriv findings till /srv/workspace/svarkor-matapp/PHASE0-research.md (citerad, UNVERIFIED märkt) + kb remember (engelska, destillerat, kompakt).
+DoD: /srv/workspace/svarkor-matapp/PHASE0-research.md existerar, citerar varje claim med URL eller märker UNVERIFIED, och täcker frågorna 1-5 ovan.
+RESULT: se schema.
+--- RESULT ---
+STATUS: DONE | BLOCKED
+FILES: <paths>
+DID: <<=4 rader>
+VERIFY: <check + utfall>
+BLOCKERS: <none eller konkret>
+--- END ---

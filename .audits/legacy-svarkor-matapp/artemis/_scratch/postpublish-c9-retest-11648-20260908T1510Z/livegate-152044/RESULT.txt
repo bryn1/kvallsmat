@@ -1,0 +1,26 @@
+POST-PUBLISH ACCEPTANCE  v1.0.0
+url:   https://sibbamala.com/matapp/
+when:  20260908T152044Z
+seat:  artemis@vm105
+  PASS  product path https://sibbamala.com/matapp/ -> 200, 8797B
+  FAIL  route /api/auth/me -> 404
+  FAIL  route /api/auth/login -> 404
+  FAIL  route /api/profile -> 404
+  FAIL  route /api/menu -> 422
+  PASS  browser navigated: ✓ Kvällsmat — veckomeny med erbjudanden
+  PASS  pixels: 1280x577 stddev=0.279461 (>=0.02) colors=4872 (>=8) -- not blank
+  FAIL  required copy MISSING from the rendered page: Konto
+  FAIL  required copy MISSING from the rendered page: Profil
+  FAIL  required copy MISSING from the rendered page: 3 förslag
+  PASS  vision described the page (1449B) [describe_image] model=lanef-27b from=reasoning (truncated — raise --max-tokens) prompt_tokens=880 completion_tokens=900 33.8s (degenerate tail trimmed)
+  FAIL  vision did NOT see expected element: Konto (evidence: livegate-152044/render.png + livegate-152044/vision.txt)
+  FAIL  vision did NOT see expected element: Profil (evidence: livegate-152044/render.png + livegate-152044/vision.txt)
+  PASS  assets: 11 subresource requests, all 2xx/3xx
+  PASS  console: 0 page errors, 0 console errors
+  ..    surface: 2 links, 4 buttons, 6 inputs, 2 forms, 8 addressable refs -> livegate-152044/snapshot.txt
+  PASS  interactive surface enumerated (8 refs) -- exercise each below or in your own steps
+  FAIL  flow: click 'a[data-page="profile"]' did not land -- ✗ Element not found. Verify the selector is correct and the element exists in the DOM.
+  FAIL  flow: click 'a[data-page="suggestions"]' did not land -- ✗ Element not found. Verify the selector is correct and the element exists in the DOM.
+  FAIL  flow: click 'a[data-page="auth"]' did not land -- ✗ Element not found. Verify the selector is correct and the element exists in the DOM.
+  PASS  no new page errors after interaction
+/usr/local/bin/postpublish-accept.sh: RESULT=FAIL

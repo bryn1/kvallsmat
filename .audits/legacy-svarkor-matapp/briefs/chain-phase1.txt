@@ -1,0 +1,4 @@
+artemis|PHASE-0 research: prior art, patterns, pitfalls, libraries, benchmarks — varje claim citerad (URL) eller UNVERIFIED; kb remember + findings-fil|/srv/workspace/svarkor-matapp/briefs/p0-research.txt|||none
+bernie|PHASE-0 architecture: dependency/closure map — komponenter, HAL-seams, beroenden, external deps present/missing, env preflight|/srv/workspace/svarkor-matapp/briefs/p0-map.txt|||1
+sickan|PHASE-0 plan: faser DERIVERADE från kartan, seat+gate+onfail+cycles, UNVERIFIED!=PASS, test-plan m/ harness self-test, hosting+post-publish DoD; commit docs/PHASE0.md|/srv/workspace/svarkor-matapp/briefs/p0-plan.txt|||2
+neo|PHASE-1 DA gate över HELA phase-0-bundlen: citeringar, closure-hål, plan-följer-karta; # VERDICT: SHIP/FIX/RECONSIDER|/srv/workspace/svarkor-matapp/briefs/p1-da.txt|back|3|3

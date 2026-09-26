@@ -1,0 +1,11 @@
+--- DISPATCH BRIEF ---
+WHAT: Fase 10-publicering blockerad av ett saknat varpen: publiceringspaketets requirements.txt saknar httpx==0.28.1. Phase 4 (bernie, 1143.4) pinade den uttryckligen (DA FIX-1, se bernie/p4-evidence.4 row 'httpx==0.28.1') men artemis 1164.8-publish-package tappade raden vid sammanslagningen. Utan httpx kastas ImportError i src/fetcher/grocer.py:19 när run_motor.py (ingest-OPS-jobbet, körs mot samma app-venv) dras -> ingest dör tyst efter deploy.
+READ: /srv/workspace/svarkor-matapp/artemis/1164.8-publish-package-20260908/INTEGRATION-NOTES.md ; /srv/workspace/svarkor-matapp/bernie/p4-evidence.md (CHECK 3).
+DoD: /srv/workspace/svarkor-matapp/artemis/1164.8-publish-package-20260908/apps/matapp/requirements.txt innehåller httpx==0.28.1 och `grep -qE '^httpx==' /srv/workspace/svarkor-matapp/artemis/1164.8-publish-package-20260908/apps/matapp/requirements.txt` exit 0, OCH en cache-bust av paketet som bekräftar att inget annat i filen ändrades (diff mot tidigare version visar exakt +1 rad).
+--- RESULT ---
+STATUS: DONE | BLOCKED
+FILES:
+DID:
+VERIFY:
+BLOCKERS:
+--- END ---

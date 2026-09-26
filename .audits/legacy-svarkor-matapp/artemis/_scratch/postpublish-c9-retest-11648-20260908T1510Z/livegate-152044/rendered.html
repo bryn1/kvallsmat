@@ -1,0 +1,242 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kvällsmat — veckomeny med erbjudanden</title>
+  <!-- Token-first: base.css (design tokens) must load before components -->
+  <link rel="stylesheet" href="static/css/base.css?v=1e554f53">
+  <link rel="stylesheet" href="static/css/components.css?v=1273106d">
+  <link rel="stylesheet" href="static/css/responsive.css?v=d24ae63c">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <h1 class="site-header__title">🍲 Kvällsmat</h1>
+    <p class="site-header__subtitle">Veckomeny med rabatterbjudanden från dina butiker</p>
+  </div>
+</header>
+
+<nav class="site-nav" aria-label="Huvudnavigering">
+  <a data-page="stores" href="#" class="site-nav__link site-nav__link--active">Butiker</a>
+  <a data-page="menu" href="#" class="site-nav__link">Veckomeny</a>
+</nav>
+
+<main>
+
+  <!-- ============================== -->
+  <!-- Store pick view                  -->
+  <!-- ============================== -->
+  <section id="page-stores" class="page-view" data-seat="stores">
+    <div class="stores-page">
+      <h2 class="page-view__title">Välj dina butiker</h2>
+      <p class="page-view__intro">Markera upp till tre butiker — vi hämtar erbjudanden därifrån till veckomenyn.</p>
+
+      <!-- Loading state -->
+      <div id="stores-loading" class="state-banner" role="status" hidden="">
+        <span class="state-banner__spinner" aria-hidden="true"></span>
+        <p>Laddar butiker...</p>
+      </div>
+
+      <!-- Error state -->
+      <div id="stores-error" class="state-banner state-banner--error" hidden="" role="alert">
+        <p>Kunde inte hämta butikerna. Försök igen om en stund.</p>
+        <button type="button" id="stores-retry" class="btn btn-ghost btn-sm">Försök igen</button>
+      </div>
+
+      <!-- Store list container (rendered by ui/stores.js) -->
+      <form id="stores-form" class="stores-form" novalidate="">
+        <fieldset id="stores-fieldset" class="stores-list">
+      <label class="store-card store-card--selected" data-store-id="willys">
+        <span class="store-card__control">
+          <input type="checkbox" class="store-card__checkbox" value="willys" checked="" aria-label="Välj willys">
+        </span>
+        <span class="store-card__body">
+          <span class="store-card__name">willys
+            <span class="store-card__chain">willys</span>
+          </span>
+        </span>
+      </label>
+      <label class="store-card store-card--selected" data-store-id="ica">
+        <span class="store-card__control">
+          <input type="checkbox" class="store-card__checkbox" value="ica" checked="" aria-label="Välj ica">
+        </span>
+        <span class="store-card__body">
+          <span class="store-card__name">ica
+            <span class="store-card__chain">ica</span>
+          </span>
+        </span>
+      </label>
+      <label class="store-card" data-store-id="coop">
+        <span class="store-card__control">
+          <input type="checkbox" class="store-card__checkbox" value="coop" aria-label="Välj coop">
+        </span>
+        <span class="store-card__body">
+          <span class="store-card__name">coop
+            <span class="store-card__chain">coop</span>
+          </span>
+        </span>
+      </label></fieldset>
+
+        <div class="stores-actions">
+          <p class="stores-actions__hint" id="stores-hint" aria-live="polite">2/3 valda.</p>
+          <button type="submit" id="stores-save" class="btn btn-primary">Spara urval</button>
+        </div>
+      </form>
+
+      <!-- Empty state (no stores available) -->
+      <div id="stores-empty" class="state-banner" hidden="" role="status">
+        <p>Just nu finns inga butiker att visa.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== -->
+  <!-- Weekly menu view                -->
+  <!-- ============================== -->
+  <section id="page-menu" class="page-view page-view--menu" hidden="">
+    <div class="menu-page">
+      <h2 class="page-view__title">Veckomeny</h2>
+      <p class="page-view__intro">Anpassa och hämta en meny för din familj.</p>
+
+      <!-- Constraints form -->
+      <form id="menu-form" class="constraints-form" novalidate="">
+        <div class="constraints-form__grid">
+
+          <div class="form-field">
+            <label for="menu-week">Vecka</label>
+            <input type="text" id="menu-week" name="week" class="form-input" placeholder="2026-W34" required="">
+            <p class="form-field__help">ISO-vecka, t.ex. <code>2026-W34</code>.</p>
+          </div>
+
+          <div class="form-field">
+            <label for="menu-meal-days">Middagar</label>
+            <select id="menu-meal-days" name="meal_days" class="form-select">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5" selected="">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="14">14</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="menu-persons">Personer</label>
+            <select id="menu-persons" name="persons" class="form-select">
+              <option value="1">1</option>
+              <option value="2" selected="">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+          </div>
+
+          <div class="form-field form-field--check">
+            <input type="checkbox" id="menu-vegetarian" name="vegetarian" class="form-check">
+            <label for="menu-vegetarian">Vegetariskt</label>
+          </div>
+
+          <div class="form-field">
+            <label for="menu-budget">Budgetnivå</label>
+            <select id="menu-budget" name="budget_tier" class="form-select">
+              <option value="">Alla nivåer</option>
+              <option value="budget">Budget</option>
+              <option value="mid" selected="">Mellan</option>
+              <option value="premium">Premium</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="menu-allergens">Undvik allergener</label>
+            <select id="menu-allergens" name="allergens" class="form-select" multiple="" size="6">
+              <option value="mjolk">Mjölk</option>
+              <option value="agg">Ägg</option>
+              <option value="vetegluten">Vete / gluten</option>
+              <option value="notter">Nötter</option>
+              <option value="jordnotter">Jordnötter</option>
+              <option value="soja">Soja</option>
+              <option value="skaldjur">Skaldjur</option>
+              <option value="fisk">Fisk</option>
+              <option value="selleri">Selleri</option>
+              <option value="senap">Senap</option>
+              <option value="sesam">Sesam</option>
+            </select>
+            <p class="form-field__help">Håll inne Ctrl/Cmd för att välja flera.</p>
+          </div>
+
+          <div class="form-field">
+            <label for="menu-seed">Slumpfrö</label>
+            <input type="number" id="menu-seed" name="seed" class="form-input" value="1234" min="0">
+            <p class="form-field__help">Samma frö ger samma meny.</p>
+          </div>
+
+          <div class="form-field form-field--actions">
+            <button type="submit" id="menu-submit" class="btn btn-primary">Hämta veckomeny</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Loading state -->
+      <div id="menu-loading" class="state-banner" hidden="" role="status">
+        <span class="state-banner__spinner" aria-hidden="true"></span>
+        <p>Tar fram veckomenyn...</p>
+      </div>
+
+      <!-- Error state -->
+      <div id="menu-error" class="state-banner state-banner--error" hidden="" role="alert">
+        <p id="menu-error-text">Kunde inte hämta veckomenyn. Kontrollera att du valt butiker och försök igen.</p>
+        <button type="button" id="menu-retry" class="btn btn-ghost btn-sm">Försök igen</button>
+      </div>
+
+      <!-- Menu results -->
+      <section id="menu-results" class="menu-results" hidden="" aria-label="Veckomeny">
+        <header class="menu-results__header">
+          <h3 class="menu-results__week" id="menu-week-key"></h3>
+          <span class="menu-results__count" id="menu-day-count" aria-live="polite"></span>
+        </header>
+
+        <!-- Loading skeleton inside results header -->
+        <div id="menu-days-loading" class="state-banner" role="status">
+          <p>Laddar menyn...</p>
+        </div>
+
+        <!-- Day cards grid -->
+        <div id="menu-days" class="menu-grid" role="list" aria-label="Veckans middagar">
+          <!-- one card per day rendered by ui/menu.js -->
+        </div>
+
+        <!-- Empty state -->
+        <div id="menu-days-empty" class="empty-state" hidden="" role="status">
+          <p class="empty-state__message">Inga middagar för den här veckan.</p>
+        </div>
+      </section>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <span>Kvällsmat — lokal prototyp · erbjudanden från valda butiker</span>
+  </div>
+  <div class="site-footer__bottom">
+    Prototyp 2026
+  </div>
+</footer>
+
+<!-- Modular JS: utils → ui modules → app.js LAST -->
+<script src="static/js/utils/api.js?v=2920e3ec"></script>
+<script src="static/js/ui/stores.js?v=0b59aafb"></script>
+<script src="static/js/ui/menu.js?v=87e618dd"></script>
+<script src="static/js/app.js?v=4ab6bd82"></script>
+
+
+</body>

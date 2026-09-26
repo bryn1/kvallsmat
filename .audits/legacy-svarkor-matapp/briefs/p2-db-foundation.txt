@@ -1,0 +1,12 @@
+--- DISPATCH BRIEF ---
+WHAT: Phase 2 (T1) db-foundation — matapp framtidsversion.
+READ: /srv/workspace/svarkor-matapp/docs/PHASE0.md §P Phase 2 (full spec: gate C1, DoD, cycles, onfail). POC-källan /srv/workspace/svarkor-matapp-root-route/dobbie/922.1-root-route-src-20260903/src/ (db.py, models).
+SKILLS: workspace-convention; test-driven-development.
+DoD: python3 -c "import app.db; from app.models import users, profile, offers_db; print(users.Base, profile.Base)" exit 0 OCH grep -c 'regular_price_cents' i offers-modellen >= 1. Harness kan fela (avsiktligt trasig modell röd).
+--- RESULT ---
+STATUS: DONE | BLOCKED
+FILES:
+DID:
+VERIFY:
+BLOCKERS:
+--- END ---

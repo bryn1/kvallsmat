@@ -1,0 +1,12 @@
+--- DISPATCH BRIEF ---
+WHAT: Mekanisk build+test-gate för Phase 3 (T2) auth gate C2. DU GRADERAR, du bygger INTE.
+READ: Phase 3 (T2) auth gate C2 spec i /srv/workspace/svarkor-matapp/docs/PHASE0.md.
+SKILLS: workspace-convention; deterministic-verdict.
+DoD: /srv/workspace/svarkor-matapp/<seat>/p3-evidence.md existerar med # VERDICT-raden (PASS/FAIL) OCH bevisar: grep -i argon2 requirements.txt >= 1 pin; auth-harness: lösenords-hash + session-roundtrip exit 0; fel lösenord RÖD.
+--- RESULT ---
+STATUS: DONE | BLOCKED
+FILES:
+DID:
+VERIFY:
+BLOCKERS:
+--- END ---

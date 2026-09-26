@@ -1,0 +1,3 @@
+--- sha256 live vs hosting POC ---
+b0df2902aa685eb3f32a48ece0f72273f9dcf612d63eb3ca90db75a8671aa065  live_index.html
+b0df2902aa685eb3f32a48ece0f72273f9dcf612d63eb3ca90db75a8671aa065  /srv/workspace/hosting/apps/matapp/templates/index.html

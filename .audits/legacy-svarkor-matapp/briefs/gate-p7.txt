@@ -1,0 +1,12 @@
+--- DISPATCH BRIEF ---
+WHAT: Mekanisk build+test-gate för Phase 7 (T6) api-lager gate C6. DU GRADERAR, du bygger INTE. Måste ha browser+vision för post-publish (Phase 10).
+READ: Phase 7 (T6) api-lager gate C6 spec i /srv/workspace/svarkor-matapp/docs/PHASE0.md.
+SKILLS: workspace-convention; deterministic-verdict; web-app-hosting.
+DoD: /srv/workspace/svarkor-matapp/<seat>/p7-evidence.md existerar med # VERDICT-raden (PASS/FAIL) OCH bevisar: GET /api/menu med giltig session+förfrågan ger 200 med suggestions längd 3 (exit 0); utan session 401; router saknar auth-dependency gick RÖD.
+--- RESULT ---
+STATUS: DONE | BLOCKED
+FILES:
+DID:
+VERIFY:
+BLOCKERS:
+--- END ---

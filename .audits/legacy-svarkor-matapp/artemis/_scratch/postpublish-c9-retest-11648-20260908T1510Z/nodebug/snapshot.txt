@@ -1,0 +1,23 @@
+- banner
+  - heading "🥘 matapp" [level=1, ref=e2]
+  - paragraph
+    - StaticText "3 förslag — veckomeny med majoritet extrapris"
+- navigation "Huvudnavigering" [ref=e1]
+  - link "Konto" [ref=e3]
+  - link "Profil" [ref=e4]
+  - link "3 förslag" [ref=e5]
+- main
+  - heading "Logga in / konto" [level=2, ref=e6]
+  - paragraph
+    - StaticText "Logga in för att nå din profil och dina förslag."
+  - form
+    - LabelText
+      - StaticText "Användarnamn"
+    - textbox "Användarnamn" [required, ref=e7]
+    - LabelText
+      - StaticText "Lösenord"
+    - textbox "Lösenord" [required, ref=e8]
+    - button "Logga in" [ref=e9]
+- contentinfo
+  - StaticText "matapp — framtidsvision · auth + profil + 3 förslag"
+  - StaticText "Prototyp 2026"

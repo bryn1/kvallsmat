@@ -1,0 +1,305 @@
+/* ============================================================================
+   Kvällsmat — Component styles (static/css/components.css)
+   ============================================================================
+   BEM component classes for buttons, forms, store pick cards and the week
+   menu grid/day cards. Token-driven; no hardcoded colours except focus uses
+   --color-border-focus. Loaded after base.css so tokens are available.
+   ============================================================================ */
+
+/* ---- Buttons (btn) ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background var(--transition-fast), border-color var(--transition-fast),
+              color var(--transition-fast);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--color-primary-600);
+  color: var(--color-text-inverse);
+}
+
+.btn-primary:hover:not(:disabled) { background: var(--color-primary-700); }
+.btn-primary:active:not(:disabled) { background: var(--color-primary-800); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-primary-600);
+  border-color: var(--color-primary-300);
+}
+
+.btn-ghost:hover:not(:disabled) { background: var(--color-primary-50); }
+
+.btn-sm { padding: var(--space-1) var(--space-3); font-size: var(--text-sm); }
+
+/* ---- Forms ---- */
+.form-input,
+.form-select {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px var(--color-info-bg);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.form-field label {
+  font-weight: var(--font-semibold);
+  font-size: var(--text-sm);
+}
+
+.form-field__help {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.form-field--check {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.form-check {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-primary-600);
+}
+
+.form-field--actions {
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+/* ---- Constraints form grid ---- */
+.constraints-form__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-6);
+  margin-bottom: var(--space-8);
+}
+
+.constraints-form__grid .form-field--actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ---- Store pick ---- */
+.stores-list {
+  border: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+.store-card {
+  --stores-checked-color: var(--color-accent-600);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-alt);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast),
+              background var(--transition-fast);
+}
+
+.store-card:hover {
+  border-color: var(--color-primary-300);
+  box-shadow: var(--shadow-sm);
+}
+
+.store-card--selected {
+  border-color: var(--color-accent-500);
+  background: var(--color-accent-50);
+  box-shadow: var(--shadow-sm);
+}
+
+.store-card__control {
+  flex-shrink: 0;
+}
+
+.store-card__checkbox {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--color-accent-600);
+}
+
+.store-card__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.store-card__name {
+  font-weight: var(--font-semibold);
+  font-size: var(--text-base);
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.store-card__chain {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-transform: capitalize;
+}
+
+.store-card__badge {
+  align-self: flex-start;
+  white-space: nowrap;
+}
+
+/* ---- Menu results ---- */
+.menu-results__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.menu-results__week {
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  color: var(--color-text);
+}
+
+.menu-results__count {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+/* ---- Day cards grid ---- */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-6);
+}
+
+.day-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+
+.day-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.day-card__heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.day-card__date {
+  font-weight: var(--font-bold);
+  font-size: var(--text-base);
+  color: var(--color-text);
+}
+
+.day-card__weekday {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.day-card__dish {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--color-text);
+  line-height: var(--leading-snug);
+}
+
+/* ---- Offer badges ---- */
+.offer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-success-bg);
+  color: var(--color-success-700, #1c6d36);
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  white-space: nowrap;
+}
+
+.offer-badge--zero {
+  background: var(--color-neutral-100);
+  color: var(--color-text-muted);
+  font-weight: var(--font-normal);
+}
+
+.offer-badge__count {
+  font-weight: var(--font-bold);
+}
+
+.offer-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.day-card__offers-heading {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  margin-top: auto;
+}
+
+/* ============================================================================
+   Focus-visible (global accessibility floor)
+   ============================================================================ */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}

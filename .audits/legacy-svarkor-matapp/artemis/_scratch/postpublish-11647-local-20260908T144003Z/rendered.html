@@ -1,0 +1,145 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>matapp — veckomeny med erbjudanden</title>
+  <!-- Token-first: base.css must load before component styles -->
+  <link rel="stylesheet" href="static/css/app.css?v=20260908">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <h1 class="site-header__title">🥘 matapp</h1>
+    <p class="site-header__subtitle">3 förslag — veckomeny med majoritet extrapris</p>
+  </div>
+</header>
+
+<nav class="site-nav" aria-label="Huvudnavigering">
+  <a data-page="auth" href="#" class="site-nav__link site-nav__link--active">Konto</a>
+  <a data-page="profile" href="#" class="site-nav__link">Profil</a>
+  <a data-page="suggestions" href="#" class="site-nav__link">3 förslag</a>
+</nav>
+
+<main>
+
+  <!-- ============================== -->
+  <!-- Auth view                      -->
+  <!-- ============================== -->
+  <section id="page-auth" class="page-view" data-seat="auth">
+    <div class="auth-page">
+      <h2 class="page-view__title">Logga in / konto</h2>
+      <p class="page-view__intro">Logga in för att nå din profil och dina förslag.</p>
+
+      <!-- Error banner -->
+      <div id="auth-error" class="state-banner state-banner--error" hidden="" role="alert">
+        <p id="auth-error-text"></p>
+      </div>
+
+      <!-- Login form (shown when unauthenticated) -->
+      <form id="auth-form" class="auth-form" novalidate="">
+        <div class="form-field">
+          <label for="auth-input-user">Användarnamn</label>
+          <input type="text" id="auth-input-user" name="username" class="form-input" autocomplete="username" required="">
+        </div>
+        <div class="form-field">
+          <label for="auth-input-pass">Lösenord</label>
+          <input type="password" id="auth-input-pass" name="password" class="form-input" autocomplete="current-password" required="">
+        </div>
+        <div class="form-field form-field--actions">
+          <button type="submit" id="auth-submit" class="btn btn-primary">Logga in</button>
+        </div>
+      </form>
+
+      <!-- Logged-in status (shown when authenticated) -->
+      <div id="auth-status" class="auth-status" hidden="">
+        <p class="auth-status__greeting">Inloggad som <strong id="auth-username"></strong>.</p>
+        <p class="auth-status__hint">Gå till <em>Profil</em> för att ställa in ditt hushåll, eller <em>3 förslag</em> för veckomenyer.</p>
+        <button type="button" id="auth-logout" class="btn btn-ghost">Logga ut</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== -->
+  <!-- Profile view                   -->
+  <!-- ============================== -->
+  <section id="page-profile" class="page-view" hidden="">
+    <div class="profile-page">
+      <h2 class="page-view__title">Din profil</h2>
+      <p class="page-view__intro">Hushållets storlek, middagar per vecka och kronbudget.</p>
+
+      <form id="profile-form" class="profile-form" novalidate="">
+        <div class="form-field">
+          <label for="profile-persons">Personer</label>
+          <input type="number" id="profile-persons" name="persons" class="form-input" min="1" value="2">
+        </div>
+        <div class="form-field">
+          <label for="profile-meal-days">Middagar per vecka</label>
+          <input type="number" id="profile-meal-days" name="meal_days" class="form-input" min="1" max="14" value="5">
+        </div>
+        <div class="form-field">
+          <label for="profile-budget">Kronbudget (kr/vecka)</label>
+          <input type="number" id="profile-budget" name="kron_budget" class="form-input" min="0" placeholder="t.ex. 900">
+        </div>
+        <p id="profile-status" class="form-help" role="status">Ingen profil än — fyll i och spara för att skapa en.</p>
+        <div class="form-field form-field--actions">
+          <button type="submit" id="profile-submit" class="btn btn-primary">Spara profil</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============================== -->
+  <!-- 3-förslag view                 -->
+  <!-- ============================== -->
+  <section id="page-suggestions" class="page-view" hidden="">
+    <div class="suggestions-page">
+      <h2 class="page-view__title">3 förslag</h2>
+      <p class="page-view__intro">Tre veckomenyförslag med majoritet extrapris, byggda på din profil.</p>
+
+      <!-- Loading -->
+      <div id="suggestions-loading" class="state-banner" role="status" hidden="">
+        <span class="state-banner__spinner" aria-hidden="true"></span>
+        <p>Hämtar förslag...</p>
+      </div>
+
+      <!-- Error -->
+      <div id="suggestions-error" class="state-banner state-banner--error" role="alert">
+        <p>Kunde inte hämta förslagen. Kontrollera att du är inloggad och har en profil, och försök igen.</p>
+        <button type="button" id="suggestions-retry" class="btn btn-ghost btn-sm">Försök igen</button>
+      </div>
+
+      <!-- Count -->
+      <p id="suggestions-count" class="page-view__count" aria-live="polite"></p>
+
+      <!-- Three suggestion cards -->
+      <div id="suggestions-grid" class="suggestions-grid" role="list" aria-label="Veckomenyförslag" hidden="">
+        <!-- one card per suggestion rendered by ui/suggestions.js -->
+      </div>
+
+      <!-- Empty state -->
+      <div id="suggestions-empty" class="empty-state" hidden="" role="status">
+        <p class="empty-state__message">Inga förslag just nu.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <span>matapp — framtidsvision · auth + profil + 3 förslag</span>
+  </div>
+  <div class="site-footer__bottom">
+    Prototyp 2026
+  </div>
+</footer>
+
+<!-- Modular JS: utils → ui modules → app.js LAST -->
+<script src="static/js/utils/api.js?v=20260908"></script>
+<script src="static/js/ui/auth.js?v=20260908"></script>
+<script src="static/js/ui/profile.js?v=20260908"></script>
+<script src="static/js/ui/suggestions.js?v=20260908"></script>
+<script src="static/js/app.js?v=20260908"></script>
+
+
+</body>

@@ -1,0 +1,1678 @@
+{
+ "willys": {
+  "grocer_id": "willys",
+  "week_key": "2026-W39",
+  "entries": [
+   {
+    "external_id": "G3OtoFf8EiBVZlYRAhmwU",
+    "name": "GOUDA",
+    "price": 49.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "sF-iKhhVKWIRPJw5M8vNx",
+    "name": "FLÄSKYTTERFILÉ",
+    "price": 69.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "57QhlEazwF9FK4FLImbVP",
+    "name": "GURKA",
+    "price": 9.9,
+    "unit": "st",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "5RwHmphRva3efsNgUJ7nT",
+    "name": "VILDFÅNGAD PINKLAX 4-PACK",
+    "price": 99.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "MBAB9s_MhSle-al2icRQP",
+    "name": "FLÄSKYTTERFILÉ",
+    "price": 59.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "vAmo3CIUacYT_0aaIdZkU",
+    "name": "TVÄTTMEDEL, SKÖLJMEDEL",
+    "price": 79.0,
+    "unit": "l",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "86RcCear20mzngTYGgQ1c",
+    "name": "CHIPS, OSTSNACKS",
+    "price": 38.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "u-plFvb9MA7OjQbHt2-Nu",
+    "name": "PIZZATOPPING",
+    "price": 30.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "0aXEVcaOKAkialRC0wjm-",
+    "name": "PINSA",
+    "price": 40.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "_7ow9QJrQ4x8Q2lFPeZ-X",
+    "name": "PIZZASALLAD",
+    "price": 12.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "z8CYQChXAuQ05OCiKJf3K",
+    "name": "RIVEN PIZZAMIX",
+    "price": 29.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "RjYoXpL2dkoHWC_eGLNqQ",
+    "name": "BURRATA",
+    "price": 35.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "vg2o4roIJuI4qd9VbOyjn",
+    "name": "FÄRSK PIZZA",
+    "price": 99.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "9s7GXObQmejatNBsu9IAK",
+    "name": "GRANA PADANO",
+    "price": 39.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "Kk6rBsx9wXKQAZ5js5mka",
+    "name": "PIZZABOTTEN 2-PACK",
+    "price": 39.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "7bGWiXmsIO1AvDDvmiAm2",
+    "name": "PIZZADEG",
+    "price": 25.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "WAgKemCRjfbkb1yARIU5J",
+    "name": "PIZZAMJÖL",
+    "price": 16.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "0mHN_pgKSiSMUl0zvByGJ",
+    "name": "PIZZASÅS",
+    "price": 18.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "ShowTlNq47cXEAfxqyWWE",
+    "name": "BRIE",
+    "price": 22.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "D87GcaS-v5wXN4BF2TnYL",
+    "name": "CAMBOZOLA",
+    "price": 39.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "tYpwBUAOhavGLSO7h8u4C",
+    "name": "CHEESE SNACK",
+    "price": 18.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "n-_uvR-JJe9OnwaBi3Bnt",
+    "name": "TAPAS DE ESPAÑA",
+    "price": 39.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "gTkfQdR3SxXLI4Rou79wQ",
+    "name": "FUET",
+    "price": 29.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "akNAlqpT0YA91NJQ4sibf",
+    "name": "DELIKATESSER",
+    "price": 45.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "6M6uOjjEz-yq7v733SQl6",
+    "name": "SALAMI SNACKS, CHIPS, STICKS",
+    "price": 38.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "F_7IJl7FM95cHYR0UhSkd",
+    "name": "EKOLOGISK OLIVOLJA",
+    "price": 59.9,
+    "unit": "l",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "Hd_BuKxigyOGQLe1JbXSF",
+    "name": "JAMÓN SERRANO",
+    "price": 40.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "mkZN7APfqqtUrOQIutrv-",
+    "name": "DELIKATESSER",
+    "price": 32.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "sAinzJZcDBoOeAzqWJQ-d",
+    "name": "BLÅMÖGELOST",
+    "price": 29.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "DT5Hz4Sti_-8W_ZKzT2KK",
+    "name": "HELGDAG",
+    "price": 79.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "artTGK5igfm1yGFc2TFso",
+    "name": "SKIVAT SMÖRGÅSPÅLÄGG",
+    "price": 50.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "46aHQDdE354rcduLda4Xf",
+    "name": "COGNACSMEDWURST",
+    "price": 24.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "-tmLIph_LP2xiatU46Xz9",
+    "name": "MJUKOST",
+    "price": 37.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "mgbnInlt_DUGXHMDgGI2d",
+    "name": "GRANOLA",
+    "price": 85.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "qiKVRSNjqsxP4XRu5bIrx",
+    "name": "SMÖR & RAPS",
+    "price": 41.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "gWf5dX6toDHcTTyd1jdKh",
+    "name": "PÅGENLIMPAN",
+    "price": 24.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "jDjWN_EIuFlCsONRe0weI",
+    "name": "SHOT",
+    "price": 29.9,
+    "unit": "l",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "EcO41reO81srrjtwz8DyR",
+    "name": "SKIVAD SMÖRGÅSGURKA",
+    "price": 15.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "bpJPmsmOqtaWCu9EGUsj_",
+    "name": "VETEKAKA 24-PACK, RÅGKAKA 30-PACK",
+    "price": 22.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "34pwF6RKWg8jIV16eCLUi",
+    "name": "GREKISKT LANTBRÖD",
+    "price": 19.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "mzqUX658pKstwIGJnzjKs",
+    "name": "KYCKLINGBRÖSTFILÉ",
+    "price": 99.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "uATuPQ1aNsn3O4x8AlC8F",
+    "name": "BEEF BURGER",
+    "price": 99.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "kheF3eNtYlPBRRF4lwqNT",
+    "name": "HEL MAJSKYCKLING",
+    "price": 59.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "a0TkYJ_oBuXzhPKHcdoHw",
+    "name": "KALVHÖGREV I BIT",
+    "price": 159.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "QvmZLNewGBYwN1letcsV1",
+    "name": "GYROS",
+    "price": 39.5,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "5IcVtzqEGBHn6myLMeZBr",
+    "name": "LAMMFRAMDEL MED BEN",
+    "price": 89.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "1V2TdcgU3xTgrPuiflcfE",
+    "name": "KEBAB",
+    "price": 79.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "0NA6VdLQNjcLdQUpy31qG",
+    "name": "FLÄSKFÄRS",
+    "price": 36.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "WBOW0FxkENttJ_FMWI4aZ",
+    "name": "RIBS",
+    "price": 49.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "ehyvkqjWEwOYDqnvcQUQS",
+    "name": "PAPAYA",
+    "price": 19.9,
+    "unit": "st",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "5p6zkKbyXyMxy51EbW-nq",
+    "name": "GURKA",
+    "price": 9.9,
+    "unit": "st",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "oIhLdrukCZJLiZ6kQGpdH",
+    "name": "KORIANDER, MYNTA 25G",
+    "price": 9.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "UDLcQDlvZwgHRRAmxC6Fq",
+    "name": "SALLADSLÖK I KNIPPE",
+    "price": 9.9,
+    "unit": "st",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "M3ebKJpebXqYM8zfb8TUr",
+    "name": "EKOLOGISK INGEFÄRA 200G",
+    "price": 9.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "gXvt_YA3Q10zzd73TU1-6",
+    "name": "SVAMP SHIMEJ 150G",
+    "price": 9.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "PHmOC1Bct_UnW7ZBB4g-k",
+    "name": "SVAMP ENOKI 100G",
+    "price": 9.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "w3gLJwgyvLGTj6jVPomNr",
+    "name": "VITLÖK I KAPSEL",
+    "price": 9.9,
+    "unit": "st",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "WISt4Z4v0EFbGJm4G_754",
+    "name": "KNOPPLJUNG",
+    "price": 79.0,
+    "unit": "st",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "D6zuCr99jtpZPB0Lq5h0n",
+    "name": "HEL BUTTERNUT PUMPA",
+    "price": 14.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "Z6YGujxhBPpbNiLi3m11h",
+    "name": "PURJOLÖK",
+    "price": 14.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "JBiIVZHfLYOMY1iHcGMmH",
+    "name": "ROYAL GALA, GRANNY SMITH",
+    "price": 19.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "GpA-fVHb-FbhTu_GIdX6T",
+    "name": "LJUNGPLANTERING",
+    "price": 59.9,
+    "unit": "st",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "vTYEB-IMqbNRRBKp-e3_K",
+    "name": "HEL SPETSKÅL",
+    "price": 14.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "nS6PHPCVfOel-dwRcE6gf",
+    "name": "PIZZA",
+    "price": 85.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "8f4rBsPeE9XaXli3AWdhD",
+    "name": "VEGETARISKA MÅLTIDSDELAR",
+    "price": 29.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "gC9CJm-EKXuCqoPJgBXXs",
+    "name": "TAGLIATELLE",
+    "price": 34.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "1Oj3DPXm4BCvZ6G_FAapb",
+    "name": "KOKOSMJÖLK",
+    "price": 28.0,
+    "unit": "l",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "B2IwxLnKXqu8CSjSXi0pY",
+    "name": "EKOLOGISK GRÄDDFIL",
+    "price": 11.9,
+    "unit": "l",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "EUWl5RWRKM9gXhld1Odr2",
+    "name": "CRÈME FRAICHE",
+    "price": 23.9,
+    "unit": "l",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "MOXx2hqQq69DLw2LPJ73F",
+    "name": "KYLD SÅS",
+    "price": 17.9,
+    "unit": "l",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "dcb01Iexn5VAEmNAXPyOk",
+    "name": "TORTILLACHIPS",
+    "price": 20.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "QY0RKRJkArJk4nc24w2bB",
+    "name": "GLUTENFRITT BRÖD",
+    "price": 26.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "xgfCaSa0LpJZtvZABldin",
+    "name": "VARMKORV",
+    "price": 49.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "C4T3SYGMeXuvC-NUwNpAU",
+    "name": "TÄRNAT BACON",
+    "price": 39.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "ZKwLfTGXo-xmoBK1UQKum",
+    "name": "BOIL IN BAG RIS 4-PACK",
+    "price": 28.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "2DYmglghhZEsUuOQ9KuiH",
+    "name": "EKOLOGISKA PASSERADE, KROSSADE TOMATER",
+    "price": 30.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "dGhpVK6h9FIi3hpZXZAtl",
+    "name": "KYCKLINGGRILLKORV",
+    "price": 35.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "VPyoXwfwkpMfa0uwplrqP",
+    "name": "LAKTOSFRI MATGRÄDDE",
+    "price": 12.9,
+    "unit": "l",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "-BNKmxtQwdT4c1w2qJt0R",
+    "name": "MAJS 3-PACK",
+    "price": 23.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "nk-bvse9bRLIhpOeVCA9v",
+    "name": "LAKTOSFRI VISPGRÄDDE",
+    "price": 18.9,
+    "unit": "l",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "5zZ0naLbvrTnt_RjUr6Po",
+    "name": "RÄKOR MED SKAL",
+    "price": 49.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "Qu6YEiJOfhgHkIlJ_h_4n",
+    "name": "FALUKORV",
+    "price": 29.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "Qlwn-zkw80RDJyUstFZ4-",
+    "name": "DELIKATESSKÖTTBULLAR",
+    "price": 38.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "zyNWwtTwe6MqmnPeU6xz1",
+    "name": "GAMMALDAGS IDEALMAKARONER",
+    "price": 21.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "zA8fV52GTQSQNdX8w2ndp",
+    "name": "NORDISKA ÄRTOR",
+    "price": 24.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "HixwqAy1O7y0C3AM6KNpt",
+    "name": "JORDGUBBSSYLT",
+    "price": 19.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "QtVRTUFCg7sL8jdCQKxho",
+    "name": "KETCHUP",
+    "price": 15.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "Zm4g1GiQD-K84tko0psIr",
+    "name": "VISPGRÄDDE",
+    "price": 25.6,
+    "unit": "l",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "13lIjCiCxygfClCayWwR6",
+    "name": "POMMES",
+    "price": 45.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "pi-L9AcT2A4EEWWrxT85j",
+    "name": "PANNKAKOR 12-PACK",
+    "price": 27.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "F7oyYjDD_EBPeCXkyucMs",
+    "name": "FUSILLI, PENNE RIGATE",
+    "price": 25.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "HkzO7vgEKqGw6HKChqIFU",
+    "name": "FISKPINNAR",
+    "price": 59.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "8gd-4yRwCq_lHmhAlbfie",
+    "name": "MASKINDISKMEDEL",
+    "price": 99.0,
+    "unit": "st",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "6GMrPC8nM-jMF42y_dJoM",
+    "name": "FLÄCKBORTTAGNING",
+    "price": 43.9,
+    "unit": "l",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "Bx1Tj_fG7MZ_WcEZbbwJg",
+    "name": "FLÄCKBORTTAGNING",
+    "price": 52.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "ohjXx33hloG0pngZdtbm5",
+    "name": "FRUKTKLÄMMISAR",
+    "price": 79.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "k2NUFZ1i-aiot8jO382RP",
+    "name": "FRUKTSTÅNG",
+    "price": 40.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "YmembwahR1sx7bHG2v2Yf",
+    "name": "MICELLAR WATER",
+    "price": 49.9,
+    "unit": "l",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "tGtaP2C5iawtILzw1NJSZ",
+    "name": "MUNSKÖLJ",
+    "price": 49.8,
+    "unit": "l",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "pfkreN92AMjPwCflDJ8wG",
+    "name": "BABYTVÄTT",
+    "price": 55.0,
+    "unit": "l",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "0yowESVZoqOOoGNxp1iTe",
+    "name": "MAJSKORVAR",
+    "price": 14.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "skSpselHU_p0qrYZMNRLG",
+    "name": "BLÖJOR",
+    "price": 239.0,
+    "unit": "st",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "hDaPq1fY0Dv2Qj-Y8iiRt",
+    "name": "SALTA JORDNÖTTER",
+    "price": 35.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "JFBaHIzOg7SJlH2RfWATU",
+    "name": "CHOKLADKAKA",
+    "price": 48.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "Xi_A41739wDuOsOXKMg2E",
+    "name": "LÄSK",
+    "price": 9.9,
+    "unit": "l",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "VTb-cetcZ8edcgtsVWeEO",
+    "name": "ALKOHOLFRI ÖL",
+    "price": 189.0,
+    "unit": "l",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "DfwmWr3E5LkBHbh96gb-q",
+    "name": "SMASH, CHOCO CRUNCH",
+    "price": 50.0,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "XWsODNVxtpECgCst9Hkgb",
+    "name": "GLASS",
+    "price": 34.9,
+    "unit": "l",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "f8luMO21f_Jfy0PIj36pt",
+    "name": "KOLSYRAT VATTEN 12-PACK",
+    "price": 36.9,
+    "unit": "l",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "5LKeZBJJszmZXbjwm4J5Y",
+    "name": "CHEEZ DOODLES",
+    "price": 29.9,
+    "unit": "kg",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   },
+   {
+    "external_id": "o1-MZdfEFnWG1OlnKloce",
+    "name": "ENERGIDRYCK",
+    "price": 30.0,
+    "unit": "l",
+    "valid_from": "2026-09-20",
+    "valid_to": "2026-09-27"
+   }
+  ]
+ },
+ "coop": {
+  "grocer_id": "coop",
+  "week_key": "2026-W39",
+  "entries": [
+   {
+    "external_id": "EYpDtdFT22Ky3ojCEQFIC",
+    "name": "Frönuftig",
+    "price": 20.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "yiTpVZb3wD2q0YlPPrO0z",
+    "name": "Plommon i ask",
+    "price": 15.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "4y3V40YBoCdvp4Arz7bg5",
+    "name": "Fish & Crisp",
+    "price": 79.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "dVONL2Np7GxQw0_yZBVFH",
+    "name": "Värmeljus 30-pack",
+    "price": 49.0,
+    "unit": "st",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "vomiHYRZc-kbAlf3HPyCP",
+    "name": "Potatis i påse",
+    "price": 10.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "jAUhhgbquXuBCv7tGAqYE",
+    "name": "Toalettpapper 6-pack",
+    "price": 99.0,
+    "unit": "st",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "Aj3V0S594kekC9QVcrv4Q",
+    "name": "Läsk Pick & Mix",
+    "price": 99.0,
+    "unit": "l",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "LYPZndXC2tbSga1Tn50GE",
+    "name": "Färsk fläskytterfilé",
+    "price": 59.9,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "ia_pyItMEgehRW9vjUdzu",
+    "name": "Ekologiska bananer",
+    "price": 19.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "yPkt3UmyvEmMk7YFHugSU",
+    "name": "Äpplen Royal Gala",
+    "price": 20.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "lnVJbQlEafLKAYMHrDWT4",
+    "name": "Basmatiris",
+    "price": 49.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "7jOA4L5Yat0rTDdEViuTZ",
+    "name": "Bryggkaffe",
+    "price": 99.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "x7v2jFJOge6nZR8kgPC_M",
+    "name": "Falukorv",
+    "price": 65.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "6HyJYcXaWE9hrdLVfxxoP",
+    "name": "Färsk laxfilé",
+    "price": 139.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "P7exomFvmj1xE8lkiEdgD",
+    "name": "Färs",
+    "price": 69.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "cDckV5uyVnXkYqNe-Fa_I",
+    "name": "Spare ribs",
+    "price": 59.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "1FXqm3poEcwg91vsuartE",
+    "name": "Rökt/gravad lax",
+    "price": 59.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "tQcTioYQgw8eyxO_Muq6z",
+    "name": "Bacon",
+    "price": 45.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "19UM78zie7DU8QNnVs-jT",
+    "name": "Färsk kycklingfilé",
+    "price": 46.9,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "tct4HJg0QSDRZv2y6KikO",
+    "name": "Färsk lammrostbiff",
+    "price": 259.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "ufwq4CrSeI8vMT8Z-wECA",
+    "name": "Blandfärs",
+    "price": 99.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "byHiV_sKACb9vQGOyIBH_",
+    "name": "Färsk lövbiff",
+    "price": 179.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "jy4gePnotBI8k4dAgcLDf",
+    "name": "Färsk entrecôte/ryggbiff",
+    "price": 339.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "VYWtZioatcQOUfsS6E0lU",
+    "name": "Soja",
+    "price": 59.9,
+    "unit": "l",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "NW9YSr97IkEJO8MKtKPAK",
+    "name": "Färdigrätter",
+    "price": 99.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "b_brbOGy1YkKo92FiFBIy",
+    "name": "Delikatessköttbullar",
+    "price": 99.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "UXkcnBkWjWqTovjJ8xFxb",
+    "name": "Köttbullar",
+    "price": 69.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "DWy8C72AHTafuMABQvej8",
+    "name": "Potatisgratäng",
+    "price": 54.9,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "HaO8itEtks3fGi_mzd6JD",
+    "name": "Frysta kycklingdelar",
+    "price": 69.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "PR6r49SNITuYU9zPtl6IV",
+    "name": "Pan Pizza/Pizza",
+    "price": 80.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "33gaAONAFJC8pP7dfhBwN",
+    "name": "Majskycklingfilé",
+    "price": 139.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "bdMC1QgRj8e-gt4F71Ths",
+    "name": "Ajvar",
+    "price": 30.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "nHLGGlMz0Lp8kvZkVnFSu",
+    "name": "Granola",
+    "price": 59.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "nltoREDYbScobfU4JkeZN",
+    "name": "Frönuftig",
+    "price": 20.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "ZB1YkWCjc_8Ykv1IhGxcQ",
+    "name": "Vitost",
+    "price": 30.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "bi2bJs0LJaVau3Xu_YMeF",
+    "name": "Proteinbar",
+    "price": 38.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "SXd7Fp5-ualFGXpLca2wS",
+    "name": "Proteinpudding",
+    "price": 35.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "1Lm52nirhqDHlv4_Ria4k",
+    "name": "Fond",
+    "price": 40.0,
+    "unit": "l",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "YNO0ZthvxIar30v0FnJ3E",
+    "name": "Diskmedel",
+    "price": 79.0,
+    "unit": "l",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "hbeNkBW5lQkdtUwU4qQ9u",
+    "name": "Kryddor i småglas",
+    "price": 59.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "otaeOHopfAPC5ajNzccIj",
+    "name": "Rosta",
+    "price": 12.9,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "g6wLjYrnzG-9ZpZ7SgIB8",
+    "name": "Kitkat chokladkakor",
+    "price": 25.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "Ma1voQ4rbgsKjIQDZPeIt",
+    "name": "Munskölj",
+    "price": 70.0,
+    "unit": "l",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "RdWIZmF4X18by4YDLl6Kk",
+    "name": "Fruktdryck 10-pack",
+    "price": 52.0,
+    "unit": "l",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "tbEh8t9qDGVQ-aXJrVotj",
+    "name": "Potatis i påse",
+    "price": 10.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "drG2bGBYwcDlb6-pVGZB8",
+    "name": "Röd paprika",
+    "price": 39.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "qRphqLWQsFgeC5MEEczTc",
+    "name": "Granatäpple",
+    "price": 25.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "E8dNqthbUHTklarcBxPiR",
+    "name": "Ekologisk gurka",
+    "price": 17.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "BvyxPIrrr1dsVYwQGr2H_",
+    "name": "Plommon i ask",
+    "price": 15.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "NGi3_qlvF7q-LIXEScjN9",
+    "name": "Höststjärna",
+    "price": 59.9,
+    "unit": "st",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "He0TOXI5LB1KUbw4gau0O",
+    "name": "Blåbär",
+    "price": 55.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "yLe0ZiwpMeNV5zN-94msN",
+    "name": "Rismellis",
+    "price": 30.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "ZKzuiqsKv0j148kHXrRF2",
+    "name": "Hela kaffebönor",
+    "price": 129.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "XSatpo4dCss8ehuKSnPZR",
+    "name": "Salami",
+    "price": 45.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "2RHtsnrCdTsD7_039tJkX",
+    "name": "Leverpastej",
+    "price": 20.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "rnr28NU_AfuwUqhREDY6-",
+    "name": "Laktosfri yoghurt/kefir",
+    "price": 22.9,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "Y9wn7Hk_LSUWEXemGizPn",
+    "name": "Juice/Fruit Crush",
+    "price": 21.9,
+    "unit": "l",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "Upq8LPtHwuvN2cEqX1iN6",
+    "name": "Ekologiska havregryn",
+    "price": 45.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "HscCPQhlgARxhNesmfOUz",
+    "name": "Smörgåspålägg",
+    "price": 26.9,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "pV_yHKcQlrAE7LSlbNzFF",
+    "name": "Shot",
+    "price": 33.0,
+    "unit": "l",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "ZV7RLYfXreb4lZnfF2EaU",
+    "name": "Bröd",
+    "price": 25.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "tsm8L9ozLMjNDanWt8sqU",
+    "name": "A-Fil",
+    "price": 12.9,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "nl-7rq1Dm7KCyl7xYGVlH",
+    "name": "Vetemjöl",
+    "price": 26.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "omhxh564hkJ7aG_a6cQfD",
+    "name": "Glass",
+    "price": 39.0,
+    "unit": "l",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "yN04Rur6f3KfiCpqPmgug",
+    "name": "Glasstrutar Mini",
+    "price": 55.0,
+    "unit": "l",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "j5zc5ft22ZC5ivKpnkSwd",
+    "name": "Bananchips",
+    "price": 35.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "i0EeFSuKDXddGGamKNcYC",
+    "name": "Bordsvatten 12-pack",
+    "price": 28.0,
+    "unit": "l",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "x_oynlkniRNZvIEZdD_Iw",
+    "name": "Chokladpåsar",
+    "price": 49.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "ead5_xqqpmMRljLEbaX2x",
+    "name": "Energidryck",
+    "price": 30.0,
+    "unit": "l",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "qz0i1Nf9GQWEunSl1KgoJ",
+    "name": "Pärlsocker",
+    "price": 12.9,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "rnCCXLCJ7u5t5X1WGn4PJ",
+    "name": "Popcornkärnor",
+    "price": 25.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "w-J_JRyw62Zq-Vt9jeejK",
+    "name": "Kanelbullar",
+    "price": 50.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "k_pHtgADfdOm2ity3S-At",
+    "name": "Ansiktskräm",
+    "price": 89.0,
+    "unit": "l",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "qperVpsgKKQasq76QRQ4o",
+    "name": "Toalettrengöring",
+    "price": 40.0,
+    "unit": "st",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "iIm2pzcgomRE_89SrUPUX",
+    "name": "Duschcreme",
+    "price": 35.0,
+    "unit": "l",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "rMcdJQZ7AGIliBhSbehzG",
+    "name": "Hushållspapper 3-pack",
+    "price": 55.0,
+    "unit": "st",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "TkUiBwtIaxuXYZ-Y8ka40",
+    "name": "Schampo/balsam",
+    "price": 159.0,
+    "unit": "l",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "E0gIaopuZtZLlQx7aadwn",
+    "name": "Kattmat",
+    "price": 99.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "MrS5XIgHqdwcIcbxe4ecE",
+    "name": "Serveringsskål",
+    "price": 40.0,
+    "unit": "st",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "79T9c24CmYkSNF24OYSt4",
+    "name": "Stekpanna 16 cm",
+    "price": 79.0,
+    "unit": "st",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "EJ5t5EOwEfHHItgwOO05R",
+    "name": "Laddkabel/hörlurar in-ear",
+    "price": 99.0,
+    "unit": "st",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "s9eEpUatWS7j7QRAXSKN6",
+    "name": "Batterier",
+    "price": 119.0,
+    "unit": "st",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "p2Kol-WMmij5pHjW7KB3g",
+    "name": "Värmeljus 30-pack",
+    "price": 49.0,
+    "unit": "st",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "xuAgEC0c4Z3LfVbWd4OmK",
+    "name": "Digital köksvåg",
+    "price": 79.0,
+    "unit": "st",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "MMUrDDmDUx6i--nAP1Zui",
+    "name": "Elvisp",
+    "price": 179.0,
+    "unit": "st",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "hI7iN56ctFlCGoUYSqewc",
+    "name": "Kastrull 1,5 liter",
+    "price": 99.0,
+    "unit": "st",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "g1tARkq4v2Krm9dSmHo0-",
+    "name": "Kanelbullar",
+    "price": 25.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "4a2Kc9-aXDVIMR05MoETg",
+    "name": "Pasta",
+    "price": 35.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "EWbO16pF6y35LneETA243",
+    "name": "Kanelbullar",
+    "price": 50.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "Xol0JGLjLFeHZE6CELx4A",
+    "name": "Kanelbullar",
+    "price": 35.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "VGXjJIXrMo1oQ-ERqnYin",
+    "name": "Färdigrätter",
+    "price": 99.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "hQZNfjS-Ifid_eMThhtAu",
+    "name": "Fish & Crisp",
+    "price": 79.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "YLnq4GEC2XqWLbA8OSFIE",
+    "name": "Diskmedel",
+    "price": 79.0,
+    "unit": "l",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "jMyKLOUzNnJv3V0cmH5TY",
+    "name": "Hushållspapper 3-pack",
+    "price": 55.0,
+    "unit": "st",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "jKckf29NMkMhaLcTYaujH",
+    "name": "Lösviktsgodis",
+    "price": 74.9,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "PzR0r5FpJo2qVmODXvKYm",
+    "name": "Bryggkaffe",
+    "price": 99.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   },
+   {
+    "external_id": "Z209Xl1ToVpIvnhPPCgNt",
+    "name": "Chokladpåsar",
+    "price": 49.0,
+    "unit": "kg",
+    "valid_from": "2026-09-27",
+    "valid_to": "2026-10-04"
+   }
+  ]
+ }
+}

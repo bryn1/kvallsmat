@@ -1,0 +1,81 @@
+{
+  "_comment": [
+    "vm106 app manifest. Strict JSON (the renderer deliberately uses no yaml lib).",
+    "type static  -> nginx serves <root>/ directly at /<name>/ ; no unit, no port.",
+    "type service -> systemd unit vm106-app-<name>.service runs <root>/<exec> as the",
+    "                unprivileged appsvc user, bound to 127.0.0.1:<port> (8100-8199),",
+    "                and nginx proxies /<name>/ to it.",
+    "ANYTHING PUSHED HERE RUNS ON THE PUBLIC BOX. Unknown type/name/port/exec is refused.",
+    "Files under source/ are versioned but NOT served."
+  ],
+  "apps": [
+    {
+      "name": "presentation",
+      "type": "static",
+      "root": "apps/presentation"
+    },
+    {
+      "name": "rocket",
+      "type": "static",
+      "root": "apps/rocket"
+    },
+    {
+      "name": "portfolio",
+      "type": "service",
+      "root": "apps/portfolio",
+      "port": 8119,
+      "exec": "server.py",
+      "websocket": true
+    },
+    {
+      "name": "futurecraft",
+      "type": "static",
+      "root": "apps/futurecraft"
+    },
+    {
+      "name": "cad",
+      "type": "service",
+      "root": "apps/cad",
+      "exec": "serve.py",
+      "port": 8125
+    },
+    {
+      "name": "matapp",
+      "type": "service",
+      "root": "apps/matapp",
+      "exec": "server.py",
+      "port": 8141
+    },
+    {
+      "name": "ai-os",
+      "type": "static",
+      "root": "apps/ai-os"
+    },
+    {
+      "name": "clonecraft",
+      "type": "static",
+      "root": "apps/clonecraft"
+    },
+    {
+      "name": "hotell",
+      "type": "service",
+      "root": "apps/hotell",
+      "exec": "server.py",
+      "port": 8117
+    },
+    {
+      "name": "affar",
+      "type": "service",
+      "root": "apps/affar",
+      "exec": "run.py",
+      "port": 8110
+    },
+    {
+      "name": "bibliotek",
+      "type": "service",
+      "root": "apps/bibliotek",
+      "exec": "server.py",
+      "port": 8140
+    }
+  ]
+}

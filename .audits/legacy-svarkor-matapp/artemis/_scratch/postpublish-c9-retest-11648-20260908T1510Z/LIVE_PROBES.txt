@@ -1,0 +1,6 @@
+/matapp/health   200
+/matapp/api/auth/me 404
+/matapp/api/auth/login 404
+/matapp/api/profile 404
+/matapp/api/menu 422
+/matapp/api/stores 200

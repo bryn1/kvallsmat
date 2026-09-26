@@ -1,0 +1,41 @@
+- banner
+  - heading "🍲 Kvällsmat" [level=1, ref=e2]
+  - paragraph
+    - StaticText "Veckomeny med rabatterbjudanden från dina butiker"
+- navigation "Huvudnavigering" [ref=e1]
+  - link "Butiker" [ref=e3]
+  - link "Veckomeny" [ref=e4]
+- main
+  - heading "Välj dina butiker" [level=2, ref=e5]
+  - paragraph
+    - StaticText "Markera upp till tre butiker — vi hämtar erbjudanden därifrån till veckomenyn."
+  - status
+    - paragraph
+      - StaticText "Laddar butiker..."
+  - alert
+    - paragraph
+      - StaticText "Kunde inte hämta butikerna. Försök igen om en stund."
+    - button "Försök igen" [ref=e6]
+  - form
+    - group
+      - LabelText [ref=e8] clickable [cursor:pointer]
+        - checkbox "Välj willys" [checked=true, ref=e11]
+        - StaticText "willys"
+        - StaticText "Willys"
+      - LabelText [ref=e9] clickable [cursor:pointer]
+        - checkbox "Välj ica" [checked=true, ref=e12]
+        - StaticText "ica"
+        - StaticText "Ica"
+      - LabelText [ref=e10] clickable [cursor:pointer]
+        - checkbox "Välj coop" [checked=false, ref=e13]
+        - StaticText "coop"
+        - StaticText "Coop"
+    - paragraph
+      - StaticText "2/3 valda."
+    - button "Spara urval" [ref=e7]
+  - status
+    - paragraph
+      - StaticText "Just nu finns inga butiker att visa."
+- contentinfo
+  - StaticText "Kvällsmat — lokal prototyp · erbjudanden från valda butiker"
+  - StaticText "Prototyp 2026"

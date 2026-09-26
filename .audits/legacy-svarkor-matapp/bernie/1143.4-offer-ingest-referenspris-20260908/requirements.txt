@@ -1,0 +1,12 @@
+# Phase 4 (T3) offer-ingest — deploy-runtime dependencies (pin, not dev-only).
+# sqlalchemy is the ORM the foundation runs on; fastapi/uvicorn/pydantic ship the web API.
+# httpx is the feed-fetch RUNTIME dep for the offer-ingest line (app/ingest/grocer.py) —
+# DA FIX-1 (PHASE1-DA-verdict §2): in the POC it was dev-only, but ingest runs at runtime,
+# so it MUST be pinned here in the production requirements.txt (offline-ingest alternative
+# rejected: the gate requires the httpx runtime dep present). Optional deps removed (last
+# versions kept from the Phase 2 runtime set).
+fastapi==0.141.1
+uvicorn==0.52.4
+sqlalchemy==2.0.52
+pydantic==2.13.4
+httpx==0.28.1

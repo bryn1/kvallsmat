@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="sv"><head><meta charset="UTF-8"><title>Calib Konto</title>
+<style>body{font-family:sans-serif;background:#f6efe4;color:#222;padding:24px}
+section[hidden]{display:none}.btn{background:#fff0;padding:6px 12px;border:1px solid #933;color:#933;border-radius:6px}
+a{margin-right:12px;color:#933}</style></head><body>
+<h1>Konto — kalibrering</h1>
+<nav><a data-page="auth" href="#">Konto</a><a data-page="profile" href="#">Profil</a></nav>
+<section id="page-auth"><h2>Lägg till konto</h2><label>Användarnamn<input id="u"></label>
+<button type="button" id="fake" class="btn">Logga in</button></section>
+<section id="page-profile" hidden><h2>Profil</h2><label>Kronbudget<input id="b"></label>
+<button type="button" class="btn">Spara profil</button></section>
+<script>
+document.querySelectorAll('[data-page]').forEach(function(a){a.addEventListener('click',function(e){
+e.preventDefault();var p=a.dataset.page;
+document.getElementById('page-auth').hidden=(p!=='auth');
+document.getElementById('page-profile').hidden=(p!=='profile');});});
+</script></body></html>

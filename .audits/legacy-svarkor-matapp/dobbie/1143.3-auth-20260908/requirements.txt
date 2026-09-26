@@ -1,0 +1,12 @@
+# Phase 2+3 — matapp framtidsvision deploy-runtime dependencies (pin, not dev-only).
+# DA FIX-1 pattern: every runtime dep ships in the deploy venv, never dev-only.
+# sqlalchemy is the ORM every phase (auth/profile/ingest) runs on.
+fastapi==0.141.1
+uvicorn==0.52.4
+sqlalchemy==2.0.52
+pydantic==2.13.4
+# Phase 3 (T2) auth — closure-gap 2: argon2-cffi was MISSING, now pinned.
+# Argon2id hashing (app/security.py) is a RUNTIME dep of /api/auth/* — must ship
+# in the deploy env, not dev-only. argon2-cffi-bindings is the native wheel it needs.
+argon2-cffi==25.1.0
+argon2-cffi-bindings==21.2.0

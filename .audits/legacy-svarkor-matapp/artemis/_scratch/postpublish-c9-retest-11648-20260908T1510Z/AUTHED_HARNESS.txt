@@ -1,0 +1,13 @@
+[ok]   RED litmus: wrong password surfaces #auth-error
+[ok]   login: #auth-status visible
+[ok]   login: greeting names the user
+[ok]   menu: 3 suggestion cards rendered
+[ok]   menu: error banner NOT visible
+[ok]   profile: save reports Sparat
+[ok]   profile: persons roundtrips (5)
+[ok]   profile: kron-budget roundtrips (1234)
+[FAIL] authed walk: 0 console errors :: [error] Failed to load suggestions: {stack: "Error: HTTP 401 |     at apiGet (http://127.0.0.1:84…498/static/js/ui/suggestions.js?v=20260908:74:20)", message: "HTTP 401"} | [error] Failed to load profile (404 ok): {stack: "Error: HTTP 401 |     at apiGet (http://127.0.0.1:84….1:8498/static/js/ui/profile.js?v=20260908:69:17)", message: "HTTP 401"} | [error] Login failed: {stack: "Error: HTTP 401 |     at apiPost (http://127.0.0.1:8….0.0.1:8498/static/js/ui/auth.js?v=20260908:70:7)", message: "HTTP 401"} | [error] Failed to load profile (404 ok): {stack: "Error: HTTP 404 |     at apiGet (http://127.0.0.1:84….1:8498/static/js/ui/profile.js?v=20260908:69:17)", message: "HTTP 404"}
+[ok]   authed walk: 0 page errors
+[ok]   logout: login form visible again (session cleared)
+AUTHED_RESULT=FAIL (1)
+AUTHED_EXIT=0

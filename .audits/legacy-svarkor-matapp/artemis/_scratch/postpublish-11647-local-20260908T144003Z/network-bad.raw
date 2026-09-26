@@ -1,0 +1,4 @@
+[1645549.14] GET http://127.0.0.1:8398/api/auth/me (Fetch) 401
+[1645549.15] GET http://127.0.0.1:8398/api/profile (Fetch) 401
+[1645549.16] GET http://127.0.0.1:8398/api/menu (Fetch) 401
+[1645549.17] GET http://127.0.0.1:8398/favicon.ico (Other) 404

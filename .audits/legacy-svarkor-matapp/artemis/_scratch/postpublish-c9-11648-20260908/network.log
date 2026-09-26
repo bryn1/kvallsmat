@@ -1,0 +1,11 @@
+[E8D7A39559AFF1DCD89D1A5ECB20850A] GET https://sibbamala.com/matapp/ (Document) 200
+[1472871.2] GET https://sibbamala.com/matapp/static/css/base.css?v=1e554f53 (Stylesheet) 200
+[1472871.3] GET https://sibbamala.com/matapp/static/css/components.css?v=1273106d (Stylesheet) 200
+[1472871.4] GET https://sibbamala.com/matapp/static/css/responsive.css?v=d24ae63c (Stylesheet) 200
+[1472871.5] GET https://sibbamala.com/matapp/static/js/utils/api.js?v=2920e3ec (Script) 200
+[1472871.6] GET https://sibbamala.com/matapp/static/js/ui/stores.js?v=0b59aafb (Script) 200
+[1472871.7] GET https://sibbamala.com/matapp/static/js/ui/menu.js?v=87e618dd (Script) 200
+[1472871.8] GET https://sibbamala.com/matapp/static/js/app.js?v=4ab6bd82 (Script) 200
+[1472871.16] GET https://sibbamala.com/matapp/api/stores (Fetch) 200
+[1472871.17] GET https://sibbamala.com/matapp/api/stores/selected (Fetch) 200
+[1472871.18] GET https://sibbamala.com/favicon.ico (Other) 200

@@ -1,0 +1,11 @@
+--- DISPATCH BRIEF ---
+WHAT: Mekanisk gate för 1164.9 (httpx-pin-fix i publiceringspaketet). DU GRADERAR, du bygger INTE.
+READ: /srv/workspace/svarkor-matapp/briefs/p10-httpx-fix.txt ; bernie/p4-evidence.md CHECK 3.
+DoD: `grep -qE '^httpx==' /srv/workspace/svarkor-matapp/artemis/1164.8-publish-package-20260908/apps/matapp/requirements.txt` exit 0, OCH diff mot git-/backupkopia visar exakt +1 rad httpx==0.28.1 (inget annat ändrat). Bevis i /srv/workspace/svarkor-matapp/<seat>/p10-fix-evidence.md med # VERDICT-raden (PASS/FAIL).
+--- RESULT ---
+STATUS: DONE | BLOCKED
+FILES:
+DID:
+VERIFY:
+BLOCKERS:
+--- END ---

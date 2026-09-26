@@ -1,0 +1,20 @@
+--- DISPATCH BRIEF ---
+WHAT: PHASE-1 devils-advocate gate over the WHOLE matapp phase-0 bundle (research+map+plan).
+SCOPE: Review only. No code. Deliverable: verdict file. This IS phase 0's gate.
+SKILLS: workspace-convention; module-breakdown-review; reasoning-techniques.
+READ: /srv/workspace/svarkor-matapp/docs/PHASE0.md (och PHASE0-research.md/PHASE0-map.md om planen länkar till dem). Granska ALLA TRE deliverables, inte bara planen:
+  1. Spot-check research-citations för fabrication (agenter har citerat obefintliga sökvägar som VERIFIED) — stickprov, citerings-grundadhet.
+  2. Proba kartan för closure-hål (den mbedtls/lwIP-klassen): finns varje extern dep namngiven present-eller-missing?
+  3. Verifiera att planen faktiskt FÖLJER från kartan (seams: plan-follows-map, map-respects-research).
+  4. Journalresonera en byggbar fas: seat+gate+onfail+cycles, UNVERIFIED != PASS, hosting/post-publish DoD (hosting.yaml + PORT bind, postpublish-accept.sh via henrik).
+SKRIV VERDICT: maskinraden som alltid — `# VERDICT: SHIP` / `# VERDICT: FIX` / `# VERDICT: RECONSIDER` (SHIP->PASS, FIX/RECONSIDER->FAIL — samma vokabulär som deterministic-verdict). På FIX/RECONSIDER: läs fas-kortet igen vid återkö, reparera namngiven deliverable (research/map/plan), re-commit docs/PHASE0.md.
+OUTPUT: /srv/workspace/svarkor-matapp/PHASE1-DA-verdict.md med # VERDICT-raden.
+DoD: /srv/workspace/svarkor-matapp/PHASE1-DA-verdict.md existerar och innehåller `# VERDICT:`-raden.
+RESULT: se schema.
+--- RESULT ---
+STATUS: DONE | BLOCKED
+FILES: <paths>
+DID: <<=4 rader>
+VERIFY: <check + utfall>
+BLOCKERS: <none eller konkret>
+--- END ---

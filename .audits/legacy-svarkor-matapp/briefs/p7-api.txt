@@ -1,0 +1,12 @@
+--- DISPATCH BRIEF ---
+WHAT: Phase 7 (T6) api-lager — matapp framtidsversion. JOIN: kräver Phase 3 (auth) + Phase 5 (profile) + Phase 6 (optimizer) alla klara.
+READ: /srv/workspace/svarkor-matapp/docs/PHASE0.md §P Phase 7 (full spec: gate C6, DoD, cycles, onfail). Våg 1-leveranser i /srv/workspace/svarkor-matapp/<seat>/ (auth, profile, optimizer). POC-skelett app/main.py+routers+server.py.
+SKILLS: workspace-convention; test-driven-development.
+DoD: GET /api/menu med giltig session+förfrågan ger 200 med suggestions längd 3 (exit 0); utan session 401. Avsiktligt trasig — router saknar auth-dependency — go RÖD.
+--- RESULT ---
+STATUS: DONE | BLOCKED
+FILES:
+DID:
+VERIFY:
+BLOCKERS:
+--- END ---

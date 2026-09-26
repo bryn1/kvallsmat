@@ -1,0 +1,13 @@
+--- DISPATCH BRIEF ---
+WHAT: Phase 4 (T3) offer-ingest-referenspris — matapp framtidsversion. Stänger closure-gap 1 + DA FIX-1.
+READ: /srv/workspace/svarkor-matapp/docs/PHASE0.md §P Phase 4 (full spec: gate C3, DoD, cycles, onfail). Map-closure-gap 1 + 5. POC src/offers_db, src/fetcher/grocer.py, src/normalizer.
+SKILLS: workspace-convention; test-driven-development.
+OBS (DA FIX-1 — KRITISKT): httpx är dev-only i POC-requirements men RUNTIME i ingest. Du MÅSTE antingen (a) lägga httpx med pin i produktions-requirements.txt, ELLER (b) dokumentera OPS-antagande om offline-ingest. DoD kräver grep '^httpx==' requirements.txt.
+DoD: ingest-harness mot inspelad willys-feed mock producerar Offer-rad med regular_price_cents > price_cents (exit 0); trasig normalizer (utan referenspris) RÖD; PLUS grep -qE '^httpx==' requirements.txt exit 0 (DA FIX-1).
+--- RESULT ---
+STATUS: DONE | BLOCKED
+FILES:
+DID:
+VERIFY:
+BLOCKERS:
+--- END ---

@@ -1,0 +1,10 @@
+- heading "Konto — kalibrering" [level=1, ref=e1]
+- navigation
+  - link "Konto" [ref=e2]
+  - link "Profil" [ref=e3]
+- generic
+  - heading "Lägg till konto" [level=2, ref=e4]
+  - LabelText
+    - StaticText "Användarnamn"
+    - textbox "Användarnamn" [ref=e6]
+  - button "Logga in" [ref=e5]

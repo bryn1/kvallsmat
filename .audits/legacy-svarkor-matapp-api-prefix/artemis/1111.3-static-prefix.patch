@@ -1,0 +1,31 @@
+diff --git a/apps/matapp/templates/index.html b/apps/matapp/templates/index.html
+index 0c0ba29..3eccc55 100644
+--- a/apps/matapp/templates/index.html
++++ b/apps/matapp/templates/index.html
+@@ -5,9 +5,9 @@
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Kvällsmat — veckomeny med erbjudanden</title>
+   <!-- Token-first: base.css (design tokens) must load before components -->
+-  <link rel="stylesheet" href="/static/css/base.css?v=1e554f53">
+-  <link rel="stylesheet" href="/static/css/components.css?v=1273106d">
+-  <link rel="stylesheet" href="/static/css/responsive.css?v=d24ae63c">
++  <link rel="stylesheet" href="static/css/base.css?v=1e554f53">
++  <link rel="stylesheet" href="static/css/components.css?v=1273106d">
++  <link rel="stylesheet" href="static/css/responsive.css?v=d24ae63c">
+ </head>
+ <body>
+ 
+@@ -209,9 +209,9 @@
+ </footer>
+ 
+ <!-- Modular JS: utils → ui modules → app.js LAST -->
+-<script src="/static/js/utils/api.js?v=2920e3ec"></script>
+-<script src="/static/js/ui/stores.js?v=0b59aafb"></script>
+-<script src="/static/js/ui/menu.js?v=87e618dd"></script>
+-<script src="/static/js/app.js?v=4ab6bd82"></script>
++<script src="static/js/utils/api.js?v=2920e3ec"></script>
++<script src="static/js/ui/stores.js?v=0b59aafb"></script>
++<script src="static/js/ui/menu.js?v=87e618dd"></script>
++<script src="static/js/app.js?v=4ab6bd82"></script>
+ </body>
+ </html>

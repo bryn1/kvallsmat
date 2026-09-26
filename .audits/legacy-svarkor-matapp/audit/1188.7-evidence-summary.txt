@@ -1,0 +1,21 @@
+MC 1188.7 evidence summary — vision click-through audit, matapp live site
+Date: 2026-09-13 UTC. Auditor: bernie.
+
+Checks executed this session (all real, pasted outputs in vision-clickthrough.md):
+1. Playwright headless Chromium 151: full click-through of every interactive element
+   (2 nav links, 3 store checkboxes, save button, 7 form fields, submit, 2 retry buttons,
+   error paths with empty + invalid week). Console captured: zero unexpected errors,
+   zero page exceptions, zero failed asset requests. Exit 0.
+2. curl probes: all 7 static assets 200; link inventory (5 hrefs, none dead);
+   18 API probes incl. 422 paths, store cap, unknown ids, boundary values.
+3. WCAG contrast math on live CSS tokens: 16 pairs, all AA-pass except one 12px badge (F2).
+4. Browser overflow sweep at 1280/375/360/320px: clean at spec'd 360px; minor overflow at 320px (F3).
+5. node --check on all 4 JS files: pass.
+
+BLOCKED item: vision_analyze (LLM vision) timed out 7/7 — subjective visual review replaced by
+pixel/overflow analysis + contrast math; screenshots shot1-shot8 saved for human review.
+
+Report: /srv/workspace/svarkor-matapp/audit/vision-clickthrough.md (VERIFY_EXIT=0)
+Copy:   /srv/workspace/hosting/bernie/1188.7-vision-clickthrough-audit-20260913.md
+Scripts: /srv/workspace/svarkor-matapp/audit/{audit_run.py,overflow_check.py,clip320.py}
+Site state restored: store selection reset to ["willys"] (as found).

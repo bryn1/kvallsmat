@@ -1,0 +1,19 @@
+The page is not blank; it contains rendered content.
+
+**Top header (dark red / rust‑colored background, full width):**
+- Left side: a bowl‑of‑noodles emoji (🍜) followed by the white bold heading "Kvällsmat".
+- Directly below, in smaller white text: "Veckomeny med rabatterbjudanden från dina butiker".
+
+**Tab bar (centered, on a light cream/off‑white background):**
+- Tab 1: "Butiker" — rendered in rust/red bold text on a white rounded rectangle, with a rust/red horizontal underline beneath it.
+- Tab 2: "Veckomeny" — rendered in gray text, no underline.
+
+**Main white card (rounded corners, centered, on the cream background):**
+- Heading (dark, bold): "Välj dina butiker".
+- Subtext (gray): "Markera upp till tre butiker — vi hämtar erbjudanden därifrån till veckomenyn."
+- A light‑gray rounded box containing, on its left, a circular spinner (rust/orange ring) followed by the text "Laddar butiker...".
+- Below that, a light pink/red rounded box with a thin red border. Inside, red text reads: "Kunde inte hämta butiker. Försök igen om en stund." To the right of that text is a button with a red border and red label: "Försök igen".
+- Below that, a horizontal row of three rounded selection boxes:
+  1. Light green background, green border; a
+
+[describe_image] model=lanef-27b from=content prompt_tokens=880 completion_tokens=900 34.0s (degenerate tail trimmed)

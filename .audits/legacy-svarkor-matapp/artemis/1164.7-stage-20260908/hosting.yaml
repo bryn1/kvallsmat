@@ -1,0 +1,16 @@
+{
+  "_comment": [
+    "vm106 hosting manifest for the matapp repo (MC 1164.7 T9, framtidsversion).",
+    "Strict JSON, no yaml lib in renderer/reconciler. Serves the SAME URL as the",
+    "POC (sibbamala.com/matapp/) on the SAME port 8141: this repo REPLACES the",
+    "apps/matapp POC entry in the hosting monorepo apps.yaml (port collision if",
+    "both are active). exec=server.py reads $PORT and binds 127.0.0.1:$PORT."
+  ],
+  "name": "matapp",
+  "type": "service",
+  "root": "apps/matapp",
+  "exec": "server.py",
+  "port": 8141,
+  "title": "matapp — veckomeny med erbjudanden",
+  "description": "Kvällsmats/framtidsversion: inloggning, profil och 3 veckomeny-förslag med majoritet extrapris."
+}

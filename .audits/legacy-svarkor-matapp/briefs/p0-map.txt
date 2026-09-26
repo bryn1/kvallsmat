@@ -1,0 +1,21 @@
+--- DISPATCH BRIEF ---
+WHAT: PHASE-0 architecture: dependency/closure map for matapp framtidsversion.
+SCOPE: Architecture map ONLY. No code. Deliverable: map file.
+SKILLS: workspace-convention; architecture-breakdown; phase-0.
+READ: dobbies POC-källa /srv/workspace/svarkor-matapp-root-route/dobbie/922.1-root-route-src-20260903/ (särskilt server.py, app/config.py, app/main.py, app/db.py, vendored src = motor) för att förstå existerande byggstenar; /srv/workspace/svarkor-matapp/PHASE0-research.md när den landat.
+VISION (MC 1110): auth + användarprofil (3 butiker, budget, måltider/vecka, personer) + motor som genererar 3 veckomenyförslag från de valda butikernas reklamblad, majoritet extrapris-ingredienser.
+MAPPA (dependency/closure — inte essä):
+  - Komponenter + gränser (auth, användarprofil/db, erbjudande-ingest, meny-optimeringsmotor, API, frontend).
+  - Vad beror på vad — pilar en exekveringsordning kan läsas ur.
+  - Closure: för varje extern dep — PRESENT eller MISSING i målmiljön (vm106 hosting, Python/motor-stack). Namnge bibliotek och lastbärande symboler. Auth-bibliotek, optimerings-bibliotek (om research valt), db (befintlig sqlite/motor), reklamkälla (willys/ica/coop feeds POC redan använder).
+  - Environment preflight: verifiera på faktisk build-host (command -v). Befintliga komponenter återbrukbara från POC källan?
+OUTPUT: /srv/workspace/svarkor-matapp/PHASE0-map.md med MODULE TASK BREAKDOWN-tabellen (architecture-breakdown-format) — fas-2 transkriberar från den.
+DoD: /srv/workspace/svarkor-matapp/PHASE0-map.md existerar med dependency/closure-map + MODULE TASK BREAKDOWN-tabell.
+RESULT: se schema.
+--- RESULT ---
+STATUS: DONE | BLOCKED
+FILES: <paths>
+DID: <<=4 rader>
+VERIFY: <check + utfall>
+BLOCKERS: <none eller konkret>
+--- END ---
