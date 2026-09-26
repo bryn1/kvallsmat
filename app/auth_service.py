@@ -18,10 +18,27 @@ import secrets
 import threading
 import time
 
+from fastapi import HTTPException, Request
+
 from app import security
 from app import db as dbm
 import app.models  # noqa: F401  (register users table before queries)
 from app.models.users import User
+
+
+def current_user_or_401(request: Request) -> User:
+    """FastAPI dependency: resolve the session cookie to a User; 401 otherwise.
+
+    The ONE shared auth-gate dependency (MC 1355.16): the profile and menu
+    routers already inline this exact gate; the stores router's new
+    ``?postal_code=`` preview reuses THIS copy instead of a third inline one
+    (T10b §4 — same gate as profile/menu, 401 never 200).
+    """
+    token = request.cookies.get(security.SESSION_COOKIE)
+    user = current_user(token)
+    if user is None:
+        raise HTTPException(status_code=401, detail="not authenticated")
+    return user
 
 
 class SessionStore:

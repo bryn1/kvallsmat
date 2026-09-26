@@ -82,6 +82,12 @@
           <label for="profile-budget">Kronbudget (kr/vecka)</label>
           <input type="number" id="profile-budget" name="kron_budget" class="form-input" min="0" placeholder="t.ex. 900">
         </div>
+        <div class="form-field">
+          <label for="profile-postal">Postnummer</label>
+          <input type="text" id="profile-postal" name="postal_code" class="form-input" placeholder="t.ex. 414 51" inputmode="numeric" autocomplete="postal-code">
+        </div>
+        <!-- MC 1355.16: resolved stores per chain + resolved_at (staleness visible) -->
+        <div id="profile-resolved" class="form-help" hidden></div>
         <p id="profile-status" class="form-help" role="status" hidden></p>
         <div class="form-field form-field--actions">
           <button type="submit" id="profile-submit" class="btn btn-primary">Spara profil</button>

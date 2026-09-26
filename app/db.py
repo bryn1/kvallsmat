@@ -65,7 +65,47 @@ def boot():
 
     engine = _engine
     init_db(engine)  # NOTE: engine, never a Session (ArgumentError otherwise)
+    ensure_columns(engine)  # MC 1355.16: guarded ALTERs for the T10e columns
     return engine
+
+
+# MC 1355.16 (T10b §3): the three columns this card adds. Base.metadata
+# create_all does NOT add columns to existing tables, and the live DB already
+# holds both tables — without these ALTERs save_profile would 500 on it.
+_NEW_COLUMNS = (
+    ("offers", "store_id", "String"),
+    ("profile", "postal_code", "String"),
+    ("profile", "resolved_stores", "Text"),
+)
+
+
+def ensure_columns(engine) -> None:
+    """Add any missing T10e column via guarded ALTER (T10b §3 / T10d F8).
+
+    Idempotent; tolerates the concurrent-boot race: an OperationalError
+    "duplicate column name" is treated as success AFTER a re-inspect confirms
+    the column really is there — concurrent boots must not crash in lifespan.
+    """
+    from sqlalchemy import inspect, text
+    from sqlalchemy.exc import OperationalError
+
+    inspector = inspect(engine)
+    for table, column, col_type in _NEW_COLUMNS:
+        cols = {c["name"] for c in inspector.get_columns(table)}
+        if column in cols:
+            continue
+        try:
+            with engine.begin() as conn:
+                conn.execute(text(
+                    f"ALTER TABLE {table} ADD COLUMN {column} {col_type}"))
+        except OperationalError as exc:
+            if "duplicate column name" not in str(exc).lower():
+                raise
+            # Concurrent boot added it — re-inspect to CONFIRM, never assume.
+            fresh = {c["name"] for c in inspect(engine).get_columns(table)}
+            if column not in fresh:
+                raise
+        inspector = inspect(engine)  # fresh inspector after each ALTER
 
 
 def get_db() -> Generator[Session, None, None]:

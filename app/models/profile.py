@@ -16,7 +16,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
 
 from database import Base  # shared Base (import BEFORE init_db — fix-2 idiom)
@@ -33,6 +33,16 @@ class Profile(Base):
     meal_days = Column(Integer, nullable=False, default=5)
     kron_budget = Column(Integer)            # kronor/week — MUST be present (Phase 5 gate)
     selected_stores = Column(String)         # comma-separated store ids, <= MAX_SELECTED_STORES
+    # MC 1355.16 (T10b §2/§3): store-level selection per postnummer.
+    #   postal_code     — digits-only Swedish postnummer, e.g. "41451"
+    #   resolved_stores — JSON {"resolved_at": iso, "chains": {chain: {
+    #                       "status": "ok"|"error", "error": str?,
+    #                       "stores": [ResolvedStore...]}}}
+    # Both nullable: absent = the user has not saved a postnummer. The
+    # per-chain status and resolved_at are PERSISTED so staleness and partial
+    # failure stay visible in every later GET (T10b §10-F7).
+    postal_code = Column(String, nullable=True)
+    resolved_stores = Column(Text, nullable=True)
     updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc),
                         onupdate=lambda: datetime.now(timezone.utc))
 

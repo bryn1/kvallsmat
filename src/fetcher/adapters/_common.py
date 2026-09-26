@@ -26,3 +26,20 @@ def get_text(session, url: str, headers: dict | None = None) -> str | None:
         return resp.text
     except Exception:
         return None
+
+
+def get_json(session, url: str, headers: dict | None = None):
+    """GET a page as parsed JSON; None on non-200, network error or bad JSON.
+
+    Shared by the offer adapters AND the src/locator store locators (T10b §2:
+    the locator package imports the shared helpers, never duplicates them).
+    """
+    import json
+
+    raw = get_text(session, url, headers)
+    if raw is None:
+        return None
+    try:
+        return json.loads(raw)
+    except ValueError:
+        return None

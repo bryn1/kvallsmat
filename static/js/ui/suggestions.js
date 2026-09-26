@@ -20,15 +20,21 @@ const suggestionsModule = (() => {
   }
 
   // ---- Rendering: a single suggestion family ----
-  function renderSuggestion(sug, index) {
+  // MC 1355.16: when the menu response carries offer_sources, append the
+  // store scope to each day's line (display only; no logic).
+  function renderSuggestion(sug, index, sourceNames) {
     const week = sug && sug.week_key ? sug.week_key : '';
     const seed = sug && sug.seed != null ? sug.seed : '';
     const days = Array.isArray(sug && sug.days) ? sug.days : [];
     const dishes = days.map((d) => {
       const pct = Math.round((d.andel_extrapris != null ? d.andel_extrapris : 0) * 100);
+      const storeScopes = (d.used_offer_ids || [])
+        .map((id) => sourceNames && sourceNames.get(id))
+        .filter(Boolean);
+      const storeLabel = storeScopes.length ? ` · butik: ${[...new Set(storeScopes)].join(', ')}` : '';
       return `<li class="suggestion__day">
         <span class="suggestion__dish">${d.dish_id || 'Recept saknas'}</span>
-        <span class="suggestion__extra">${d.date || ''} · ${pct}% extrapris</span>
+        <span class="suggestion__extra">${d.date || ''} · ${pct}% extrapris${storeLabel}</span>
       </li>`;
     }).join('');
 
@@ -44,6 +50,11 @@ const suggestionsModule = (() => {
   // ---- Rendering: all three ----
   function render(data) {
     const suggestions = (data && Array.isArray(data.suggestions)) ? data.suggestions : [];
+    // offer_id -> store scope (display only; absent offer_sources = no label).
+    const sourceNames = new Map(
+      ((data && Array.isArray(data.offer_sources)) ? data.offer_sources : [])
+        .filter((s) => s && s.store_id)
+        .map((s) => [s.offer_id, s.store_id]));
     const grid = document.getElementById('suggestions-grid');
     const countEl = document.getElementById('suggestions-count');
     const emptyEl = document.getElementById('suggestions-empty');
@@ -52,7 +63,7 @@ const suggestionsModule = (() => {
     if (countEl) countEl.textContent = suggestions.length
       ? `${suggestions.length} förslag`
       : '';
-    if (grid) grid.innerHTML = suggestions.map(renderSuggestion).join('');
+    if (grid) grid.innerHTML = suggestions.map((sug, i) => renderSuggestion(sug, i, sourceNames)).join('');
     if (emptyEl) emptyEl.hidden = suggestions.length > 0;
     if (errorEl) errorEl.hidden = true;
   }

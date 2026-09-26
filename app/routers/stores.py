@@ -3,6 +3,10 @@ hosting copy, MC 1355.3 T3; origin: hosting/apps/matapp app/routers/stores.py).
 
   GET  /api/stores        -> catalog READ from the motor's PlannerConfig grocers
                              at request time (O1 pin — no app-side second list).
+                             MC 1355.16: optional ``?postal_code=`` resolve-
+                             preview — AUTH-GATED (401 anonymous, same gate as
+                             profile/menu, T10b §10-F5); anonymous calls without
+                             the param keep today's byte-identical behavior.
   POST /api/stores/select -> replace-all the chosen stores, capped at 3
                              (store_selection.upsert_selection). >3 or unknown
                              store_id -> 422.
@@ -14,10 +18,11 @@ marshals HTTP<->session.
 """
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
+from app import auth_service
 from app.config import get_planner_config
 from app.db import get_db
 from app.models.store_selection import (
@@ -25,6 +30,7 @@ from app.models.store_selection import (
     upsert_selection,
     MAX_SELECTED,
 )
+from src.locator import resolve_stores_cached
 
 router = APIRouter(prefix="/api/stores", tags=["stores"])
 
@@ -49,9 +55,22 @@ def _catalog(config):
 
 
 @router.get("")
-def list_stores(session: Session = Depends(get_db)) -> list[dict]:
+def list_stores(request: Request,
+                postal_code: str | None = Query(default=None),
+                session: Session = Depends(get_db)):
+    """Store catalog; with ``?postal_code=`` an auth-gated resolve-preview.
+
+    The preview param is honored ONLY for an authenticated user (401 when
+    anonymous — T10b §10-F5: the locator pipeline, Nominatim 1 req/s policy
+    included, is never reachable anonymously). The resolve result is served
+    from the bounded per-process cache (TTL 24 h, max 128 entries — T10d N4).
+    """
     cfg = get_planner_config()
-    return _catalog(cfg)
+    catalog = _catalog(cfg)
+    if postal_code is None:
+        return catalog  # anonymous behavior byte-identical to today
+    auth_service.current_user_or_401(request)
+    return {"stores": catalog, "nearby": resolve_stores_cached(postal_code)}
 
 
 @router.post("/select")

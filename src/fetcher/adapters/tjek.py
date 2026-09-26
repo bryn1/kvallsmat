@@ -178,3 +178,90 @@ def pull(grocer_cfg, week_key: str, session=None) -> dict:
     entries = parse_hotspots(records, week_start(week_key))
     return {"grocer_id": grocer_cfg.grocer_id, "week_key": week_key,
             "entries": entries}
+
+
+def pull_store_scoped(grocer_cfg, week_key: str, store_id: str,
+                      store_label: str, session=None) -> dict:
+    """Store-scoped RawFeed pull for ONE physical store (MC 1355.16, T10b §3).
+
+    Tjek catalogs are labeled per store and the catalog list carries
+    ``store_id: null`` (T10a §2b), so the catalog is matched on the store's
+    label string (casefold + strip). RULE 1 (T10b §3 / T10d N1): the
+    store-scoped entries are stamped ``external_id = f"{store_id}:{id}"`` AND
+    ``store_id`` — they can never collide with (or overwrite) a chain-level
+    bare-id row. An unmatched store yields an empty feed and is LOGGED, never
+    silently dropped (T10b §10-F9).
+    """
+    import httpx
+    import json
+    import logging
+
+    from ._common import get_text
+
+    logger = logging.getLogger(__name__)
+    empty = {"grocer_id": grocer_cfg.grocer_id, "week_key": week_key,
+             "entries": []}
+    if not store_id or not store_label:
+        raise ValueError("pull_store_scoped requires store_id and store_label")
+    base, dealer_id = _dealer_urls(grocer_cfg.endpoint)
+    if not dealer_id:
+        return empty
+    headers = dict(grocer_cfg.headers or {})
+    own = session is None
+    client = session if session is not None else httpx.Client()
+    try:
+        catalogs_raw = get_text(client, f"{base}?dealer_id={dealer_id}", headers)
+        if catalogs_raw is None:
+            return empty
+        try:
+            catalogs = json.loads(catalogs_raw)
+        except ValueError:
+            return empty
+        catalog = _catalog_for_store(catalogs, store_label)
+        if catalog is None:
+            # loud, not silent: the store has no Tjek catalog this week
+            logger.warning(
+                "no Tjek catalog labeled %r for dealer %s — store %s falls "
+                "back to chain-level offers", store_label, dealer_id, store_id)
+            return empty
+        hotspots_raw = get_text(
+            client, f"{base}/{catalog['id']}/hotspots", headers)
+        if hotspots_raw is None:
+            return empty
+        try:
+            records = json.loads(hotspots_raw)
+        except ValueError:
+            return empty
+    finally:
+        if own and hasattr(client, "close"):
+            client.close()
+    entries = parse_hotspots(records, week_start(week_key))
+    for entry in entries:
+        # RULE 1: store-scoped ids are ALWAYS prefixed — asserted, never assumed.
+        entry["external_id"] = f"{store_id}:{entry['external_id']}"
+        entry["store_id"] = str(store_id)
+    return {"grocer_id": grocer_cfg.grocer_id, "week_key": week_key,
+            "entries": entries}
+
+
+def _catalog_for_store(catalogs, store_label: str) -> dict | None:
+    """The current catalog whose label matches the store name (casefold+strip)."""
+    wanted = store_label.casefold().strip()
+    current = pick_catalog(catalogs)
+    if current is not None and _label_matches(current, wanted):
+        return current
+    # The current dealer-wide catalog may belong to ANOTHER store; look for a
+    # covering catalog labeled for THIS store specifically.
+    now = datetime.now(timezone.utc)
+    for cat in catalogs if isinstance(catalogs, list) else []:
+        if isinstance(cat, dict) and _label_matches(cat, wanted):
+            start = _parse_iso(cat.get("run_from"))
+            end = _parse_iso(cat.get("run_till"))
+            if start is not None and end is not None and start <= now <= end:
+                return cat
+    return None
+
+
+def _label_matches(catalog: dict, wanted: str) -> bool:
+    label = catalog.get("label")
+    return isinstance(label, str) and label.casefold().strip() == wanted

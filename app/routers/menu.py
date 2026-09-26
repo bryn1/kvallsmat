@@ -69,9 +69,20 @@ class Suggestion(BaseModel):
     days: list[MenuDay]
 
 
+class OfferSource(BaseModel):
+    """Which offer row (and store scope) fed the plan — MC 1355.16 (T10b §4)."""
+
+    offer_id: int
+    grocer_id: str
+    store_id: str | None = None
+
+
 class MenuResponse(BaseModel):
     week_key: str
     suggestions: list[Suggestion] = Field(default_factory=list)
+    # MC 1355.16: optional additive field; used_offer_ids kept unchanged for
+    # response-shape compatibility.
+    offer_sources: list[OfferSource] = Field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------
@@ -121,6 +132,20 @@ def get_menu(request: Request,
     meal_days = profile.meal_days if profile is not None else FamilyPrefs().meal_days
     family = FamilyPrefs(meal_days=meal_days, persons=persons)
 
+    # MC 1355.16 (T10b §4): store-level selection — the store clause keeps a
+    # chain-level row (store_id NULL = valid everywhere) or a row scoped to one
+    # of the profile's resolved stores; then dedup by (grocer_id, normalized
+    # name) preferring the store-level row. No resolved stores (or no
+    # postal_code) -> both steps are a no-op and behavior is exactly today's.
+    resolved = profile.resolved_stores if profile is not None else None
+    offers = _apply_store_clause(offers, resolved)
+    offers = _dedup_by_name(offers, resolved)
+    offer_sources = [
+        {"offer_id": o.offer_id, "grocer_id": o.grocer_id,
+         "store_id": o.store_id}
+        for o in offers
+    ]
+
     # The motor's real planner (src/planner/menu.py) — one plan per seed.
     recipe_roster = recipes()
     by_title = {r.title: r for r in recipe_roster}
@@ -149,4 +174,63 @@ def get_menu(request: Request,
         )
         for seed, p in zip(DEFAULT_SEEDS, plans)
     ]
-    return MenuResponse(week_key=week_key, suggestions=suggestions)
+    return MenuResponse(week_key=week_key, suggestions=suggestions,
+                        offer_sources=offer_sources)
+
+
+# ---------------------------------------------------------------------------
+# Store-level selection helpers (MC 1355.16, T10b §4)
+# ---------------------------------------------------------------------------
+
+
+def _resolved_chain_ids(resolved: dict | None, chain: str) -> list[str]:
+    """Store ids resolved for *chain*; [] when absent or the chain errored.
+
+    An errored chain contributes chain-level rows only (T10b §4) — which the
+    store clause below expresses by matching no store-scoped ids.
+    """
+    if not isinstance(resolved, dict):
+        return []
+    entry = (resolved.get("chains") or {}).get(chain) or {}
+    if entry.get("status") != "ok":
+        return []
+    return [str(s.get("store_id")) for s in entry.get("stores", [])
+            if s.get("store_id") is not None]
+
+
+def _apply_store_clause(offers: list, resolved: dict | None) -> list:
+    """Keep an offer when chain-level (store_id NULL) or scoped to a resolved
+    store of its own chain (T10b §4 step 1). No resolved stores at all -> a
+    no-op: behavior is exactly today's (the regression guard)."""
+    if not isinstance(resolved, dict) or not resolved.get("chains"):
+        return offers
+    kept = []
+    for offer in offers:
+        ids = _resolved_chain_ids(resolved, offer.grocer_id)
+        if offer.store_id is None or str(offer.store_id) in ids:
+            kept.append(offer)
+    return kept
+
+
+def _dedup_by_name(offers: list, resolved: dict | None) -> list:
+    """Dedup (grocer_id, normalized name) preferring the store-level row
+    (T10b §4 step 2). Normalized = casefold + strip (T10d N3). Chains without
+    resolved stores are left untouched — the byte-identical no-op regression
+    guard — so plan_menu's offer-hit counting and andel_extrapris never
+    double-count the same physical product that exists both chain-level and
+    store-level."""
+    best: dict = {}
+    ordered: list = []
+    for offer in offers:
+        if not _resolved_chain_ids(resolved, offer.grocer_id):
+            ordered.append(offer)  # untouched chain: never deduped
+            continue
+        key = (offer.grocer_id, (offer.name or "").casefold().strip())
+        current = best.get(key)
+        if current is None:
+            best[key] = offer
+            ordered.append(offer)
+        elif offer.store_id is not None and current.store_id is None:
+            best[key] = offer  # store-level row wins; keep its position
+            ordered[ordered.index(current)] = offer
+    return ordered
