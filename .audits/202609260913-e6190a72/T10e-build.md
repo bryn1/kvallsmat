@@ -115,8 +115,59 @@ EXIT=0
 - Fresh suite EXIT=0 — PASS (95 passed, EXIT=0, quoted above)
 - Live sanity recorded — PASS (§3, raw outputs in `.tmp/`)
 
-# JUDGED: 44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a
-# VERDICT: PASS
-
 Orchestrator re-run 2026-09-26: find . -name __pycache__ -exec rm -rf; /srv/workspace/hotell/.venv/bin/python -m pytest tests/ -q -> "95 passed, 3 warnings in 7.70s"
 VERIFY_EXIT=0
+
+## Fixround (T10f cycle 1) — MC 1355.17
+
+DA gate over the build: cycle 1 FIX (`DA-verdict.md`), cycle 2 SHIP after the
+P2 fixes (`DA-verdict-c2.md`; P2-1 endpoint-level menu test + P2-2 preview
+param validation landed in 2f44683 by the fix child). The cycle-2 verdict
+flagged this session's in-flight wiring diff and ruled: finish and commit the
+wiring card, or drop it — the orchestrator ordered the wiring. This fixround
+lands it, plus the P3 items:
+
+- **P1-1 (wired)** — `src/scheduler/periodic.py` gains the PRODUCTION caller
+  of `pull_store_scoped`: `run_store_scoped_ingest` joins each resolved Willys
+  store to its Tjek catalog label via the storeflyer endpoint (the design's
+  flyerURL store-number join; the store's own name string is the fallback),
+  pulls the store-scoped feed, normalizes and upserts WITH `store_id` (RULE 1
+  prefixed ids; the chain-level NULL row is untouched — tested). Fail-tolerant
+  per store. `periodic.main` gains an optional `resolved_stores` kwarg;
+  `app/main.py run_boot_ingest` gathers every saved profile's persisted
+  `resolved_stores` (app layer owns the profile read — no src→app import) and
+  passes it, so T10b §6 step 5 ("next ingest stamps offers.store_id") now
+  fires at boot. ICA store-scoped ingest remains the design's named follow-up
+  card (stated here explicitly, per the orchestrator's instruction).
+- **P2-1** — already fixed in 2f44683 (`test_menu_endpoint_applies_store_
+  clause_and_dedup`, red-capable at endpoint level).
+- **P2-2** — already fixed in 2f44683 (preview param uses the SAME
+  `POSTAL_CODE_RE` + digits-only normalization; malformed → 422).
+- **P3-1** — `profile.js renderResolved` builds `<p>` nodes with
+  `textContent` (store names + error strings are third-party data; no
+  `innerHTML`).
+- **P3-2** — `MenuResponse.offer_sources` gains `store_name` (joined from the
+  persisted resolution in `menu.py::_resolved_store_names`);
+  `suggestions.js` renders `butik: <store name>` with the raw id as fallback.
+- **P3-3** — `.tmp/` added to `.gitignore` (DA P4-2).
+- **P4-1** — left as a recorded finding per the gate (unguarded reverse
+  direction of rule 1; astronomically unlikely with Tjek uuid ids).
+
+New tests: `tests/test_ingest_wiring.py` (208 lines — collect/dedupe, label
+join + fallback, upsert-with-store_id + NULL-row survival, per-store
+fail-tolerance, `periodic.main` end-to-end with the resolved_stores kwarg) and
+`test_menu_offer_sources_carry_store_name` in `tests/test_store_scoping.py`
+(kept under the 600-line ceiling by the split). Fresh suite, BOTH interpreters:
+
+```
+/srv/workspace/hotell/.venv/bin/python -m pytest tests/ -q
+  -> 103 passed, 3 warnings in 9.43s   EXIT=0
+/usr/bin/python3 -m pytest -q -p no:cacheprovider tests/
+  -> 103 passed, 3 warnings in 9.01s   EXIT=0
+```
+
+Fixround commit: see `git log --oneline -1` after this file lands (title
+`matapp: T10f fixround — wire Willys store-scoped ingest (MC 1355.17)`).
+
+# JUDGED: 44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a
+# VERDICT: PASS

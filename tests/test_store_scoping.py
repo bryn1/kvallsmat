@@ -422,7 +422,8 @@ def test_menu_response_carries_offer_sources(client, fake_resolve):
     body = r.json()
     assert isinstance(body.get("offer_sources"), list)
     for src in body["offer_sources"]:
-        assert set(src) == {"offer_id", "grocer_id", "store_id"}
+        # MC 1355.17 (T10f DA P3-2): store_name joined for the UI display.
+        assert set(src) == {"offer_id", "grocer_id", "store_id", "store_name"}
     assert all("used_offer_ids" in d
                for sug in body["suggestions"] for d in sug["days"])
 
@@ -472,3 +473,29 @@ def test_stores_preview_rejects_malformed_and_normalizes_postal(client):
         stores_router.resolve_stores_cached = original
     assert r.status_code == 200
     assert seen == ["41451"]  # normalized to digits-only before the resolve
+
+
+
+def test_menu_offer_sources_carry_store_name(client, fake_resolve):
+    """T10f DA P3-2: offer_sources carries the resolved store NAME so the UI
+    shows 'butik: Willys Majorna', not a raw id."""
+    _mkuser_and_login(client, "menuuser4", "pw-menu-4")
+    client.put("/api/profile", json={
+        "persons": 2, "meal_days": 5, "kron_budget": 900,
+        "selected_stores": [], "postal_code": "41451"})
+    from app import db as dbm
+    s = dbm._Session()
+    try:
+        upsert_week(s, [_row("2103:hs1", store_id="2103",
+                             name="Grädde 5dl", price=1490)], WEEK)
+    finally:
+        s.close()
+    r = client.get(f"/api/menu?week={WEEK}")
+    assert r.status_code == 200
+    scoped = [src for src in r.json()["offer_sources"]
+              if src["store_id"] == "2103"]
+    assert scoped and all(src["store_name"] == "Willys Majorna"
+                          for src in scoped)
+    # chain-level sources carry store_name None
+    assert all(src["store_name"] is None for src in r.json()["offer_sources"]
+               if src["store_id"] is None)

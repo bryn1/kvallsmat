@@ -27,16 +27,48 @@ from app.routers import auth, menu, profile, stores
 logger = logging.getLogger("kvallsmat.app")
 
 
+def _saved_resolved_stores() -> list:
+    """All saved profiles' persisted resolved_stores JSON (T10b §3 Population).
+
+    The app layer owns the profile read (layering: src/ never imports app/);
+    periodic.main consumes the plain list for its Willys store-scoped pass.
+    """
+    import json
+
+    from app.models.profile import Profile
+
+    out = []
+    if db._Session is None:
+        return out
+    session = db._Session()
+    try:
+        rows = (session.query(Profile.resolved_stores)
+                .filter(Profile.resolved_stores.isnot(None)).all())
+        for (raw,) in rows:
+            try:
+                parsed = json.loads(raw)
+            except ValueError:
+                continue
+            if isinstance(parsed, dict):
+                out.append(parsed)
+    finally:
+        session.close()
+    return out
+
+
 def run_boot_ingest() -> int:
     """Run ONE weekly ingest pass against the app's own DB (MC 1355.5).
 
     Uses the live PlannerConfig (O1 — the motor's config is the store source) and
     the SAME DB URL app.db is bound to, so the offers DB the menu reads is the one
-    this populates. Raises on failure — the lifespan decides tolerance.
+    this populates. Saved profiles' resolved stores ride along so the Willys
+    store-scoped ingest pass runs (T10b §3 Population, MC 1355.17). Raises on
+    failure — the lifespan decides tolerance.
     """
     from src.scheduler import periodic
 
-    return periodic.main(cfg=get_planner_config(), db_url=db.db_url())
+    return periodic.main(cfg=get_planner_config(), db_url=db.db_url(),
+                         resolved_stores=_saved_resolved_stores())
 
 
 @asynccontextmanager

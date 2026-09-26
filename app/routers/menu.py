@@ -70,11 +70,16 @@ class Suggestion(BaseModel):
 
 
 class OfferSource(BaseModel):
-    """Which offer row (and store scope) fed the plan — MC 1355.16 (T10b §4)."""
+    """Which offer row (and store scope) fed the plan — MC 1355.16 (T10b §4).
+
+    MC 1355.17 (T10f DA P3-2): ``store_name`` carries the resolved store's
+    display name so the UI shows "butik: Willys Majorna", not a raw id.
+    """
 
     offer_id: int
     grocer_id: str
     store_id: str | None = None
+    store_name: str | None = None
 
 
 class MenuResponse(BaseModel):
@@ -140,9 +145,13 @@ def get_menu(request: Request,
     resolved = profile.resolved_stores if profile is not None else None
     offers = _apply_store_clause(offers, resolved)
     offers = _dedup_by_name(offers, resolved)
+    # MC 1355.17 (T10f DA P3-2): store_id -> display name from the persisted
+    # resolution, so offer_sources can show the store NAME in the UI.
+    store_names = _resolved_store_names(resolved)
     offer_sources = [
         {"offer_id": o.offer_id, "grocer_id": o.grocer_id,
-         "store_id": o.store_id}
+         "store_id": o.store_id,
+         "store_name": store_names.get(str(o.store_id)) if o.store_id else None}
         for o in offers
     ]
 
@@ -196,6 +205,25 @@ def _resolved_chain_ids(resolved: dict | None, chain: str) -> list[str]:
         return []
     return [str(s.get("store_id")) for s in entry.get("stores", [])
             if s.get("store_id") is not None]
+
+
+def _resolved_store_names(resolved: dict | None) -> dict:
+    """store_id -> store_name across ALL resolved chains (T10f DA P3-2).
+
+    Empty when unresolved/malformed — the UI then falls back to the raw id.
+    """
+    names: dict = {}
+    if not isinstance(resolved, dict):
+        return names
+    for entry in (resolved.get("chains") or {}).values():
+        if not isinstance(entry, dict) or entry.get("status") != "ok":
+            continue
+        for store in entry.get("stores") or []:
+            sid = store.get("store_id")
+            name = store.get("store_name")
+            if sid is not None and name:
+                names[str(sid)] = str(name)
+    return names
 
 
 def _apply_store_clause(offers: list, resolved: dict | None) -> list:

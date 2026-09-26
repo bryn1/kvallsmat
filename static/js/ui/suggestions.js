@@ -51,10 +51,11 @@ const suggestionsModule = (() => {
   function render(data) {
     const suggestions = (data && Array.isArray(data.suggestions)) ? data.suggestions : [];
     // offer_id -> store scope (display only; absent offer_sources = no label).
+    // T10f DA P3-2: prefer the resolved store NAME; the raw id is the fallback.
     const sourceNames = new Map(
       ((data && Array.isArray(data.offer_sources)) ? data.offer_sources : [])
         .filter((s) => s && s.store_id)
-        .map((s) => [s.offer_id, s.store_id]));
+        .map((s) => [s.offer_id, s.store_name || s.store_id]));
     const grid = document.getElementById('suggestions-grid');
     const countEl = document.getElementById('suggestions-count');
     const emptyEl = document.getElementById('suggestions-empty');

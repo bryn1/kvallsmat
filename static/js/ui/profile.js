@@ -49,7 +49,7 @@ const profileModule = (() => {
   function renderResolved(resolved) {
     const el = document.getElementById('profile-resolved');
     if (!el) return;
-    if (!resolved || !resolved.chains) { el.hidden = true; el.innerHTML = ''; return; }
+    if (!resolved || !resolved.chains) { el.hidden = true; el.textContent = ''; return; }
     const lines = [];
     for (const [chain, entry] of Object.entries(resolved.chains)) {
       if (entry && entry.status === 'ok') {
@@ -63,7 +63,14 @@ const profileModule = (() => {
     if (resolved.resolved_at) {
       lines.push(`Hämtat: ${resolved.resolved_at}`);
     }
-    el.innerHTML = lines.map((l) => `<p>${l}</p>`).join('');
+    // T10f DA P3-1: store names and error strings come from third-party
+    // responses — build the <p> nodes with textContent, never innerHTML.
+    el.textContent = '';
+    for (const line of lines) {
+      const p = document.createElement('p');
+      p.textContent = line;
+      el.appendChild(p);
+    }
     el.hidden = lines.length === 0;
   }
 

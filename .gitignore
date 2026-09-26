@@ -3,3 +3,5 @@ __pycache__/
 .data/
 .pytest_cache/
 .venv/
+# T10f DA P4-2: scratch/run dir — never a deliverable (workspace-convention).
+.tmp/
