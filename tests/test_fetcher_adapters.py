@@ -204,15 +204,18 @@ def test_lidl_pull_fail_tolerant_non200_and_exception():
 # ---- dispatch / contract ----------------------------------------------------
 
 def test_dispatch_unknown_chain_falls_back_to_legacy_pull():
-    # willys has no real adapter yet: pull_grocer must still use the legacy
-    # {base}/veckans-extrapris path (contract preserved).
+    # hemkop has no real adapter: pull_grocer must still use the legacy
+    # {base}/veckans-extrapris path (contract preserved). (Willys gained a
+    # real Tjek adapter in MC 1355.10, so it no longer exercises this path.)
+    hemkop = PlannerConfig.grocer("hemkop", "https://feeds.hemkop.se/week",
+                                  chain="hemkop")
     session = FakeSession({
-        "https://feeds.willys.se/week/veckans-extrapris":
-            (200, '{"offers":[{"external_id":"w1","name":"Mjölk","price":12.5,'
+        "https://feeds.hemkop.se/week/veckans-extrapris":
+            (200, '{"offers":[{"external_id":"h1","name":"Mjölk","price":12.5,'
                   '"unit":"l","valid_from":"2026-09-21","valid_to":"2026-09-27"}]}'),
     })
-    feed = pull_grocer(WILLYS_CFG, "2026-W39", session=session)
-    assert feed["entries"][0]["external_id"] == "w1"
+    feed = pull_grocer(hemkop, "2026-W39", session=session)
+    assert feed["entries"][0]["external_id"] == "h1"
 
 
 def test_week_start_helper():

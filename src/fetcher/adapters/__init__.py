@@ -11,12 +11,16 @@ from __future__ import annotations
 
 from . import ica as _ica
 from . import lidl as _lidl
+from . import tjek as _tjek
 from ._common import get_text, week_start  # re-exported for callers/tests
 
 # chain/grocer_id -> module with a pull(cfg, week_key, session) -> RawFeed
 _ADAPTERS = {
     "ica": _ica,
     "lidl": _lidl,
+    # Willys + Coop publish their veckoblad through Tjek (MC 1355.10).
+    "willys": _tjek,
+    "coop": _tjek,
 }
 
 

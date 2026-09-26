@@ -40,11 +40,19 @@ def get_planner_config():
 # source, not a second app-side list. KVALLSMATS_GROCERS (JSON list of
 # {grocer_id, endpoint, token|chain}) overrides the default for deployment.
 _DEFAULT_GROCERS = [
-    PlannerConfig.grocer("willys", "https://feeds.willys.se/week", chain="willys"),
+    # Willys + Coop publish their veckoblad through Tjek; the public squid API
+    # serves the offers as structured JSON (MC 1355.10, audit T7a).
+    PlannerConfig.grocer(
+        "willys",
+        "https://squid-api.tjek.com/v2/catalogs?dealer_id=c371GA",
+        chain="willys"),
     # Real endpoints (MC 1355.4, audit T2): ICA's offers page embeds the weekly
     # offers server-side; Lidl's offers index links the campaign pages.
     PlannerConfig.grocer("ica", "https://www.ica.se/erbjudanden/", chain="ica"),
-    PlannerConfig.grocer("coop", "https://feeds.coop.se/week", chain="coop"),
+    PlannerConfig.grocer(
+        "coop",
+        "https://squid-api.tjek.com/v2/catalogs?dealer_id=6c28SD",
+        chain="coop"),
     PlannerConfig.grocer("lidl", "https://www.lidl.se/c/erbjudanden", chain="lidl"),
 ]
 
