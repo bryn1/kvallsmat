@@ -425,3 +425,50 @@ def test_menu_response_carries_offer_sources(client, fake_resolve):
         assert set(src) == {"offer_id", "grocer_id", "store_id"}
     assert all("used_offer_ids" in d
                for sug in body["suggestions"] for d in sug["days"])
+
+
+def test_menu_endpoint_applies_store_clause_and_dedup(client, fake_resolve):
+    """T10f DA P2-1: the store clause must run inside the ENDPOINT, not only in
+    the helpers — a store-scoped row for an UNRESOLVED store (9999) is excluded
+    from offer_sources while the chain-level row survives."""
+    _mkuser_and_login(client, "menuuser3", "pw-menu-3")
+    client.put("/api/profile", json={
+        "persons": 2, "meal_days": 5, "kron_budget": 900,
+        "selected_stores": [], "postal_code": "41451"})
+    from app import db as dbm
+    s = dbm._Session()
+    try:
+        upsert_week(s, [_row("w-1", name="Köttfärs nöt 500g", price=4990),
+                        _row("9999:hs9", store_id="9999",
+                             name="Fiskgratäng", price=3990)], WEEK)
+    finally:
+        s.close()
+    r = client.get(f"/api/menu?week={WEEK}")
+    assert r.status_code == 200
+    sources = r.json()["offer_sources"]
+    assert all(src["store_id"] != "9999" for src in sources)  # unresolved: dropped
+    assert any(src["grocer_id"] == "willys" and src["store_id"] is None
+               for src in sources)  # chain-level row survives
+
+
+def test_stores_preview_rejects_malformed_and_normalizes_postal(client):
+    """T10f DA P2-2: the preview param follows the SAME postnummer rule as
+    PUT /api/profile — malformed -> 422, valid spaced value -> digits-only."""
+    _mkuser_and_login(client, "previewuser2", "pw-preview-2")
+    r = client.get("/api/stores", params={"postal_code": "abcde"})
+    assert r.status_code == 422
+    seen: list[str] = []
+
+    def capture(pc):
+        seen.append(pc)
+        return json.loads(json.dumps(FAKE_RESOLVE))
+
+    import app.routers.stores as stores_router
+    original = stores_router.resolve_stores_cached
+    stores_router.resolve_stores_cached = capture
+    try:
+        r = client.get("/api/stores", params={"postal_code": "414 51"})
+    finally:
+        stores_router.resolve_stores_cached = original
+    assert r.status_code == 200
+    assert seen == ["41451"]  # normalized to digits-only before the resolve

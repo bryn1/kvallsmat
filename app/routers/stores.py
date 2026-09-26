@@ -18,6 +18,8 @@ marshals HTTP<->session.
 """
 from __future__ import annotations
 
+import re
+
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
@@ -30,6 +32,9 @@ from app.models.store_selection import (
     upsert_selection,
     MAX_SELECTED,
 )
+# MC 1355.17 (T10f DA P2-2): the preview param is validated + normalized by the
+# SAME regex/normalization the profile PUT uses — one postnummer rule, no second.
+from app.routers.profile import POSTAL_CODE_RE
 from src.locator import resolve_stores_cached
 
 router = APIRouter(prefix="/api/stores", tags=["stores"])
@@ -70,7 +75,15 @@ def list_stores(request: Request,
     if postal_code is None:
         return catalog  # anonymous behavior byte-identical to today
     auth_service.current_user_or_401(request)
-    return {"stores": catalog, "nearby": resolve_stores_cached(postal_code)}
+    # MC 1355.17 (T10f DA P2-2): same validation + digits-only normalization as
+    # PUT /api/profile — a malformed param is a 422, never a raw Nominatim query.
+    if not POSTAL_CODE_RE.fullmatch(postal_code.strip()):
+        raise HTTPException(
+            status_code=422,
+            detail="postal_code must be a Swedish postnummer, e.g. "
+                   "'414 51' or '41451'")
+    return {"stores": catalog,
+            "nearby": resolve_stores_cached(re.sub(r"\s", "", postal_code))}
 
 
 @router.post("/select")
