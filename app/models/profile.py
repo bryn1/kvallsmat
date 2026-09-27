@@ -43,6 +43,11 @@ class Profile(Base):
     # failure stay visible in every later GET (T10b §10-F7).
     postal_code = Column(String, nullable=True)
     resolved_stores = Column(Text, nullable=True)
+    # MC 1355.18 (T11): antal barn (informational — does NOT feed servings
+    # planning in this card) and the kid-friendly preference (0/1). Both
+    # nullable: absent = the user has not saved a value (postal_code rule).
+    num_children = Column(Integer, nullable=True)
+    prefer_kid_friendly = Column(Integer, nullable=True)  # 0/1
     updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc),
                         onupdate=lambda: datetime.now(timezone.utc))
 

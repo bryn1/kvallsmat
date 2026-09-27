@@ -24,6 +24,10 @@ class Recipe(Base):
     ingredients_json = Column(Text)
     allergens_json = Column(Text)
     vegetarian = Column(Integer, default=0)  # 0/1
+    # MC 1355.18 (T11): 0/1 barnvänligt. Declared on the model so create_all on
+    # a FRESH database includes it (the guarded ALTER only covers existing DBs).
+    # The guarded ALTER adds no DEFAULT: existing rows read NULL — treat as 0.
+    kid_friendly = Column(Integer, default=0)  # 0/1
     budget_tier = Column(String)  # 'budget'|'mid'|'premium'
     source_url = Column(String, default="")
     created_at = Column(String)  # ISO UTC

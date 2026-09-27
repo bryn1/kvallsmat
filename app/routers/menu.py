@@ -61,6 +61,9 @@ class MenuDay(BaseModel):
     dish_id: str
     andel_extrapris: float
     used_offer_ids: list[int] = Field(default_factory=list)
+    # MC 1355.18 (T11): additive field (same precedent as offer_sources) —
+    # absent/false renders nothing in the UI, old responses stay valid.
+    kid_friendly: bool = False
 
 
 class Suggestion(BaseModel):
@@ -135,7 +138,10 @@ def get_menu(request: Request,
     profile = profile_service.load_profile(user)
     persons = profile.persons if profile is not None else FamilyPrefs().persons
     meal_days = profile.meal_days if profile is not None else FamilyPrefs().meal_days
-    family = FamilyPrefs(meal_days=meal_days, persons=persons)
+    family = FamilyPrefs(meal_days=meal_days, persons=persons,
+                         prefer_kid_friendly=bool(
+                             profile.prefer_kid_friendly or 0)
+                         if profile is not None else False)
 
     # MC 1355.16 (T10b §4): store-level selection — the store clause keeps a
     # chain-level row (store_id NULL = valid everywhere) or a row scoped to one
@@ -177,6 +183,9 @@ def get_menu(request: Request,
                         if d["dish_id"] in by_title else 0.0
                     ),
                     used_offer_ids=d["used_offer_ids"],
+                    kid_friendly=bool(
+                        (getattr(by_title[d["dish_id"]], "kid_friendly", 0) or 0)
+                    ) if d["dish_id"] in by_title else False,
                 )
                 for d in p["days"]
             ],

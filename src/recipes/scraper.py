@@ -79,6 +79,8 @@ def _normalize_spec(spec, source: str) -> Optional[dict]:
         "category": _text(spec.get("category"), "husmanskost"),
         "servings": _int(spec.get("servings"), 4),
         "vegetarian": 1 if _int(spec.get("vegetarian"), 0) else 0,
+        # MC 1355.18 (T11): same 0/1 normalisation idiom as vegetarian.
+        "kid_friendly": 1 if _int(spec.get("kid_friendly"), 0) else 0,
         "budget_tier": _text(spec.get("budget_tier"), "mid"),
         "ingredients_json": json.dumps(spec.get("ingredients", []), ensure_ascii=False),
         "allergens_json": json.dumps(spec.get("allergens", []), ensure_ascii=False),

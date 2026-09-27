@@ -19,6 +19,16 @@ const suggestionsModule = (() => {
     return await res.json(); // {week_key, suggestions:[{week_key, seed, days:[...]}]}
   }
 
+  // ---- HTML escaping (T11 DA P2b) ----
+  // The card renders through ONE innerHTML template, so every backend-sourced
+  // string interpolated into it must be escaped here. The kid-friendly badge
+  // itself is static text and needs no escaping.
+  function escapeHtml(value) {
+    return String(value == null ? '' : value)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
   // ---- Rendering: a single suggestion family ----
   // MC 1355.16: when the menu response carries offer_sources, append the
   // store scope to each day's line (display only; no logic).
@@ -31,10 +41,15 @@ const suggestionsModule = (() => {
       const storeScopes = (d.used_offer_ids || [])
         .map((id) => sourceNames && sourceNames.get(id))
         .filter(Boolean);
-      const storeLabel = storeScopes.length ? ` · butik: ${[...new Set(storeScopes)].join(', ')}` : '';
+      const storeLabel = storeScopes.length
+        ? ` · butik: ${escapeHtml([...new Set(storeScopes)].join(', '))}` : '';
+      // MC 1355.18 (T11): plain-text "Barnvänligt" badge next to the dish when
+      // the day's recipe is kid-friendly; nothing renders when absent/false.
+      const kidBadge = d.kid_friendly
+        ? ' <span class="form-help">(Barnvänligt)</span>' : '';
       return `<li class="suggestion__day">
-        <span class="suggestion__dish">${d.dish_id || 'Recept saknas'}</span>
-        <span class="suggestion__extra">${d.date || ''} · ${pct}% extrapris${storeLabel}</span>
+        <span class="suggestion__dish">${escapeHtml(d.dish_id) || 'Recept saknas'}${kidBadge}</span>
+        <span class="suggestion__extra">${escapeHtml(d.date || '')} · ${pct}% extrapris${storeLabel}</span>
       </li>`;
     }).join('');
 

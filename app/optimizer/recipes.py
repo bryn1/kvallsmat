@@ -21,6 +21,7 @@ class Recipe:
     servings: int
     vegetarian: int
     budget_tier: str
+    kid_friendly: int = 0  # MC 1355.18 (T11): 0/1 barnvänligt (roster mirror)
     ingredients: list = field(default_factory=list)
     allergens: list = field(default_factory=list)
 
@@ -37,6 +38,7 @@ ROSTER = [
     Recipe(
         title="Köttbullar med gräddsås och potatis", category="husmanskost",
         servings=4, vegetarian=0, budget_tier="budget",
+        kid_friendly=1,
         ingredients=[{"name": "köttfärs", "qty": 500, "unit": "g"},
                      {"name": "potatis", "qty": 800, "unit": "g"},
                      {"name": "grädde", "qty": 2, "unit": "dl"}],
@@ -45,6 +47,7 @@ ROSTER = [
     Recipe(
         title="Köttfärssås och spagetti", category="husmanskost",
         servings=4, vegetarian=0, budget_tier="budget",
+        kid_friendly=1,
         ingredients=[{"name": "köttfärs", "qty": 400, "unit": "g"},
                      {"name": "krossade tomater", "qty": 500, "unit": "g"},
                      {"name": "lök", "qty": 1, "unit": "st"},
@@ -54,6 +57,7 @@ ROSTER = [
     Recipe(
         title="Ugnsbakad lax med kokt potatis", category="husmanskost",
         servings=4, vegetarian=0, budget_tier="premium",
+        kid_friendly=0,
         ingredients=[{"name": "laxfilé", "qty": 600, "unit": "g"},
                      {"name": "potatis", "qty": 800, "unit": "g"},
                      {"name": "citron", "qty": 1, "unit": "st"}],
@@ -62,6 +66,7 @@ ROSTER = [
     Recipe(
         title="Kyckling med ris och currysås", category="husmanskost",
         servings=4, vegetarian=0, budget_tier="mid",
+        kid_friendly=0,
         ingredients=[{"name": "kycklingfilé", "qty": 500, "unit": "g"},
                      {"name": "ris", "qty": 4, "unit": "dl"},
                      {"name": "currysås", "qty": 3, "unit": "dl"}],
@@ -70,6 +75,7 @@ ROSTER = [
     Recipe(
         title="Korv stroganoff", category="husmanskost",
         servings=4, vegetarian=0, budget_tier="budget",
+        kid_friendly=1,
         ingredients=[{"name": "falukorv", "qty": 400, "unit": "g"},
                      {"name": "tomatpuré", "qty": 1, "unit": "dl"},
                      {"name": "grädde", "qty": 2, "unit": "dl"},
@@ -82,6 +88,7 @@ ROSTER = [
     Recipe(
         title="Pannkakor med sylt", category="husmanskost",
         servings=4, vegetarian=1, budget_tier="budget",
+        kid_friendly=1,
         ingredients=[{"name": "mjöl", "qty": 3, "unit": "dl"},
                      {"name": "mjölk", "qty": 6, "unit": "dl"},
                      {"name": "ägg", "qty": 3, "unit": "st"}],

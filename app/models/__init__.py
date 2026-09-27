@@ -12,3 +12,9 @@ from . import users      # noqa: F401  (registers users table on Base)
 from . import profile    # noqa: F401  (registers profile table on Base)
 from . import offers_db  # noqa: F401  (registers offers table on Base)
 from . import store_selection  # noqa: F401  (registers store_selection table, MC 1355.3)
+
+# MC 1355.18 (T11 DA c2 P0): the recipes ORM model must be registered on the
+# shared Base BEFORE boot()/create_all — nothing else in the app path imports
+# src.recipes.store, so without this the ``recipes`` table is never created and
+# ensure_columns' inspector raises NoSuchTableError on the kid_friendly ALTER.
+from src.recipes.store import Recipe as _T11Recipe  # noqa: F401

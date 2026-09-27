@@ -34,17 +34,23 @@ class ProfileData:
     """
 
     __slots__ = ("persons", "meal_days", "kron_budget", "selected_stores",
-                 "postal_code", "resolved_stores")
+                 "postal_code", "resolved_stores", "num_children",
+                 "prefer_kid_friendly")
 
     def __init__(self, persons: int, meal_days: int, kron_budget: int,
                  selected_stores: list[str], postal_code: str | None = None,
-                 resolved_stores: dict | None = None) -> None:
+                 resolved_stores: dict | None = None,
+                 num_children: int | None = None,
+                 prefer_kid_friendly: int | None = None) -> None:
         self.persons = persons
         self.meal_days = meal_days
         self.kron_budget = kron_budget
         self.selected_stores = list(selected_stores)
         self.postal_code = postal_code
         self.resolved_stores = resolved_stores
+        # MC 1355.18 (T11): antal barn (informational) + barnvänligt-pref (0/1).
+        self.num_children = num_children
+        self.prefer_kid_friendly = prefer_kid_friendly
 
     def as_dict(self) -> dict:
         return {
@@ -54,6 +60,8 @@ class ProfileData:
             "selected_stores": self.selected_stores,
             "postal_code": self.postal_code,
             "resolved_stores": self.resolved_stores,
+            "num_children": self.num_children,
+            "prefer_kid_friendly": self.prefer_kid_friendly,
         }
 
     def _store_list(self) -> str:
@@ -93,6 +101,10 @@ def save_profile(user: User, data: ProfileData) -> Profile:
         row.resolved_stores = (
             json.dumps(data.resolved_stores)
             if data.resolved_stores is not None else None)
+        # MC 1355.18 (T11): antal barn + barnvänligt-pref persist exactly like
+        # the other optional fields (NULL = not saved).
+        row.num_children = data.num_children
+        row.prefer_kid_friendly = data.prefer_kid_friendly
         session.commit()
         session.refresh(row)
         return row
@@ -116,6 +128,8 @@ def load_profile(user: User) -> ProfileData | None:
             selected_stores=stores,
             postal_code=row.postal_code,
             resolved_stores=_parse_resolved(row.resolved_stores),
+            num_children=row.num_children,
+            prefer_kid_friendly=row.prefer_kid_friendly,
         )
     finally:
         session.close()

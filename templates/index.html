@@ -37,20 +37,48 @@
         <p id="auth-error-text"></p>
       </div>
 
-      <!-- Login form (shown when unauthenticated) -->
-      <form id="auth-form" class="auth-form" novalidate>
-        <div class="form-field">
-          <label for="auth-input-user">Användarnamn</label>
-          <input type="text" id="auth-input-user" name="username" class="form-input" autocomplete="username" required>
+      <!-- MC 1355.18: the WHOLE auth choice region (toggle + both forms) lives
+           inside #auth-login — the id auth.js showLogin/showLoggedIn already
+           target (F0 fix: the id previously existed nowhere, so the login form
+           was never hidden when logged in). Hiding #auth-login now covers the
+           register form too. -->
+      <div id="auth-login">
+        <!-- Mode toggle: login | register -->
+        <div class="form-field form-field--actions auth-mode">
+          <button type="button" id="auth-mode-login" class="btn btn-ghost" aria-pressed="true">Logga in</button>
+          <button type="button" id="auth-mode-register" class="btn btn-ghost" aria-pressed="false">Registrera konto</button>
         </div>
-        <div class="form-field">
-          <label for="auth-input-pass">Lösenord</label>
-          <input type="password" id="auth-input-pass" name="password" class="form-input" autocomplete="current-password" required>
-        </div>
-        <div class="form-field form-field--actions">
-          <button type="submit" id="auth-submit" class="btn btn-primary">Logga in</button>
-        </div>
-      </form>
+
+        <!-- Login form (shown in login mode) -->
+        <form id="auth-form" class="auth-form" novalidate>
+          <div class="form-field">
+            <label for="auth-input-user">Användarnamn</label>
+            <input type="text" id="auth-input-user" name="username" class="form-input" autocomplete="username" required>
+          </div>
+          <div class="form-field">
+            <label for="auth-input-pass">Lösenord</label>
+            <input type="password" id="auth-input-pass" name="password" class="form-input" autocomplete="current-password" required>
+          </div>
+          <div class="form-field form-field--actions">
+            <button type="submit" id="auth-submit" class="btn btn-primary">Logga in</button>
+          </div>
+        </form>
+
+        <!-- Register form (shown in register mode; reuses POST /api/auth/register) -->
+        <form id="auth-register-form" class="auth-form" hidden novalidate>
+          <div class="form-field">
+            <label for="auth-reg-user">Användarnamn</label>
+            <input type="text" id="auth-reg-user" name="username" class="form-input" autocomplete="username" required>
+          </div>
+          <div class="form-field">
+            <label for="auth-reg-pass">Lösenord</label>
+            <input type="password" id="auth-reg-pass" name="password" class="form-input" autocomplete="new-password" required>
+          </div>
+          <div class="form-field form-field--actions">
+            <button type="submit" id="auth-register-submit" class="btn btn-primary">Skapa konto</button>
+          </div>
+        </form>
+      </div>
 
       <!-- Logged-in status (shown when authenticated) -->
       <div id="auth-status" class="auth-status" hidden>
@@ -85,6 +113,17 @@
         <div class="form-field">
           <label for="profile-postal">Postnummer</label>
           <input type="text" id="profile-postal" name="postal_code" class="form-input" placeholder="t.ex. 414 51" inputmode="numeric" autocomplete="postal-code">
+        </div>
+        <!-- MC 1355.18 (T11): antal barn (informational) + barnvänligt-pref -->
+        <div class="form-field">
+          <label for="profile-num-children">Antal barn</label>
+          <input type="number" id="profile-num-children" name="num_children" class="form-input" min="0" max="20">
+          <p class="form-help">Sparas för hushållet — påverkar förslagen än så länge inte.</p>
+        </div>
+        <div class="form-field">
+          <label for="profile-kid-friendly">Barnvänligt</label>
+          <input type="checkbox" id="profile-kid-friendly" name="prefer_kid_friendly" value="1">
+          <p class="form-help">Barnvänliga rätter prioriteras i förslagen.</p>
         </div>
         <!-- MC 1355.16: resolved stores per chain + resolved_at (staleness visible) -->
         <div id="profile-resolved" class="form-help" hidden></div>

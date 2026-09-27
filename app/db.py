@@ -76,6 +76,11 @@ _NEW_COLUMNS = (
     ("offers", "store_id", "String"),
     ("profile", "postal_code", "String"),
     ("profile", "resolved_stores", "Text"),
+    # MC 1355.18 (T11): antal barn + barnvänligt. The guarded ALTER adds no
+    # DEFAULT, so EXISTING rows get NULL — every reader treats NULL as 0/absent.
+    ("profile", "num_children", "Integer"),
+    ("profile", "prefer_kid_friendly", "Integer"),
+    ("recipes", "kid_friendly", "Integer"),
 )
 
 
@@ -91,6 +96,11 @@ def ensure_columns(engine) -> None:
 
     inspector = inspect(engine)
     for table, column, col_type in _NEW_COLUMNS:
+        # MC 1355.18 (T11 DA c2 P0): a legacy/partial DB may not hold the table
+        # at all (create_all only makes tables whose ORM model was imported).
+        # Skip rather than raise — the table's own boot path creates it whole.
+        if not inspector.has_table(table):
+            continue
         cols = {c["name"] for c in inspector.get_columns(table)}
         if column in cols:
             continue

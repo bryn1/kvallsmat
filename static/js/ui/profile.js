@@ -13,6 +13,9 @@ const profileModule = (() => {
   // MC 1355.16: absent-means-unchanged PUT semantics — postal_code is only
   // included in the PUT body when the user actually edited the field.
   let postalEdited = false;
+  // MC 1355.18 (T11): same absent-means-unchanged tracking for the new fields.
+  let childrenEdited = false;
+  let kidEdited = false;
 
   // ---- Data accessors (render-only) ----
   async function fetchProfile() {
@@ -38,6 +41,14 @@ const profileModule = (() => {
     if (budgetEl) budgetEl.value = profile && profile.kron_budget != null ? profile.kron_budget : '';
     if (postalEl) postalEl.value = (profile && profile.postal_code) || '';
     postalEdited = false;
+    const childrenEl = document.getElementById('profile-num-children');
+    const kidEl = document.getElementById('profile-kid-friendly');
+    if (childrenEl) {
+      childrenEl.value = (profile && profile.num_children != null) ? profile.num_children : '';
+    }
+    if (kidEl) kidEl.checked = !!(profile && profile.prefer_kid_friendly);
+    childrenEdited = false;
+    kidEdited = false;
     renderResolved(profile && profile.resolved_stores);
     if (statusEl) {
       statusEl.textContent = profile ? 'Profil laddad.' : 'Ingen profil än — fyll i och spara för att skapa en.';
@@ -93,6 +104,16 @@ const profileModule = (() => {
       const postalVal = document.getElementById('profile-postal')?.value?.trim() || '';
       data.postal_code = postalVal === '' ? null : postalVal;
     }
+    // MC 1355.18 (T11): antal barn — an edit to empty sends null = explicit
+    // clear; barnvänligt — a checkbox has no empty state, so an edit always
+    // sends 1 (checked) or 0 (unchecked) = an explicit preference (DA P3).
+    if (childrenEdited) {
+      const childrenVal = parseInt(document.getElementById('profile-num-children')?.value, 10);
+      data.num_children = Number.isNaN(childrenVal) ? null : childrenVal;
+    }
+    if (kidEdited) {
+      data.prefer_kid_friendly = document.getElementById('profile-kid-friendly')?.checked ? 1 : 0;
+    }
     try {
       const res = await saveProfile(data);
       fillForm(res.profile || data);
@@ -127,6 +148,10 @@ const profileModule = (() => {
     // the user changed it (absent = unchanged backend semantics).
     const postalEl = document.getElementById('profile-postal');
     if (postalEl) postalEl.addEventListener('input', () => { postalEdited = true; });
+    const childrenEl = document.getElementById('profile-num-children');
+    if (childrenEl) childrenEl.addEventListener('input', () => { childrenEdited = true; });
+    const kidEl = document.getElementById('profile-kid-friendly');
+    if (kidEl) kidEl.addEventListener('change', () => { kidEdited = true; });
   }
 
   function init() {

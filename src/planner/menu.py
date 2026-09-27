@@ -142,9 +142,15 @@ def plan_menu(week_key: str, offers: list, recipes: list,
     dates = _week_dates(week_key, family.meal_days)
 
     eligible = [r for r in recipes if _allowed(r, family)]
-    # Deterministic rank: hit-count DESC, then a seeded, stable tie-break.
+    # Deterministic rank: hit-count DESC, then (MC 1355.18) kid-friendly wins
+    # TIES when the family prefers it, then a seeded, stable tie-break. getattr
+    # keeps the key working for any FamilyPrefs carrier; with the flag off (or
+    # no kid-friendly recipes) the key is byte-identical to the pre-T11 one.
+    prefer_kid = bool(getattr(family, "prefer_kid_friendly", False))
+
     def _rank(r):
-        return (-_offer_hit_count(r, offers), rng.random())
+        kid = (getattr(r, "kid_friendly", 0) or 0) if prefer_kid else 0
+        return (-_offer_hit_count(r, offers), -kid, rng.random())
     pool = sorted(eligible, key=_rank)
 
     days: list[dict] = []

@@ -42,9 +42,26 @@ const authModule = (() => {
     const loginView = document.getElementById('auth-login');
     const statusView = document.getElementById('auth-status');
     const nameEl = document.getElementById('auth-username');
+    const errEl = document.getElementById('auth-error');
     if (loginView) loginView.hidden = true;
     if (statusView) statusView.hidden = false;
     if (nameEl) nameEl.textContent = (user && user.username) || '';
+    if (errEl) errEl.hidden = true;
+  }
+
+  // ---- MC 1355.18: login/register mode toggle ----
+  // Toggles the two inner forms inside #auth-login + the aria-pressed state.
+  // Both forms live INSIDE #auth-login, so showLoggedIn() hiding that wrapper
+  // hides the register form too (DA P2a).
+  function setMode(mode) {
+    const loginForm = document.getElementById('auth-form');
+    const registerForm = document.getElementById('auth-register-form');
+    const loginBtn = document.getElementById('auth-mode-login');
+    const registerBtn = document.getElementById('auth-mode-register');
+    if (loginForm) loginForm.hidden = mode !== 'login';
+    if (registerForm) registerForm.hidden = mode !== 'register';
+    if (loginBtn) loginBtn.setAttribute('aria-pressed', mode === 'login' ? 'true' : 'false');
+    if (registerBtn) registerBtn.setAttribute('aria-pressed', mode === 'register' ? 'true' : 'false');
   }
 
   // ---- UI feedback helpers ----
@@ -75,6 +92,47 @@ const authModule = (() => {
     }
   }
 
+  // ---- Register submit (reuses the EXISTING POST /api/auth/register) ----
+  async function submitRegister() {
+    const userEl = document.getElementById('auth-reg-user');
+    const passEl = document.getElementById('auth-reg-pass');
+    const username = (userEl && userEl.value || '').trim();
+    const password = passEl ? passEl.value : '';
+    if (!username || !password) {
+      showError('Fyll i användarnamn och lösenord.');
+      return;
+    }
+    try {
+      await apiPost(Endpoints.register, { username, password });
+      // The backend sets the session cookie exactly like login — auto-login.
+      await refreshAuth();
+    } catch (err) {
+      console.error('Register failed:', err);
+      showError(await registerErrorMessage(err));
+    }
+  }
+
+  // Map the register failure to honest Swedish copy. The 422 detail is read
+  // from the response body (a too-long username must not be labelled a
+  // password failure — DA P3); the banner is set with textContent, never
+  // innerHTML.
+  async function registerErrorMessage(err) {
+    const status = err && err.response ? err.response.status : 0;
+    if (status === 409) return 'Användarnamnet är upptaget — välj ett annat.';
+    if (status === 422) {
+      let detail = '';
+      try {
+        const body = await err.response.json();
+        detail = body && typeof body.detail === 'string' ? body.detail : '';
+      } catch (e) { /* body unreadable — fall through to the class default */ }
+      if (/username|användarnamn/i.test(detail)) {
+        return 'Användarnamnet måste vara 1-64 tecken.';
+      }
+      return 'Lösenordet är för kort eller svagt.';
+    }
+    return 'Kunde inte skapa kontot. Försök igen.';
+  }
+
   // ---- Logout ----
   async function submitLogout() {
     try {
@@ -91,7 +149,10 @@ const authModule = (() => {
       const user = await fetchMe();
       showLoggedIn(user);
     } catch (err) {
-      // 401 => not logged in => login view. Any other error also falls back to login.
+      // 401 => not logged in => login view. Any other error also falls back to
+      // login. The mode resets so a stale register form/aria state never
+      // survives a refresh (DA P2a).
+      setMode('login');
       showLogin();
     }
   }
@@ -113,13 +174,26 @@ const authModule = (() => {
     });
   }
 
+  function bindRegister() {
+    const form = document.getElementById('auth-register-form');
+    if (form) form.addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      submitRegister();
+    });
+    const loginBtn = document.getElementById('auth-mode-login');
+    const registerBtn = document.getElementById('auth-mode-register');
+    if (loginBtn) loginBtn.addEventListener('click', () => setMode('login'));
+    if (registerBtn) registerBtn.addEventListener('click', () => setMode('register'));
+  }
+
   function init() {
     bindLogin();
+    bindRegister();
     bindLogout();
     refreshAuth();
   }
 
-  return { init, refreshAuth, submitLogin, submitLogout, showLogin, showLoggedIn };
+  return { init, refreshAuth, submitLogin, submitRegister, submitLogout, setMode, showLogin, showLoggedIn };
 })();
 
 // Global alias (POC idiom): app.js bootstraps via window-scope module.

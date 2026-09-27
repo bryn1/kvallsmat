@@ -41,6 +41,10 @@ class FamilyPrefs:
     vegetarian: bool = False      # True -> only vegetarian dishes
     allergens: tuple = ()         # excluded allergens (e.g. ("mjölk", "fisk"))
     budget_tier: str | None = None  # None = no budget filter; else budget|mid|premium
+    # MC 1355.18 (T11): barnvänligt — kid-friendly dishes win TIES on offer-hits
+    # when set. This is the FamilyPrefs the menu router instantiates and passes
+    # into plan_menu (DA P1: NOT the same-named src/planner dataclass).
+    prefer_kid_friendly: bool = False
 
     def __post_init__(self):
         if self.meal_days <= 0:

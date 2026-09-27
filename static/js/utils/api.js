@@ -29,7 +29,13 @@ const API_BASE = resolveApiBase(window.location.pathname);
  */
 async function apiGet(path) {
   const res = await fetch(API_BASE + path);
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  if (!res.ok) {
+    // MC 1355.18: attach the Response so callers can read status/detail
+    // (e.g. auth.js distinguishing 409 from 422) without a second mechanism.
+    const err = new Error(`HTTP ${res.status}`);
+    err.response = res;
+    throw err;
+  }
   return res;
 }
 
@@ -46,7 +52,11 @@ async function apiPost(path, body) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  if (!res.ok) {
+    const err = new Error(`HTTP ${res.status}`);
+    err.response = res;
+    throw err;
+  }
   return res;
 }
 
@@ -63,7 +73,11 @@ async function apiPut(path, body) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  if (!res.ok) {
+    const err = new Error(`HTTP ${res.status}`);
+    err.response = res;
+    throw err;
+  }
   return res;
 }
 
@@ -72,6 +86,7 @@ const Endpoints = {
   login: '/api/auth/login',
   logout: '/api/auth/logout',
   me: '/api/auth/me',
+  register: '/api/auth/register',
   profile: '/api/profile',
   menu: '/api/menu',
 };

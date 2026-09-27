@@ -46,6 +46,11 @@ class ProfileBody(BaseModel):
     # would wipe a saved postnummer on a stale-client save — T10d F6). Only an
     # explicit null or "" clears it (and resolved_stores with it).
     postal_code: str | None = None
+    # MC 1355.18 (T11): same absent-means-unchanged rule as postal_code —
+    # absent = leave the persisted value, explicit null = clear, value = store.
+    # num_children is INFORMATIONAL in T11 (does not feed servings planning).
+    num_children: int | None = Field(default=None, ge=0)
+    prefer_kid_friendly: int | None = Field(default=None, ge=0, le=1)
 
 
 def _current_user_or_401(request: Request) -> User:
@@ -103,6 +108,15 @@ def put_profile(body: ProfileBody, request: Request,
         postal = existing.postal_code if existing else None
         resolved = existing.resolved_stores if existing else None
 
+    # MC 1355.18 (T11): num_children / prefer_kid_friendly — same rule as
+    # postal_code: absent = unchanged, explicit null = clear, value = store.
+    children_sent = "num_children" in body.model_fields_set
+    kid_sent = "prefer_kid_friendly" in body.model_fields_set
+    num_children = (body.num_children if children_sent
+                    else (existing.num_children if existing else None))
+    prefer_kid = (body.prefer_kid_friendly if kid_sent
+                  else (existing.prefer_kid_friendly if existing else None))
+
     data = profile_service.ProfileData(
         persons=body.persons,
         meal_days=body.meal_days,
@@ -110,6 +124,8 @@ def put_profile(body: ProfileBody, request: Request,
         selected_stores=body.selected_stores,
         postal_code=postal,
         resolved_stores=resolved,
+        num_children=num_children,
+        prefer_kid_friendly=prefer_kid,
     )
     row = profile_service.save_profile(user, data)
     saved = profile_service.load_profile(user)
