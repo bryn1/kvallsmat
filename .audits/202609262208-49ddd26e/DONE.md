@@ -1,0 +1,16 @@
+# DONE — T11 design (MC 1355.17)
+
+| ID | claim | STATUS | evidence |
+|---|---|---|---|
+| D1 | T11-design.md exists at the DoD path with the three pieces designed (register UI, num_children, kid_friendly) and last line `# VERDICT: SHIP` | PASS | `/srv/workspace/matapp/.audits/202609260913-e6190a72/T11-design.md` (commits 4a37157, cfa1662); `tail -3` shows `# VERDICT: SHIP`; byte-identical copy in this out dir (diff -q empty) |
+| D2 | Register UI wired to the EXISTING endpoint — no new endpoint, no new mechanism | PASS | design §a; grounding VERIFIED this session: `app/routers/auth.py:73-84` (POST /api/auth/register, auto-login, 409/422), `static/js/utils/api.js:71-76` (Endpoints registry lacks register — the gap the design closes) |
+| D3 | num_children: nullable int, guarded ALTER via ensure_columns, PUT/GET absent-means-unchanged | PASS | design §b + schema table; mechanism VERIFIED at `app/db.py:75-108` (guarded, idempotent, concurrent-boot tolerant) and precedent `app/routers/profile.py:44-48,90-104` (model_fields_set rule the design mirrors) |
+| D4 | kid_friendly: recipes column + seed values named with rationale, scraper passthrough, prefer_kid_friendly option, planner boost-not-filter, menu must not break without kid-friendly recipes | PASS | design §c; boost-as-tiebreak verified structurally safe (rank key `(-hits, 0, rng)` with flag off orders identically to today's `(-hits, rng)`; pool exhaustion `src/planner/menu.py:160-162` unreachable via a tiebreak); seed 1-list named (7 dishes) with 0-list rationale |
+| D5 | Security findings ranked by severity with repro | PASS | SEC-findings.md in this out dir: no CRITICAL/HIGH; S1 LOW (pre-existing, owner-ratified open-registration enumeration, repro given); S2-S5 INFO with code evidence |
+| D6 | Adversarial verdict on the design | PASS | DA-verdict.md (cycle 1: FIX, findings F-DA1/F-DA2/F-DA3) → design amended (commit cfa1662) → DA-verdict-c2.md: `# JUDGED: 583daa4b6f76b6d549381eb0ef2862523fcde2995857a3511e45e8c8b6ae375e` + `# VERDICT: SHIP` |
+| D7 | Test list: offline fixture tests per the repo's session-injection idiom | PASS | design "Test list" section names 4 test files / 12 tests, all against the VERIFIED `tests/conftest.py` temp-DB `client` idiom (read this session) |
+| D8 | Explicit non-goals stated | PASS | design "Explicit non-goals" section (7 items) |
+| D9 | ARCH: docs/ARCHITECTURE.md matches reality | N/A | this run changed no project file (design-only; artifacts live under .audits/); the design notes the BUILD card must create docs/ARCHITECTURE.md (it does not exist yet — verified: no docs/ dir) |
+| D10 | pytest in the out dir passes | N/A | the out dir holds no test files (design-only run); the repo test suite is untouched by this run |
+| D11 | Git hygiene: no untracked run files, no TODO/FIXME added to source | PASS | `git status --short` empty after the final commit; all run artifacts committed; no source file modified (git diff --stat base..HEAD touches only .audits/) |
+| D12 | Phases executed by spawned profile children | N/A | spawn mechanically rejected from this session: `Error: subagent depth 2 exceeds maxDepth 1` (tool error, cycle 0); phases executed inline per the run dir's T7a precedent, documented in CYCLES.md |
