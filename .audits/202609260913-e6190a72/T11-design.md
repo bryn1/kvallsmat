@@ -39,14 +39,17 @@ Repo: `/srv/workspace/matapp` (main). Investigated this session at HEAD `1664b94
 Files and seams:
 
 1. `templates/index.html` (auth view, lines 40-53):
-   * Wrap the login form in `<div id="auth-login">` — this makes the EXISTING
-     `auth.js` `showLogin`/`showLoggedIn` code work unchanged (fixes F0 by supplying the id
-     the JS already looks for; zero JS id churn).
-   * Add a sibling `<div id="auth-register" hidden>` holding the register form:
-     username (`autocomplete="username"`) + password (`autocomplete="new-password"`),
-     submit button "Skapa konto". Same `form-field`/`form-input`/`btn btn-primary` classes —
-     no new CSS components.
-   * Add a toggle row above the two forms: two buttons
+   * Wrap the ENTIRE auth choice region — the toggle row AND both forms — in
+     `<div id="auth-login">`. This makes the EXISTING `auth.js` `showLogin`/`showLoggedIn`
+     code work unchanged (fixes F0 by supplying the id the JS already looks for; zero JS id
+     churn) and, critically, makes the logged-in hide cover the register form too: the
+     register form `<div id="auth-register" hidden>` lives INSIDE `#auth-login`, never as a
+     sibling — `showLoggedIn()` hides only `#auth-login` (`static/js/ui/auth.js:41-48`), so a
+     sibling would stay visible after login. `setMode` toggles the two inner forms.
+     Register form: username (`autocomplete="username"`) + password
+     (`autocomplete="new-password"`), submit button "Skapa konto". Same
+     `form-field`/`form-input`/`btn btn-primary` classes — no new CSS components.
+   * Toggle row (first element inside `#auth-login`): two buttons
      (`<button type="button" id="auth-mode-login">Logga in</button>`,
      `<button type="button" id="auth-mode-register">Registrera konto</button>`) with
      `aria-pressed` state; the active mode's form is shown, the other `hidden`.
@@ -116,6 +119,11 @@ CONTRADICTED-claim trap. Named follow-up: **T11b — feed num_children into serv
 duplicate-column race — the three entries ride that mechanism unchanged.
 
 **Seed values** (`src/recipes/seed.py` — `kid_friendly: 1` on kid-typical dishes, `0` elsewhere):
+
+**ORM declaration (F-DA2):** `src/recipes/store.py` `Recipe` gains
+`kid_friendly = Column(Integer, default=0)  # 0/1` — without the model column, `create_all`
+on a FRESH database omits it and the seed upsert would fail; the guarded ALTER only covers
+existing databases. Both sides are needed, exactly like the T10e columns.
 
 * `1`: Köttbullar med gräddsås och potatis · Pannkakor med sylt · Korv stroganoff · Tacopaj ·
   Köttfärssås och spagetti · Pasta med tomaatsås och basilika · Quesadillas med bönor.
