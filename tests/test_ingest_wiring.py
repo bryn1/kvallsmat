@@ -64,23 +64,37 @@ def _willys_cfg():
 
 
 def _tjek_routes(label="Willys Alingsås Hagaplan"):
-    """Storeflyer + Tjek catalog/hotspot fixtures for store 2149 (WEEK 39)."""
+    """Storeflyer + Tjek catalog/hotspot fixtures for store 2149.
+
+    MC 1355.18 fixround: the catalog dates are DYNAMIC (run_from = now-1d,
+    run_till = now+6d) because the Tjek adapter's ``pick_catalog`` prefers the
+    catalog COVERING NOW — hardcoded W39 dates expired once the real clock
+    passed 2026-09-27, silently yielding written==0. WEEK stays a label key
+    only (the adapter never compares it to the clock).
+    """
+    from datetime import datetime, timedelta, timezone
+
+    now = datetime.now(timezone.utc)
+    fmt = "%Y-%m-%dT%H:%M:%S%z"
+    run_from = (now - timedelta(days=1)).strftime(fmt)
+    run_till = (now + timedelta(days=6)).strftime(fmt)
+    published = (now - timedelta(days=2)).strftime(fmt)
     return {
         "https://www.willys.se/axfood/rest/v2/storeflyer/2149":
             json.dumps({"name": label}),
         "https://squid-api.tjek.com/v2/catalogs?dealer_id=c371GA":
             json.dumps([{"id": "cat1", "label": label,
-                         "run_from": "2026-09-21T00:00:00+0000",
-                         "run_till": "2026-09-27T00:00:00+0000",
-                         "publication_date": "2026-09-20T00:00:00+0000"}]),
+                         "run_from": run_from,
+                         "run_till": run_till,
+                         "publication_date": published}]),
         "https://squid-api.tjek.com/v2/catalogs/cat1/hotspots":
             json.dumps([{"id": "hs1", "offer": {
                 "id": "off1", "heading": "GOUDA",
                 "pricing": {"price": 49.9, "currency": "SEK"},
                 "quantity": {"unit": {"symbol": "kg",
                                       "si": {"symbol": "kg", "factor": 1}}},
-                "run_from": "2026-09-21T00:00:00+0000",
-                "run_till": "2026-09-27T00:00:00+0000"}}]),
+                "run_from": run_from,
+                "run_till": run_till}}]),
     }
 
 

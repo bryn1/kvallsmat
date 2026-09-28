@@ -130,10 +130,36 @@ def test_parse_hotspots_happy_and_drops():
         assert not e["external_id"].startswith(("willys-", "coop-"))
 
 
+def _current_catalogs():
+    """CATALOGS with the CUR window DYNAMIC around the real clock.
+
+    MC 1355.18 fixround: pull_grocer's pick_catalog uses the REAL clock (no
+    now parameter), so the hardcoded W39 CUR window expired once the calendar
+    passed 2026-09-27 and the happy path silently yielded 0 entries. OLD stays
+    expired and FUT future relative to now; the pick_catalog UNIT tests keep
+    the fixed NOW constant and stay deterministic.
+    """
+    from datetime import datetime, timedelta, timezone
+
+    now = datetime.now(timezone.utc)
+    fmt = "%Y-%m-%dT%H:%M:%S%z"
+    old = dict(CATALOGS[0],
+               run_from=(now - timedelta(days=15)).strftime(fmt),
+               run_till=(now - timedelta(days=8)).strftime(fmt))
+    cur = dict(CATALOGS[1],
+               run_from=(now - timedelta(days=1)).strftime(fmt),
+               run_till=(now + timedelta(days=6)).strftime(fmt),
+               publication_date=(now - timedelta(days=2)).strftime(fmt))
+    fut = dict(CATALOGS[2],
+               run_from=(now + timedelta(days=7)).strftime(fmt),
+               run_till=(now + timedelta(days=14)).strftime(fmt))
+    return [old, cur, fut]
+
+
 def test_pull_happy_path_through_pull_grocer():
     session = FakeSession({
         "https://squid-api.tjek.com/v2/catalogs?dealer_id=c371GA":
-            httpx.Response(200, json=CATALOGS).text,
+            httpx.Response(200, json=_current_catalogs()).text,
         "https://squid-api.tjek.com/v2/catalogs/CUR/hotspots":
             httpx.Response(200, json=HOTSPOTS).text,
     })
