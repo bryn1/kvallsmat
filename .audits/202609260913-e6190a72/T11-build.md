@@ -153,3 +153,6 @@ Largest changed source file: `app/routers/menu.py` 271 lines (< 400). One
 concern per file preserved; no new CSS component system.
 
 # VERDICT: PASS
+
+Orchestrator re-run 2026-09-28: /srv/workspace/hotell/.venv/bin/python -m pytest tests/ -q -> "116 passed, 3 warnings in 12.83s"
+VERIFY_EXIT=0
