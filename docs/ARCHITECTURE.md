@@ -38,8 +38,11 @@ sqlalchemy, pydantic, argon2-cffi, httpx. No other runtime deps.
   `andel_extrapris`).
 
 ### Motor — `src/` (vendored, self-contained; never imported by anything outside)
-- `src/fetcher/` + `src/fetcher/adapters/` — per-chain offer fetchers
-  (willys/ica/coop/lidl + Tjek), `aggregate.py`.
+- `src/fetcher/` + `src/fetcher/adapters/` — offer fetchers. Adapter files:
+  `ica.py`, `lidl.py`, `tjek.py` (+ `_common.py`). Willys and Coop publish
+  their veckoblad through Tjek, so ONE Tjek adapter serves both chains
+  (dealer ids in `app/config.py`); there are no separate willys/coop adapter
+  files. `aggregate.py` + `grocer.py` drive the pass.
 - `src/normalizer/` — offer normalization to the `offers` row shape
   (`chain_mapper.py`, per-ingredient `is_extraprice`).
 - `src/offers_db/store.py` — the SINGLE canonical `offers` table
@@ -87,8 +90,8 @@ No password reset, no e-mail verification, no lockout change.
 | Willys | store locator | `https://www.willys.se/axfood/rest/v2/store` |
 | ICA | offers + stores | `https://www.ica.se/erbjudanden/`, `https://www.ica.se/e11/public-access-token`, `https://apim-pub.gw.ica.se/sverige/digx/storesearch/v1` |
 | Coop | offers + stores | `https://www.coop.se/butiker-erbjudanden/`, `https://proxy.api.coop.se/external/store/stores?api-version=v1` |
-| Lidl | offers + stores | `https://www.lidl.se/c/erbjudanden:`, `https://live.api.schwarz/odj/stores-api/v2/myapi` |
-| Tjek | offer data | Tjek API via `src/fetcher/adapters/tjek.py` |
+| Lidl | offers + stores | `https://www.lidl.se/c/erbjudanden`, `https://live.api.schwarz/odj/stores-api/v2/myapi` |
+| Tjek (serves Willys + Coop) | offer data | `https://squid-api.tjek.com/v2/catalogs?dealer_id=<id>` via `src/fetcher/adapters/tjek.py` |
 | Geocode | Nominatim | `https://nominatim.openstreetmap.org/search` |
 
 ## Store-level selection flow (MC 1355.16)
@@ -100,10 +103,23 @@ scoped to one of the profile's resolved stores → dedup by (grocer_id,
 normalized name) preferring the store-level row. No postal code / no resolved
 stores → both steps are no-ops (behaviour = pre-T10b).
 
+## Known limitations (stated, not hidden)
+
+- **ICA store-scoped ingest is a named follow-up** — store-scoped offer rows
+  currently populate for Willys only (`src/scheduler/periodic.py`
+  `run_store_scoped_ingest`); ICA is chain-level until that follow-up lands.
+- **Coop cold-start warm**: the Coop locator's store cache is file-backed; the
+  first resolve after a cache wipe warms it lazily inside that resolve
+  (`src/locator/coop.py` docstring) — a stated POC limitation.
+- **`num_children` is informational-only in T11** (does not feed servings
+  planning, `app/routers/profile.py`); servings-aware planning is the T11b
+  follow-up.
+
 ## Data store
 
 One sqlite file (`MATAPP_DB_URL` / `$STATE_DIRECTORY`). Tables on the shared
-`database.Base`: `users`, `profile`, `offers`, `recipes`, `store_selection`
+`database.Base` declared in the repo-root `database.py` (ORM models in
+`app/models/`): `users`, `profile`, `offers`, `recipes`, `store_selection`
 (sessions live in-memory in `auth_service.SessionStore`, not a table). Schema
 changes = ORM column + `_NEW_COLUMNS` guarded-ALTER entry
 (existing rows read NULL — every reader treats NULL as 0/absent).
