@@ -103,8 +103,9 @@ stores → both steps are no-ops (behaviour = pre-T10b).
 ## Data store
 
 One sqlite file (`MATAPP_DB_URL` / `$STATE_DIRECTORY`). Tables on the shared
-`database.Base`: `users`, `profile`, `offers`, `recipes`, `store_selection`,
-sessions. Schema changes = ORM column + `_NEW_COLUMNS` guarded-ALTER entry
+`database.Base`: `users`, `profile`, `offers`, `recipes`, `store_selection`
+(sessions live in-memory in `auth_service.SessionStore`, not a table). Schema
+changes = ORM column + `_NEW_COLUMNS` guarded-ALTER entry
 (existing rows read NULL — every reader treats NULL as 0/absent).
 
 ## Tests

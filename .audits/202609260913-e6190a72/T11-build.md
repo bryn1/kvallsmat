@@ -11,9 +11,11 @@ this run with the verdict discipline preserved; recorded in CYCLES.md.
 ## Commit
 
 `9a5b299` — `matapp: register UI + num_children + kid_friendly recipes (MC 1355.18)`
-on main (not pushed). Parent-loop bookkeeping commits (a92d88b, d4deb54,
-ca97aa5, 987c336) landed the DA verdicts and the four T11 test files mid-run;
-9a5b299 carries the implementation.
+on main (not pushed), plus fixround `a742cb3` — `matapp: date-independent
+ingest wiring fixtures (MC 1355.18)` (see Fresh suite below). Parent-loop
+bookkeeping commits (a92d88b, d4deb54, ca97aa5, 987c336) landed the DA
+verdicts and the four T11 test files mid-run; 9a5b299 carries the
+implementation.
 
 ## Diff summary (17 files, +295/−26)
 
@@ -112,13 +114,37 @@ via the escaped template (suggestions.js). Full transcript:
 
 Cleaned `__pycache__`/`.pytest_cache`, then
 `/srv/workspace/hotell/.venv/bin/python -m pytest tests/ -q`:
-**113 passed, 3 failed** — the 3 failures
-(`test_ingest_wiring.py::test_store_scoped_ingest_*`) are PRE-EXISTING at the
-base commit: verified by `git stash -u` + rerun at 05c0a3e (same 3 fail) and
-independently by the DA at 4a371578. Out of T11 scope (T10b ingest wiring,
-untouched by this card); recorded, not chased. pytest exit code is 1 solely
-because of those 3; every T11 test and every other suite test passes.
+**116 passed, 0 failed, EXIT=0.**
 Log: `.audits/202609270403-a1c4dd1d/.tmp/fresh-suite.log`.
+
+### Fixround note (date-dependent fixtures, parent steering)
+
+The first fresh runs showed 3 failures in `tests/test_ingest_wiring.py`
+(store-scoped ingest). Initially recorded as "pre-existing at the base commit"
+(verified by `git stash -u` rerun at 05c0a3e) — the parent's DA pass found the
+REAL cause: the fixtures were DATE-DEPENDENT. `_tjek_routes()` hardcoded the
+W39 catalog window (run_from 2026-09-21, run_till 2026-09-27T00:00) and the
+Tjek adapter's `pick_catalog` prefers the catalog COVERING NOW — once the real
+clock passed 2026-09-27 the fixture catalog was expired and written==0. They
+passed on 2026-09-26, fail today. RED evidence of the planted-bad case
+(hardcoded dates): `WRITTEN: 0`, `LABEL: None` (reproduction transcript in the
+run's .tmp/). Fix commit `a742cb3` "matapp: date-independent ingest wiring
+fixtures (MC 1355.18)":
+* `tests/test_ingest_wiring.py::_tjek_routes` — catalog + offer dates now
+  dynamic (run_from = now-1d, run_till = now+6d, published = now-2d); WEEK
+  stays a label key only (the adapter never compares it to the clock).
+* `tests/test_tjek_adapter.py` — same disease: `test_pull_happy_path_through_
+  pull_grocer` calls `pull_grocer` with the REAL clock, so `CATALOGS`' CUR
+  window expired too; the happy path now uses `_current_catalogs()` (OLD
+  expired / CUR covering now / FUT future, all relative to the real clock).
+  The `pick_catalog` UNIT tests keep the fixed `NOW` constant and stay
+  deterministic.
+* `tests/test_store_scoping.py` / `tests/test_locator.py` — checked for the
+  same pattern: their hardcoded dates are stored strings only, never compared
+  to "now" — no change needed (44/44 pass).
+
+After the fix: fresh suite **116 passed, 0 failed, EXIT=0** — green regardless
+of calendar date.
 
 ## File hygiene
 
