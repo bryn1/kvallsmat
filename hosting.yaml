@@ -1,0 +1,16 @@
+{
+  "_comment": [
+    "vm106 hosting config for bryn1/kvallsmat (copied from svarkor-ai/Matapp, MC 3796 P3).",
+    "STRICT JSON (no yaml lib). Schema owner: infra/vm106/repo-visibility-hosting/reconcile.py (do not fork).",
+    "Service app: exec=server.py binds $HOST:$PORT (PORT must equal apps.yaml port 8141).",
+    "mirror.exclude EXTENDS the service defaults (mirror.py:180-183): without it the first mirror",
+    "would stage 2106 tracked files where 70 are served (2100 under .audits/, tests/, .tmp/).",
+    "Reviewed served list: p3-copy/matapp-served.list sha256 6b065fc7... (70 files, 0 under .audits/ or tests/)."
+  ],
+  "name": "matapp",
+  "type": "service",
+  "root": "apps/matapp",
+  "exec": "server.py",
+  "port": 8141,
+  "mirror": { "exclude": [".audits/**", "tests/**", "**/.tmp/**"] }
+}
