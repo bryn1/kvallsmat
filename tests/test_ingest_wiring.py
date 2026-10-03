@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import httpx
 import json
+from datetime import datetime, timezone
 
 import pytest
 from sqlalchemy import create_engine, text
@@ -23,7 +24,15 @@ from sqlalchemy.orm import sessionmaker
 from src.offers_db.store import Offer, upsert_week
 from src.scheduler.periodic import collect_resolved_willys, run_store_scoped_ingest
 
-WEEK = "2026-W39"
+# Date-independence, completed (follow-up to the MC 1355.18 fixround): the
+# fixture dates were made dynamic there, but normalize() is the single owner
+# of the running-week predicate (store.py N4) and filters offers against
+# iso_week_bounds(week_key) — a HARDCODED week label expired them once the
+# clock passed 2026-09-27 (written==0 again in October). The week key must
+# ride the real clock like the dates do; a 7-day offer window always overlaps
+# the current ISO week.
+_iso = datetime.now(timezone.utc).isocalendar()
+WEEK = f"{_iso[0]}-W{_iso[1]:02d}"
 
 
 class FakeResp:
@@ -69,8 +78,9 @@ def _tjek_routes(label="Willys Alingsås Hagaplan"):
     MC 1355.18 fixround: the catalog dates are DYNAMIC (run_from = now-1d,
     run_till = now+6d) because the Tjek adapter's ``pick_catalog`` prefers the
     catalog COVERING NOW — hardcoded W39 dates expired once the real clock
-    passed 2026-09-27, silently yielding written==0. WEEK stays a label key
-    only (the adapter never compares it to the clock).
+    passed 2026-09-27, silently yielding written==0. WEEK now rides the clock
+    too (see the WEEK note above): normalize() DOES compare offer windows to
+    the week key, so a static label re-breaks this every quarter.
     """
     from datetime import datetime, timedelta, timezone
 
