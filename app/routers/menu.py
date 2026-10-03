@@ -225,6 +225,18 @@ def _assemble_menu(session, user: User, week_key: str) -> MenuResponse:
         )
         for seed, p in zip(DEFAULT_SEEDS, plans)
     ]
+    # DA P2-B (MC 10037 fix cycle): /api/menu must NEVER 200 a zero-day week.
+    # ProfileBody bounds stop absurd input, but an in-range profile can still
+    # leave ZERO eligible recipes (persons=12 exceeds every roster serving
+    # count) — a silent [0,0,0] week is the GT-5rz starvation UX, and accept +
+    # shopping/build harden on top of it. That is an unsatisfiable-state
+    # conflict, not a menu: 409 with the reason, and accept inherits the same
+    # guard through this shared assembly.
+    if all(not s.days for s in suggestions):
+        raise HTTPException(
+            status_code=409,
+            detail=(f"no eligible recipes for this profile (persons={persons}, "
+                    f"meal_days={meal_days}, week={week_key}) — nothing to plan"))
     return MenuResponse(week_key=week_key, suggestions=suggestions,
                         offer_sources=offer_sources)
 

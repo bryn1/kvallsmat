@@ -37,6 +37,14 @@ recipe_router = APIRouter(prefix="/api/recipe", tags=["recipe"])
 class AcceptBody(BaseModel):
     seed: int
     week: str | None = None
+    # MC 10037 DA P1-A: the client MUST echo the dish ids the GET offered for
+    # this seed, in order. REQUIRED on purpose — an optional field with a
+    # "None = current behavior" fallback would keep the silent-recording
+    # defect alive for every client that omits it, and that is exactly the
+    # defect the DA verdict named. No client outside this repo called accept
+    # yet (grep: tests only), so the API break is minimal and the guarantee
+    # absolute: a divergent plan never lands usage rows.
+    dishes: list[str]
 
 
 @accept_router.post("/accept")
@@ -45,7 +53,14 @@ def accept_plan(body: AcceptBody,
                 user: User = Depends(_current_user_or_401),
                 session=Depends(db.get_db)) -> dict:
     """Accept one of THIS week's three suggestions: recompute its exact plan,
-    record the rotation usage (replace-all for user+week), return the dishes."""
+    VERIFY it still matches what the client was offered, then record the
+    rotation usage (replace-all for user+week) and return the dishes.
+
+    DA P1-A guarantee: offers are rewritten by the boot-time ingest on every
+    server restart, and profiles move — so the recompute can diverge from the
+    GET the user acted on. When it does, answer 409 and record NOTHING (the
+    client re-fetches and accepts the current plan); the rotation clock and
+    shopping/build only ever see plans a household actually saw."""
     if body.week is not None and not re.fullmatch(WEEK_PATTERN, body.week):
         raise HTTPException(
             status_code=422,
@@ -60,6 +75,19 @@ def accept_plan(body: AcceptBody,
             detail=f"seed {body.seed} is not one of the offered seeds "
                    f"{sorted(DEFAULT_SEEDS)}")
     dishes = [d.dish_id for d in suggestion.days]
+    # DA P1-A: the plan recomputed NOW must be exactly what the client claims
+    # it was offered. Offers can be rewritten by boot-ingest on a server
+    # restart and profiles can move between GET and accept; a divergence means
+    # the user would be recording a plan they never saw — refuse with 409 and
+    # write NO usage rows (the rotation clock and shopping/build only ever see
+    # plans the household actually saw). The client re-GETs and accepts the
+    # current plan.
+    if dishes != body.dishes:
+        raise HTTPException(
+            status_code=409,
+            detail=("the offered plan changed since it was fetched — accept "
+                    "records only the plan you were shown; re-fetch "
+                    "GET /api/menu and accept with the current dishes"))
     replace_week_usage(session, user.user_id, week_key, body.seed, dishes)
     return {"ok": True, "week_key": week_key, "dishes": dishes}
 

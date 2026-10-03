@@ -41,6 +41,19 @@ def _served_titles(resp_json, seed=None) -> list[str]:
     return out
 
 
+def _offer(client, week: str, seed: int) -> list[str]:
+    """What GET /api/menu currently serves for (week, seed) — the dishes the
+    client must echo back to accept (DA P1-A)."""
+    return _served_titles(client.get(f"/api/menu?week={week}").json(), seed=seed)
+
+
+def _accept(client, seed: int, week: str = WEEK, dishes=None):
+    if dishes is None:
+        dishes = _offer(client, week, seed)
+    return client.post("/api/menu/accept",
+                       json={"seed": seed, "week": week, "dishes": dishes})
+
+
 # ------------------------------------------------------- accept: exact recompute
 
 def test_accept_recomputes_offered_plan_and_records_usage(client):
@@ -50,7 +63,7 @@ def test_accept_recomputes_offered_plan_and_records_usage(client):
     seed101 = _served_titles(offered, seed=101)
     assert len(seed101) == 5  # meal_days default
 
-    r = client.post("/api/menu/accept", json={"seed": 101, "week": WEEK})
+    r = _accept(client, 101, dishes=seed101)
     assert r.status_code == 200, r.text
     body = r.json()
     assert body == {"ok": True, "week_key": WEEK, "dishes": seed101}
@@ -70,9 +83,8 @@ def test_accept_replaces_rows_for_same_week(client):
     offered = client.get(f"/api/menu?week={WEEK}").json()
     seed202 = _served_titles(offered, seed=202)
 
-    assert client.post("/api/menu/accept",
-                       json={"seed": 101, "week": WEEK}).status_code == 200
-    r = client.post("/api/menu/accept", json={"seed": 202, "week": WEEK})
+    assert _accept(client, 101).status_code == 200
+    r = _accept(client, 202, dishes=seed202)
     assert r.status_code == 200, r.text
     assert r.json()["dishes"] == seed202
 
@@ -93,14 +105,91 @@ def test_accept_gates_401_and_422(client):
     assert r.status_code == 401
 
     _login(client, "gateuser")
+    # dishes is REQUIRED (DA P1-A): omitting the echo is a contract violation,
+    # not a silent record.
     assert client.post("/api/menu/accept",
-                       json={"seed": "not-an-int", "week": WEEK}).status_code == 422
+                       json={"seed": 101, "week": WEEK}).status_code == 422
     assert client.post("/api/menu/accept",
-                       json={"seed": 101, "week": "garbage"}).status_code == 422
+                       json={"seed": "not-an-int", "week": WEEK,
+                             "dishes": []}).status_code == 422
     assert client.post("/api/menu/accept",
-                       json={"seed": 101, "week": "2026-W54"}).status_code == 422
+                       json={"seed": 101, "week": "garbage",
+                             "dishes": []}).status_code == 422
     assert client.post("/api/menu/accept",
-                       json={"seed": 999, "week": WEEK}).status_code == 422
+                       json={"seed": 101, "week": "2026-W54",
+                             "dishes": []}).status_code == 422
+    assert client.post("/api/menu/accept",
+                       json={"seed": 999, "week": WEEK,
+                             "dishes": ["x"]}).status_code == 422
+
+
+# --------------------------------------------- DA P1-A: divergence never lands
+
+def test_accept_divergence_409_and_records_nothing(client):
+    dbm.boot()
+    _login(client, "divuser")
+    offered = _offer(client, WEEK, 101)
+
+    # Offers move after the GET (boot-ingest on a restart reproduces exactly
+    # this): the seed-101 plan the user saw is no longer the plan on disk.
+    from src.offers_db.store import upsert_week
+    s = dbm._Session()
+    try:
+        upsert_week(s, [{"grocer_id": "ica", "external_id": "p-div",
+                         "week_key": WEEK, "name": "Laxfilé 600g",
+                         "price_cents": 8990, "regular_price_cents": 12990,
+                         "valid_from": "2026-09-07", "valid_to": "2026-09-13"}],
+                    WEEK)
+        s.commit()
+    finally:
+        s.close()
+
+    r = client.post("/api/menu/accept",
+                    json={"seed": 101, "week": WEEK, "dishes": offered})
+    assert r.status_code == 409, r.text
+
+    session = dbm._Session()
+    try:
+        assert list_usage(session, 1) == [], \
+            "a divergent accept must NEVER land usage rows (DA P1-A)"
+    finally:
+        session.close()
+
+    # The honest path still works: accept the plan as CURRENTLY served.
+    fresh = _offer(client, WEEK, 101)
+    assert fresh != offered, "probe setup failed: offers did not move the plan"
+    assert _accept(client, 101, dishes=fresh).status_code == 200
+
+
+# ------------------------------------------------- DA P2-B: bounds + no empty week
+
+def test_profile_fields_are_bounded_422(client):
+    _login(client, "bounduser")
+    base = {"selected_stores": []}
+    for bad in ({"persons": 0, "meal_days": 5, "kron_budget": 900},
+                {"persons": 99999, "meal_days": 5, "kron_budget": 900},
+                {"persons": 2, "meal_days": 0, "kron_budget": 900},
+                {"persons": 2, "meal_days": 8, "kron_budget": 900},
+                {"persons": 2, "meal_days": 5, "kron_budget": -1}):
+        assert client.put("/api/profile", json={**base, **bad}).status_code == 422, bad
+    # the bounds themselves are inclusive
+    assert client.put("/api/profile", json={
+        **base, "persons": 12, "meal_days": 7, "kron_budget": 900,
+    }).status_code == 200
+
+
+def test_in_range_but_unsatisfiable_profile_409_not_empty_week(client):
+    dbm.boot()
+    _login(client, "bigfam")
+    assert client.put("/api/profile", json={
+        "persons": 12, "meal_days": 5, "kron_budget": 900,
+        "selected_stores": [],
+    }).status_code == 200  # in-range (DA P2-B bounds) ...
+    r = client.get(f"/api/menu?week={WEEK}")
+    # ... yet every roster serving is < 12 -> zero eligible recipes. The
+    # guarantee: never a 200 with [0,0,0]-day suggestions.
+    assert r.status_code == 409, r.text
+    assert "no eligible recipes" in r.json()["detail"]
 
 
 # --------------------------------------------------- 42-day rotation semantics
@@ -110,8 +199,7 @@ def test_rotation_excludes_accepted_titles_for_five_weeks_returns_at_six(client)
     _login(client, "rotuser")
     offered = client.get(f"/api/menu?week={WEEK}").json()
     accepted = _served_titles(offered, seed=101)
-    assert client.post("/api/menu/accept",
-                       json={"seed": 101, "week": WEEK}).status_code == 200
+    assert _accept(client, 101).status_code == 200
 
     for wk in FOLLOWING:
         titles = set(_served_titles(client.get(f"/api/menu?week={wk}").json()))
@@ -130,8 +218,7 @@ def test_rotation_is_per_user(client):
     _login(client, "owner1")
     accepted = _served_titles(client.get(f"/api/menu?week={WEEK}").json(),
                               seed=101)
-    assert client.post("/api/menu/accept",
-                       json={"seed": 101, "week": WEEK}).status_code == 200
+    assert _accept(client, 101).status_code == 200
     client.cookies.clear()
 
     _login(client, "owner2")  # second household sees the full pool

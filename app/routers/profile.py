@@ -37,9 +37,14 @@ POSTAL_CODE_RE = re.compile(r"^\d{3}\s?\d{2}$")
 
 
 class ProfileBody(BaseModel):
-    persons: int = Field(default=2, ge=1)
-    meal_days: int = Field(default=5, ge=1)
-    kron_budget: int  # REQUIRED — gate C4 "kron-budget" (missing -> 422)
+    # DA P2-B (MC 10037 fix cycle): every field that feeds planning carries a
+    # sane lower AND upper bound. Unbounded persons/meal_days let /api/menu
+    # answer 200 with zero-day suggestions (persons=50 -> pool of 0 eligible
+    # recipes; meal_days=400 -> a relaxation WARNING per request): out-of-range
+    # is a 422 at THIS boundary, never a silently degenerate week.
+    persons: int = Field(default=2, ge=1, le=12)      # household size, sane cap
+    meal_days: int = Field(default=5, ge=1, le=7)     # a week has 7 days
+    kron_budget: int = Field(ge=0, le=10_000_000)  # REQUIRED — gate C4 "kron-budget" (missing -> 422)
     selected_stores: list[str] = Field(default_factory=list)
     # MC 1355.16 (T10b §4): ABSENT field = leave the persisted value unchanged
     # (the deployed frontend does not send postal_code today; clear-on-absent
