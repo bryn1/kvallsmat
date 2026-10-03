@@ -96,6 +96,18 @@ def test_menu_without_kid_friendly_recipes_still_200_full_week(client, monkeypat
     monkeypatch.setattr(menu_router, "recipes", lambda: all_zero)
 
     from app import db as dbm
+    from app.models.recipes_db import Recipe
+
+    # MC 10037 (P1-a0): the menu now serves the DB recipes table when
+    # non-empty (boot seeds it) — empty it here so the monkeypatched static
+    # ROSTER accessor is what actually serves this no-kid-recipes scenario.
+    _s = dbm._Session()
+    try:
+        _s.query(Recipe).delete()
+        _s.commit()
+    finally:
+        _s.close()
+
     r = client.post("/api/auth/register",
                     json={"username": "nokid", "password": "pw-nokid-1"})
     assert r.status_code == 200

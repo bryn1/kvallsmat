@@ -36,6 +36,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from app import auth_service, db, profile_service, security
 from app.models.store_selection import list_selected
 from app.models.users import User
+from app.models.recipes_db import c_rdb_list_all
 from app.optimizer.optimizer import DEFAULT_SEEDS, FamilyPrefs, andel_extrapris
 from app.optimizer.recipes import recipes
 from src.offers_db.store import list_offers_in_week
@@ -162,7 +163,12 @@ def get_menu(request: Request,
     ]
 
     # The motor's real planner (src/planner/menu.py) — one plan per seed.
-    recipe_roster = recipes()
+    # MC 10037 (P1-a0): the roster is the DB ``recipes`` table when it carries
+    # rows (boot-seeded starter, app.db.seed_recipes_if_empty); the static
+    # Phase-6 ROSTER stays the fallback for an empty table. Both shapes carry
+    # the same C-RDB attributes _allowed/plan/andel_extrapris/MenuDay read, so
+    # the planner seam needs no adapter.
+    recipe_roster = _recipe_roster(session)
     by_title = {r.title: r for r in recipe_roster}
     plans = [plan_menu(week_key, offers, recipe_roster, family, seed=seed)
              for seed in DEFAULT_SEEDS]
@@ -194,6 +200,20 @@ def get_menu(request: Request,
     ]
     return MenuResponse(week_key=week_key, suggestions=suggestions,
                         offer_sources=offer_sources)
+
+
+# ---------------------------------------------------------------------------
+# Recipe roster (MC 10037 P1-a0)
+# ---------------------------------------------------------------------------
+
+
+def _recipe_roster(session) -> list:
+    """The served roster: DB ``recipes`` rows when the table carries any
+    (boot-seeded starter), else the static Phase-6 ROSTER fallback. The DB read
+    reuses the motor's C-RDB contract seam (c_rdb_list_all, title-ordered) —
+    one implementation, imported via the app.models.recipes_db shim."""
+    rows = c_rdb_list_all(session)
+    return rows if rows else recipes()
 
 
 # ---------------------------------------------------------------------------

@@ -17,4 +17,6 @@ from . import store_selection  # noqa: F401  (registers store_selection table, M
 # shared Base BEFORE boot()/create_all — nothing else in the app path imports
 # src.recipes.store, so without this the ``recipes`` table is never created and
 # ensure_columns' inspector raises NoSuchTableError on the kid_friendly ALTER.
-from src.recipes.store import Recipe as _T11Recipe  # noqa: F401
+# MC 10037 (P1-a0): the direct import is retired behind the recipes_db shim
+# (offers_db precedent) — app code imports recipes ONLY via app.models.recipes_db.
+from . import recipes_db  # noqa: F401  (registers recipes table on Base via the shim)

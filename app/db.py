@@ -66,7 +66,46 @@ def boot():
     engine = _engine
     init_db(engine)  # NOTE: engine, never a Session (ArgumentError otherwise)
     ensure_columns(engine)  # MC 1355.16: guarded ALTERs for the T10e columns
+    seed_recipes_if_empty(engine)  # MC 10037 P1-a0: fail-tolerant starter seed
     return engine
+
+
+def seed_recipes_if_empty(engine) -> int:
+    """Seed the starter recipes at boot when the table is EMPTY (MC 10037 P1-a0).
+
+    Idempotent (``seed_starter`` upserts on UNIQUE title) and fail-tolerant like
+    the boot-time ingest (app.main lifespan precedent): a motor failure must
+    never crash boot — the menu then keeps serving the static ROSTER fallback.
+
+    The seed module lives in the motor (``src/recipes/seed.py``) and imports its
+    sibling via the run_motor top-level idiom (``from recipes.store import
+    ...``). Adding src/ to sys.path here would load a SECOND Recipe class on the
+    shared Base (InvalidRequestError — the double-map hazard the offers_db shim
+    exists for); the repo-sanctioned seam is to alias the ALREADY-IMPORTED
+    package into sys.modules instead (tests/test_recipe_kid_friendly.py idiom).
+    """
+    import logging
+    import sys
+
+    from sqlalchemy.orm import Session as _SqlSession
+
+    from app.models.recipes_db import Recipe  # canonical class (already loaded)
+    import src.recipes
+    import src.recipes.store
+
+    sys.modules.setdefault("recipes", src.recipes)
+    sys.modules.setdefault("recipes.store", src.recipes.store)
+    try:
+        from src.recipes.seed import seed_starter
+        with _SqlSession(engine) as session:
+            if session.query(Recipe).count():
+                return 0
+            return seed_starter(session)
+    except Exception:  # fail-tolerant: boot continues, menu uses the fallback
+        logging.getLogger("kvallsmat.app").warning(
+            "recipe boot-seed failed — /api/menu falls back to the static ROSTER",
+            exc_info=True)
+        return 0
 
 
 # MC 1355.16 (T10b §3): the three columns this card adds. Base.metadata
