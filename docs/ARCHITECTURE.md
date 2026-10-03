@@ -127,4 +127,32 @@ changes = ORM column + `_NEW_COLUMNS` guarded-ALTER entry
 ## Tests
 
 `tests/` pytest, offline (temp-DB `client` fixture in `conftest.py`, no
-network). Run: `/srv/workspace/hotell/.venv/bin/python -m pytest tests/ -q`.
+network). Run: `python -m pytest tests/ -q` from the repo root with the app's
+deps installed. NOTE (MC 10037): the `client` fixture yields a TestClient
+without entering its context manager, so the lifespan (boot ingest + recipe
+boot-seed) never runs under pytest — the live-boot path is covered by runtime
+acceptance, and menu tests default to the ROSTER fallback unless they seed the
+table explicitly (see `tests/test_db_recipe_roster.py`).
+
+## Ported features (from bryn1/matapp, MC 10037)
+
+### Recipe roster: DB-served with ROSTER fallback (P1-a0)
+- `app/models/recipes_db.py` re-exports the canonical `Recipe`/`c_rdb_list_all` from `src/recipes/store.py` (offers_db shim precedent; ONE mapping on the shared Base — app code must never import `src.recipes.store` directly).
+- `app.db.boot()` → `seed_recipes_if_empty()` seeds the 18 starter recipes once (idempotent, fail-tolerant; motor failure ⇒ ROSTER fallback, never a crash).
+- `/api/menu` roster = DB rows when non-empty, static ROSTER otherwise; both shapes carry `ingredients_json` et al., so planner/optimizer seams are unchanged. `src/planner/menu.py` stays pure and deterministic — no clock inside.
+
+### Rotation + accept + ratings (P1-a)
+- `POST /api/menu/accept {seed, week?}` recomputes the offered plan through the ONE shared assembly (`_assemble_menu`, identical inputs to the GET that offered it) and records `recipe_usage(user_id, title, week_key, seed)` — written ONLY here (single-clock rule; matapp's plan-time vs cook-time two-clock mess is the anti-pattern deliberately not ported). Re-accepting a week replaces its rows.
+- `GET /api/menu` drops titles the user accepted < 42 days before the planned week (router-side week math, `ROTATION_WINDOW_DAYS = 42`; a usage exactly 42 days old may return); relax-oldest-first + one WARNING when the filtered roster can't fill `meal_days` (matapp GT-5rz contract).
+- `POST /api/recipe/rate` (rating 1..7, upsert) + `GET /api/recipe/ratings` on `recipe_rating(user_id, title, rating)`. No ranking use yet — named follow-up.
+
+### Weekly shopping (P1-b/P2)
+- `app/services/shopping_text.py` — PURE port of matapp's normalize/longest-keyword categorize/quantity-merge (no db import; the pantry-coupling flaw fixed at the seam).
+- `shopping_item(user_id, week_key, item, quantity, category, checked, added_manually, source∈{plan,memory,staple,manual})`, UNIQUE(user_id, week_key, item); GET/POST/DELETE `/api/shopping(+/{item})`, POST `/api/shopping/toggle` (check = purchase).
+- `shopping_memory(user_id, item, last_bought, times_bought, avg_interval_days, bought_dates)` updated on toggle-check; due habitual items (times_bought>=3, interval due) auto-inject into a fresh week (matapp GT-6q4 logic), deduped.
+- `staple(user_id, item, interval_days, last_bought)`; due staples inject into a fresh week (staple wins name collisions); buying resets `last_bought`; `/api/staples` CRUD.
+- `POST /api/shopping/build?week=` aggregates the ACCEPTED plan's recipe ingredients into `source='plan'` rows (404 without an accepted plan for that week; 409 if an accepted title is missing from the recipes table), merging quantities into existing rows; building also makes the week non-fresh for due-injection.
+- All shopping/accept/rate routes auth-gated via the shared 401 dependency; per-user isolation is the contract (matapp's plaintext-global tables deliberately NOT carried).
+
+### Deliberately NOT ported (decision record)
+order_agent/auto-ordering (external-account credentials, PoC-grade); matapp scrapers/willys/campaigns/geo tables (Tjek store-scoped ingest supersedes); blob-encrypted `user_data` scheme (relational per-user tables instead); committed admin password, key-in-cookie sessions, shared creds file (port blockers — MATAPP audit §7). Deferred with reasons: pantry, price-watchlist, recipe-catalog scraper.
