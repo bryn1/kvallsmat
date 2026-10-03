@@ -10,16 +10,18 @@ test_menu_wiring. Covers the port DoD:
   5. habitual injection appears only on a FRESH week, never duplicates, staples
      win a name collision;
   6. staple CRUD + due injection + reset of last_bought on buy;
-  7. malformed / not-a-real week -> 422 (same boundary as the menu router).
-
-Point 4 of the child-B brief (build-from-accepted-plan) ships with commit A's
-recipe_usage and is NOT asserted here — DEFERRED (see CHILD-B-RESULT.md).
+  7. malformed / not-a-real week -> 422 (same boundary as the menu router);
+  8. build-from-accepted (point 4): plan-sourced items for an accepted week,
+     404 without an accept, dedupe+merge against a manual row.
 """
 from __future__ import annotations
 
+import json
 from datetime import date, timedelta
 
 from app import auth_service, db as dbm, security
+from app.models.recipe_usage import RecipeUsage
+from app.models.recipes_db import Recipe
 from app.models.shopping import ShoppingMemory, ShoppingItem, Staple
 from app.models.users import User
 
@@ -220,3 +222,80 @@ def test_week_validation_and_delete(client):
     client.post(f"/api/shopping?week={WEEK}", json={"item": " salt "})
     assert client.delete(f"/api/shopping/Salt?week={WEEK}").status_code == 200
     assert client.delete(f"/api/shopping/salt?week={WEEK}").status_code == 404
+
+
+# ─── 8. build-from-accepted-plan (MC 10037 spec point 4, commit b96555b) ─────
+
+
+def _seed_accepted_week(uid, week, dishes_with_ings):
+    """Seed Recipe rows + the accept clock (recipe_usage) directly — the
+    accept router itself is commit A's tested surface; here we test the
+    build consumer."""
+    session = dbm._Session()
+    try:
+        for title, ings in dishes_with_ings:
+            if session.query(Recipe).filter_by(title=title).first() is None:
+                session.add(Recipe(
+                    title=title, servings=4, vegetarian=0,
+                    ingredients_json=json.dumps(ings, ensure_ascii=False),
+                    allergens_json="[]"))
+        for title, _ in dishes_with_ings:
+            session.add(RecipeUsage(user_id=uid, title=title,
+                                    week_key=week, seed=101))
+        session.commit()
+    finally:
+        session.close()
+
+
+MEATBALLS = ("Köttbullar med gräddsås", [
+    {"name": "Köttfärs", "qty": 500, "unit": "g"},
+    {"name": "Grädde", "qty": 5, "unit": "dl"},
+    {"name": "Potatis", "qty": 800, "unit": "g"},
+])
+PASTA = ("Spagetti med köttfärssås", [
+    {"name": "Köttfärs", "qty": 400, "unit": "g"},
+    {"name": "Spagetti", "qty": 500, "unit": "g"},
+])
+
+
+def test_build_needs_accepted_plan(client):
+    _mkuser_and_login(client)
+    # logged-in, no accept for the week -> 404 (auth itself: other test)
+    r = client.post("/api/shopping/build?week=2026-W20")
+    assert r.status_code == 404 and "no accepted plan" in r.json()["detail"]
+
+
+def test_build_without_login_is_401(client):
+    assert client.post("/api/shopping/build?week=2026-W20").status_code == 401
+
+
+def test_build_produces_plan_sourced_items_and_merges_manual(client):
+    uid = _mkuser_and_login(client)
+    _seed_accepted_week(uid, "2026-W22", [MEATBALLS, PASTA])
+    # a manual row already exists — build must merge, never duplicate
+    client.post("/api/shopping?week=2026-W22",
+                json={"item": "köttfärs", "quantity": "200 g"})
+
+    r = client.post("/api/shopping/build?week=2026-W22")
+    assert r.status_code == 200, r.text
+    body = r.json()
+    assert body["dishes"] == 2 and body["added"] == 3 and body["merged"] == 1
+
+    rows = {x["item"]: x for x in _items(client, "2026-W22")}
+    assert set(rows) == {"köttfärs", "grädde", "potatis", "spagetti"}
+    # manual köttfärs 200 g + 500 g + 400 g (two dishes merged once first)
+    assert rows["köttfärs"]["quantity"] == "1100 g"
+    assert rows["köttfärs"]["source"] == "manual"      # source kept
+    assert rows["grädde"]["source"] == "plan"
+    assert rows["grädde"]["quantity"] == "5 dl"
+    assert rows["potatis"]["category"] == "frukt/grönt"
+
+
+def test_build_makes_week_non_fresh(client):
+    uid = _mkuser_and_login(client)
+    _seed_habit(uid, "kaffe")
+    _seed_accepted_week(uid, "2026-W23", [MEATBALLS])
+    client.post("/api/shopping/build?week=2026-W23")
+    rows = _items(client, "2026-W23")
+    assert all(x["item"] != "kaffe" for x in rows)     # no due-injection on a
+    assert any(x["source"] == "plan" for x in rows)    # planned-out week

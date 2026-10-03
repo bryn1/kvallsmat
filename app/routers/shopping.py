@@ -19,17 +19,22 @@
 AUTH: every handler rides the ONE shared gate auth_service.current_user_or_401
 (401, never 200). Week keys: POST/toggle/DELETE also accept ?week= (default =
 current week) so callers — and tests — can target a specific week like GET.
-``build-from-accepted`` (spec point 4) lands with commit A's recipe_usage.
+``build-from-accepted`` (spec point 4) rides commit A's recipe_usage (b96555b).
 """
 from __future__ import annotations
+
+import json
 
 from pydantic import BaseModel, Field
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 
 from app import auth_service, db
-from app.models.shopping import (SOURCE_MANUAL, SOURCE_MEMORY, SOURCE_STAPLE,
-                                 ShoppingItem, ShoppingMemory, Staple,
+from app.models.recipe_usage import RecipeUsage
+from app.models.recipes_db import Recipe
+from app.models.shopping import (SOURCE_MANUAL, SOURCE_MEMORY, SOURCE_PLAN,
+                                 SOURCE_STAPLE,
+                                 ShoppingItem, Staple,
                                  due_memory_items, due_staples,
                                  record_purchase, staple_buy_reset)
 from app.models.users import User
@@ -185,6 +190,74 @@ def toggle_shopping(payload: ShoppingToggle,
         staple_buy_reset(session, user.user_id, key)
     session.commit()
     return row
+
+
+# ─── build-from-accepted-plan (MC 10037 P1-b, spec point 4) ──────────────────
+
+
+@router.post("/shopping/build")
+def build_from_plan(request: Request,
+                    week: str | None = Query(default=None, pattern=WEEK_PATTERN),
+                    user: User = Depends(auth_service.current_user_or_401),
+                    session=Depends(db.get_db)) -> dict:
+    """Aggregate the ACCEPTED plan's ingredients into the week's list.
+
+    ONE clock (recipe_usage is written only by POST /api/menu/accept): the
+    week must have the user's accepted rows, else 404. Ingredients join back
+    via dish title == Recipe.title (the accept records exactly what
+    plan_menu chose). Upsert semantics: existing rows merge quantities (never
+    duplicated, source kept), new rows are inserted source='plan'.
+    """
+    week_key = _week_or_422(week)
+    usage = (session.query(RecipeUsage)
+             .filter_by(user_id=user.user_id, week_key=week_key).all())
+    if not usage:
+        raise HTTPException(
+            status_code=404,
+            detail=f"no accepted plan for week {week_key}")
+
+    titles = sorted({row.title for row in usage})
+    recipes = (session.query(Recipe).filter(Recipe.title.in_(titles)).all())
+    found = {r.title for r in recipes}
+    missing = [t for t in titles if t not in found]
+    if missing:
+        raise HTTPException(status_code=409,
+                            detail=f"accepted dishes missing from recipes table: {missing}")
+
+    # Aggregate ingredients across the accepted dishes first (same item in
+    # several dishes merges once, before touching the list).
+    aggregated: dict[str, str] = {}
+    for recipe in recipes:
+        try:
+            ingredients = json.loads(recipe.ingredients_json or "[]")
+        except ValueError:
+            continue
+        for ing in ingredients:
+            name = normalize_item_name(str(ing.get("name", "")))
+            if not name:
+                continue
+            qty = ing.get("qty")
+            quantity = f"{qty:g} {ing.get('unit', '')}".strip() if isinstance(qty, (int, float)) and qty else ""
+            aggregated[name] = (combine_quantities(aggregated[name], quantity)
+                                if name in aggregated else quantity)
+
+    added = merged = 0
+    for item, quantity in aggregated.items():
+        row = (session.query(ShoppingItem)
+               .filter_by(user_id=user.user_id, week_key=week_key, item=item)
+               .first())
+        if row is None:
+            session.add(ShoppingItem(user_id=user.user_id, week_key=week_key,
+                                     item=item, quantity=quantity,
+                                     category=guess_category(item),
+                                     source=SOURCE_PLAN))
+            added += 1
+        else:
+            row.quantity = combine_quantities(row.quantity, quantity)
+            merged += 1
+    session.commit()
+    return {"ok": True, "week": week_key, "dishes": len(recipes),
+            "added": added, "merged": merged}
 
 
 # ─── staples ──────────────────────────────────────────────────────────────────
