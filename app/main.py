@@ -22,7 +22,7 @@ from sqlalchemy import func
 
 import app.db as db
 from app.config import get_planner_config
-from app.routers import auth, menu, profile, stores
+from app.routers import auth, menu, plans, profile, shopping, stores
 
 logger = logging.getLogger("kvallsmat.app")
 
@@ -88,6 +88,10 @@ app.include_router(auth.router)
 app.include_router(profile.router)
 app.include_router(menu.router)
 app.include_router(stores.router)
+app.include_router(shopping.router)
+# MC 10037 (P1-a): accept (on the /api/menu prefix) + recipe ratings.
+app.include_router(plans.accept_router)
+app.include_router(plans.recipe_router)
 
 
 @app.get("/health")

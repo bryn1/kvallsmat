@@ -61,3 +61,6 @@ STATUS: ACTIVE — audit + real-offers build landed 2026-09-24 (MC 1355).
 
 ## 2026-10-03 — MC 10037 port P1-a0: /api/menu serves the DB recipes table
 - Roster source flipped from the static Phase-6 ROSTER to the DB `recipes` table when non-empty; boot() seeds seed_starter when empty (fail-tolerant, boot-ingest precedent); ROSTER stays the empty-table fallback. app/models/recipes_db.py re-export shim (offers_db precedent) is now the ONLY app-side import path for the recipes mapping; the menu reads via c_rdb_list_all through the shim. Seed-module sibling import handled with the repo-sanctioned sys.modules alias (no src/ on sys.path — the double-map hazard stays retired). Tests: tests/test_db_recipe_roster.py (seed/idempotent/db-served/fallback); test_menu_kid_friendly fallback scenario emptied the table to keep pinning the ROSTER path.
+
+## 2026-10-03 — MC 10037 port wave B: weekly shopping + purchase memory + staples (P1-b/P2-a/P2-b)
+- Ports from matapp: shopping_text (normalize/category/combine, pure), per-user relational shopping_item/shopping_memory/staple, fresh-week due-habit + due-staple injection, toggle=buy (record_purchase + staple reset). build-from-accepted deferred to commit A (recipe_usage). 127 tests green (/tmp/matvenv).
