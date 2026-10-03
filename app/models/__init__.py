@@ -20,3 +20,5 @@ from . import store_selection  # noqa: F401  (registers store_selection table, M
 # MC 10037 (P1-a0): the direct import is retired behind the recipes_db shim
 # (offers_db precedent) — app code imports recipes ONLY via app.models.recipes_db.
 from . import recipes_db  # noqa: F401  (registers recipes table on Base via the shim)
+from . import recipe_usage  # noqa: F401  (registers recipe_usage table, MC 10037 P1-a)
+from . import recipe_rating  # noqa: F401  (registers recipe_rating table, MC 10037 P1-a)

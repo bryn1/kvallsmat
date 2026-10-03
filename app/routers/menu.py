@@ -7,6 +7,12 @@ to the user's selected stores (store_selection), and handed to the motor's real
 planner ``src.planner.menu.plan_menu`` — the hardcoded ``app/optimizer/offers.py``
 fixture list is no longer the menu's data source.
 
+MC 10037 (PORT-PLAN P1-a0/P1-a): the recipe roster is the DB ``recipes`` table
+when non-empty (ROSTER = empty-table fallback), and accepted dishes are excluded
+for 42 days per user. The GET assembly lives in ``_assemble_menu`` — the ONE
+implementation shared by POST /api/menu/accept (app/routers/plans.py), so an
+accept recomputes byte-identically to the GET that offered the plan.
+
   * AUTH: every handler first resolves the opaque ``matapp_session`` cookie to a
     logged-in ``users.User`` via Phase 3 ``auth_service.current_user``; absent/invalid
     cookie -> **401, never 200** (the exact gate-C6 line "utan session 401").
@@ -29,11 +35,16 @@ service modules; the week math lives in src/planner/weeks.py.
 """
 from __future__ import annotations
 
+import logging
+
+from datetime import date
+
 from pydantic import BaseModel, Field
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 
 from app import auth_service, db, profile_service, security
+from app.models.recipe_usage import list_usage
 from app.models.store_selection import list_selected
 from app.models.users import User
 from app.models.recipes_db import c_rdb_list_all
@@ -43,6 +54,8 @@ from src.offers_db.store import list_offers_in_week
 from src.planner.menu import plan_menu
 from src.planner.weeks import current_week_key, week_to_monday
 
+logger = logging.getLogger("kvallsmat.app.menu")
+
 router = APIRouter(prefix="/api/menu", tags=["menu"])
 
 # Gate C6 contract: exactly three suggestions (the Phase 6 DEFAULT_SEEDS = 3 seeds).
@@ -50,6 +63,9 @@ SUGGESTION_COUNT = 3
 # Display week keys are ISO 8601 week dates, e.g. "2026-W34" (1-2 digit week is
 # accepted by the pattern; real-week validity is checked by week_to_monday).
 WEEK_PATTERN = r"^\d{4}-W\d{1,2}$"
+# MC 10037 (P1-a, owner-quoted matapp rule): a recipe must not reappear for
+# >= 6 weeks; a usage EXACTLY 42 days before the planned week may return.
+ROTATION_WINDOW_DAYS = 42
 
 
 # ---------------------------------------------------------------------------
@@ -119,9 +135,16 @@ def get_menu(request: Request,
              user: User = Depends(_current_user_or_401),
              session=Depends(db.get_db)) -> MenuResponse:
     """Plan the week's menu from the offers DB for the authenticated user's household."""
+    # WEEK: default = current ISO week; validated as a REAL week (BUG-1/BUG-2
+    # fix) inside the shared assembly, 422 — never 500.
+    return _assemble_menu(session, user, week or current_week_key())
 
-    # WEEK: default = current ISO week; validate as a REAL week (BUG-1/BUG-2 fix).
-    week_key = week or current_week_key()
+
+def _assemble_menu(session, user: User, week_key: str) -> MenuResponse:
+    """THE menu assembly — one implementation for GET /api/menu and the accept
+    recomputation in POST /api/menu/accept (MC 10037 P1-a): accept must see
+    byte-identical inputs to the GET that offered the plan. Raises 422 on a
+    week that is not a real ISO week."""
     try:
         week_to_monday(week_key)
     except ValueError:
@@ -169,6 +192,10 @@ def get_menu(request: Request,
     # the same C-RDB attributes _allowed/plan/andel_extrapris/MenuDay read, so
     # the planner seam needs no adapter.
     recipe_roster = _recipe_roster(session)
+    # MC 10037 (P1-a): 42-day per-user hard no-repeat on ACCEPTED dishes.
+    # Clock/week math lives HERE in the router, never inside plan_menu (N7).
+    recipe_roster = _apply_rotation(session, user.user_id, week_key,
+                                    recipe_roster, family.meal_days)
     by_title = {r.title: r for r in recipe_roster}
     plans = [plan_menu(week_key, offers, recipe_roster, family, seed=seed)
              for seed in DEFAULT_SEEDS]
@@ -214,6 +241,57 @@ def _recipe_roster(session) -> list:
     one implementation, imported via the app.models.recipes_db shim."""
     rows = c_rdb_list_all(session)
     return rows if rows else recipes()
+
+
+# ---------------------------------------------------------------------------
+# Rotation (MC 10037 P1-a): 42-day hard no-repeat per user
+# ---------------------------------------------------------------------------
+
+
+def _apply_rotation(session, user_id: int, week_key: str, roster: list,
+                    meal_days: int) -> list:
+    """Drop titles the user ACCEPTED within the last 42 days (matapp GT-5rz
+    lesson applied: ONE clock — usage rows are written only by
+    POST /api/menu/accept — and week math is done here, in the router).
+
+    A usage recorded for week W blocks the title when planning week R iff
+    0 < (monday(R) - monday(W)).days < ROTATION_WINDOW_DAYS: weeks R = W+1..W+5
+    exclude it, R = W+6 (exactly 42 days) lets it return, and R = W keeps
+    same-week re-plans stable (an accept never rewrites its own week's menu).
+
+    When the strict pool cannot fill meal_days, the excluded titles come back
+    OLDEST-USED-FIRST and one WARNING is logged — never silent starvation
+    (matapp's relax-and-warn, the GT-5rz failure mode made impossible)."""
+    rows = list_usage(session, user_id)
+    if not rows:
+        return roster
+    req_monday = week_to_monday(week_key)
+    excluded: set = set()
+    last_use: dict = {}
+    for row in rows:
+        try:
+            used_monday = week_to_monday(row.week_key)
+        except ValueError:
+            continue  # a stale/garbage week key never blocks the planner
+        prev = last_use.get(row.title)
+        if prev is None or used_monday > prev:
+            last_use[row.title] = used_monday
+        if 0 < (req_monday - used_monday).days < ROTATION_WINDOW_DAYS:
+            excluded.add(row.title)
+    kept = [r for r in roster if r.title not in excluded]
+    if len(kept) < meal_days:
+        logger.warning(
+            "rotation pool too thin for user %s week %s (%d titles < meal_days"
+            " %d) — relaxing oldest-used-first",
+            user_id, week_key, len(kept), meal_days)
+        kept_titles = {r.title for r in kept}
+        for candidate in sorted(
+                (r for r in roster if r.title not in kept_titles),
+                key=lambda r: last_use.get(r.title, date.min)):
+            if len(kept) >= meal_days:
+                break
+            kept.append(candidate)
+    return kept
 
 
 # ---------------------------------------------------------------------------
